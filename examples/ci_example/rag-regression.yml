@@ -1,0 +1,20 @@
+name: RAG Regression Check
+
+on: [push, pull_request]
+
+jobs:
+  rag-probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Install LongProbe with Chroma support
+        run: uv pip install longprobe[chroma]
+
+      - name: Run RAG regression check
+        run: longprobe check --goldens goldens.yaml --output github
+
+      # Posts PR comment with recall table + lost chunks diff via GitHub annotations

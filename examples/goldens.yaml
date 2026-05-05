@@ -1,0 +1,48 @@
+name: "example-rag-golden-set"
+version: "1.0"
+
+questions:
+  - id: "q1"
+    question: "What is the termination clause in the service agreement?"
+    match_mode: "id"
+    required_chunks:
+      - "contracts_chunk_42"
+      - "contracts_chunk_43"
+    top_k: 5
+    tags: ["doc:service_agreement", "contracts", "legal", "critical"]
+
+  - id: "q2"
+    question: "What are the payment terms for enterprise clients?"
+    match_mode: "text"
+    required_chunks:
+      - "net 30 days from invoice date"
+      - "enterprise clients receive a 15% discount"
+    top_k: 5
+    tags: ["doc:pricing_policy", "finance", "enterprise"]
+
+  - id: "q3"
+    question: "Who are the authorized signatories for the company?"
+    match_mode: "semantic"
+    semantic_threshold: 0.80
+    required_chunks:
+      - "The following officers are authorized to sign contracts on behalf of the company: CEO, CFO, and General Counsel."
+    top_k: 10
+    tags: ["doc:corporate_bylaws", "legal", "governance"]
+
+  - id: "q4"
+    question: "What is the refund policy for annual subscriptions?"
+    match_mode: "text"
+    required_chunks:
+      - "full refund within 30 days"
+      - "prorated refund after 30 days"
+    top_k: 5
+    tags: ["doc:refund_policy", "billing", "policy"]
+
+  - id: "q5"
+    question: "How is user data encrypted at rest?"
+    match_mode: "text"
+    required_chunks:
+      - "AES-256 encryption"
+      - "data at rest is encrypted using industry standard algorithms"
+    top_k: 5
+    tags: ["doc:security_whitepaper", "security", "compliance"]

@@ -1,0 +1,31 @@
+# Example: Call the LongProbe reusable workflow from your repo
+#
+# This workflow runs on every pull request and uses the reusable LongProbe
+# workflow to check for RAG retrieval regressions.
+#
+# Usage:
+#   1. Copy this file to your repo as .github/workflows/longprobe-check.yml
+#   2. Ensure you have longprobe.yaml and goldens.yaml in your repo root
+#   3. Set required secrets (e.g., OPENAI_API_KEY, PINECONE_API_KEY)
+
+name: RAG Regression Check
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  longprobe:
+    # Option A: If longprobe is in the same repo
+    uses: ./.github/workflows/longprobe.yml
+    # Option B: If referencing from the longprobe repo (uncomment)
+    # uses: longprobe/longprobe/.github/workflows/longprobe.yml@main
+    with:
+      python-version: "3.12"
+      config-path: "longprobe.yaml"
+      goldens-path: "goldens.yaml"
+      fail-on-regression: true
+      install-extras: "http"
+    secrets: inherit

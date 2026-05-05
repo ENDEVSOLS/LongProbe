@@ -1,0 +1,105 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "longprobe"
+version = "0.1.0"
+description = "RAG retrieval regression testing — define Golden Questions, detect lost chunks in CI"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    {name = "EnDevSols", email = "opensource@endevsols.com"},
+]
+maintainers = [
+    {name = "EnDevSols", email = "opensource@endevsols.com"},
+]
+keywords = ["rag", "retrieval", "testing", "langchain", "llm", "evaluation", "regression", "vector-store"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Testing",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "typer>=0.12.0",
+    "rich>=13.0.0",
+    "pyyaml>=6.0",
+    "numpy>=1.24.0",
+    "requests>=2.28.0",
+]
+
+[project.urls]
+Homepage = "https://endevsols.com/open-source/longprobe"
+Documentation = "https://github.com/ENDEVSOLS/LongProbe#readme"
+Repository = "https://github.com/ENDEVSOLS/LongProbe"
+Issues = "https://github.com/ENDEVSOLS/LongProbe/issues"
+Changelog = "https://github.com/ENDEVSOLS/LongProbe/blob/main/CHANGELOG.md"
+"Source Code" = "https://github.com/ENDEVSOLS/LongProbe"
+
+[project.optional-dependencies]
+langchain = ["langchain>=0.2.0", "langchain-core>=0.2.0"]
+llamaindex = ["llama-index>=0.10.0"]
+pinecone = ["pinecone-client>=3.0.0"]
+qdrant = ["qdrant-client>=1.7.0"]
+chroma = ["chromadb>=0.4.0"]
+openai = ["openai>=1.0.0"]
+huggingface = ["sentence-transformers>=2.2.0", "torch>=2.0.0"]
+generate = ["litellm>=1.0.0", "markitdown>=0.1.0"]
+all = [
+    "longprobe[langchain]",
+    "longprobe[llamaindex]",
+    "longprobe[openai]",
+    "longprobe[huggingface]",
+    "longprobe[pinecone]",
+    "longprobe[qdrant]",
+    "longprobe[chroma]",
+    "longprobe[generate]",
+]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.4.0",
+    "longprobe[chroma,huggingface]",
+]
+
+[project.scripts]
+longprobe = "longprobe.cli.main:app"
+
+[project.entry-points."pytest11"]
+longprobe = "longprobe.pytest_plugin"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/longprobe"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/longprobe", "tests", "examples", "README.md", "LICENSE"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "ruff>=0.4.0",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM", "RUF"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.ruff.lint.isort]
+known-first-party = ["longprobe"]

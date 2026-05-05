@@ -1,0 +1,35 @@
+# LongProbe Configuration
+# Docs: https://github.com/ENDEVSOLS/LongProbe
+
+retriever:
+  type: "chroma"                     # langchain | llamaindex | pinecone | qdrant | chroma
+  collection: "my_documents"          # Collection name (for chroma/qdrant)
+  persist_directory: "./chroma_db"    # Path to ChromaDB storage
+  # For Pinecone:
+  # type: "pinecone"
+  # index_name: "my-index"
+  # namespace: ""
+  # api_key: "${PINECONE_API_KEY}"
+  # For Qdrant:
+  # type: "qdrant"
+  # collection: "my_collection"
+  # host: "localhost"
+  # port: 6333
+  # api_key: "${QDRANT_API_KEY}"
+
+embedder:
+  provider: "local"                   # openai | huggingface | local
+  model: "text-embedding-3-small"     # OpenAI model (when provider=openai)
+  # For HuggingFace:
+  # provider: "huggingface"
+  # model: "sentence-transformers/all-MiniLM-L6-v2"
+  # For local (testing, returns zero vectors):
+  # provider: "local"
+
+scoring:
+  recall_threshold: 0.8              # Minimum recall score to pass (0.0 - 1.0)
+  fail_on_regression: true           # Exit with code 1 if regression detected
+
+baseline:
+  db_path: ".longprobe/baselines.db" # Path to baseline SQLite database
+  auto_compare: true                 # Always compare against "latest" baseline

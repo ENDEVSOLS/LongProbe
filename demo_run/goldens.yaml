@@ -1,0 +1,40 @@
+name: my-golden-set
+version: '1.0'
+questions:
+- id: q_dummy
+  question: Dummy
+  required_chunks:
+  - dummy
+  match_mode: id
+  semantic_threshold: 0.85
+  top_k: 5
+  tags: []
+  metadata: {}
+- id: q_what_is_the_refund_policy
+  question: What is the refund policy?
+  required_chunks:
+  - The refund policy allows for full refunds within 30 days of purchase. No questions
+    asked.
+  - Our enterprise payment terms are net 60 days.
+  - Standard shipping takes 5-7 business days.
+  - Data is encrypted at rest using AES-256 and in transit using TLS 1.3.
+  match_mode: text
+  semantic_threshold: 0.85
+  top_k: 5
+  tags:
+  - doc:legal
+  metadata: {}
+- id: q_how_is_data_encrypted
+  question: How is data encrypted?
+  required_chunks:
+  - Data is encrypted at rest using AES-256 and in transit using TLS 1.3.
+  - The refund policy allows for full refunds within 30 days of purchase. No questions
+    asked.
+  - Our enterprise payment terms are net 60 days.
+  - Standard shipping takes 5-7 business days.
+  match_mode: text
+  semantic_threshold: 0.85
+  top_k: 5
+  tags:
+  - doc:legal
+  metadata: {}

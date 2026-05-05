@@ -1,0 +1,12 @@
+retriever:
+  type: chroma
+  persist_directory: "chroma_db"
+  collection: "default"
+
+scoring:
+  fail_on_regression: true
+  recall_threshold: 1.0
+
+baseline:
+  auto_compare: true
+  db_path: ".longprobe/baselines.db"
