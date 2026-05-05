@@ -11,14 +11,14 @@ This package exposes the public data models used throughout LongProbe:
   time.
 """
 
+from longprobe.core.embedder import QueryEmbedder
 from longprobe.core.golden import GoldenQuestion, GoldenSet
 from longprobe.core.scorer import ProbeReport, QuestionResult
-from longprobe.core.embedder import QueryEmbedder
 
 __all__ = [
     "GoldenQuestion",
     "GoldenSet",
-    "QuestionResult",
     "ProbeReport",
     "QueryEmbedder",
+    "QuestionResult",
 ]

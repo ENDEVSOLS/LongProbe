@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import math
 import warnings
-from typing import List
 
 
 class QueryEmbedder:
@@ -75,7 +74,7 @@ class QueryEmbedder:
     # Public API
     # ------------------------------------------------------------------
 
-    def embed(self, query: str) -> List[float]:
+    def embed(self, query: str) -> list[float]:
         """Embed a single query string and return a normalized vector.
 
         Parameters
@@ -102,7 +101,7 @@ class QueryEmbedder:
 
         return self.normalize(vector)
 
-    def embed_batch(self, queries: List[str]) -> List[List[float]]:
+    def embed_batch(self, queries: list[str]) -> list[list[float]]:
         """Embed multiple query strings.
 
         Parameters
@@ -118,7 +117,7 @@ class QueryEmbedder:
         return [self.embed(q) for q in queries]
 
     @staticmethod
-    def normalize(vector: List[float]) -> List[float]:
+    def normalize(vector: list[float]) -> list[float]:
         """L2-normalize *vector* to a unit vector.
 
         Parameters
@@ -141,7 +140,7 @@ class QueryEmbedder:
     # Backend implementations
     # ------------------------------------------------------------------
 
-    def _embed_openai(self, query: str) -> List[float]:
+    def _embed_openai(self, query: str) -> list[float]:
         """Call the OpenAI embeddings API for a single query string."""
         try:
             import openai
@@ -167,7 +166,7 @@ class QueryEmbedder:
         response = client.embeddings.create(**create_kwargs)
         return response.data[0].embedding
 
-    def _embed_huggingface(self, query: str) -> List[float]:
+    def _embed_huggingface(self, query: str) -> list[float]:
         """Embed using a HuggingFace ``sentence-transformers`` model."""
         try:
             from sentence_transformers import SentenceTransformer
@@ -185,7 +184,7 @@ class QueryEmbedder:
         embedding = self._hf_model.encode(query)
         return embedding.tolist()
 
-    def _embed_local(self, query: str) -> List[float]:
+    def _embed_local(self, query: str) -> list[float]:
         """Return a zero vector (fallback for testing without API keys)."""
         dim = self.dimensions or 384
         warnings.warn(

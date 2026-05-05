@@ -18,10 +18,9 @@ from __future__ import annotations
 import os
 import re
 from dataclasses import dataclass, field
-from typing import Any, Dict
+from typing import Any
 
 import yaml
-
 
 # ---------------------------------------------------------------------------
 # Environment-variable expansion
@@ -87,7 +86,7 @@ class HttpRetrieverConfig:
     url: str = ""
     method: str = "POST"
     body_template: str = '{"query": "{question}", "top_k": {top_k}}'
-    headers: Dict[str, str] = field(default_factory=dict)
+    headers: dict[str, str] = field(default_factory=dict)
     response_mapping: HttpResponseMapping = field(default_factory=HttpResponseMapping)
     timeout: int = 30
 
@@ -122,7 +121,7 @@ class RetrieverConfig:
     port: int = 6333
     api_key: str = ""
     http: HttpRetrieverConfig = field(default_factory=HttpRetrieverConfig)
-    extra: Dict[str, Any] = field(default_factory=dict)
+    extra: dict[str, Any] = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------------------
@@ -240,7 +239,7 @@ class ProbeConfig:
     # ------------------------------------------------------------------
 
     @classmethod
-    def defaults(cls) -> "ProbeConfig":
+    def defaults(cls) -> ProbeConfig:
         """Return a :class:`ProbeConfig` instance with every field set to its
         declared default value.
 
@@ -250,7 +249,7 @@ class ProbeConfig:
         return cls()
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ProbeConfig":
+    def from_dict(cls, data: dict[str, Any]) -> ProbeConfig:
         """Build a :class:`ProbeConfig` from a plain dictionary.
 
         Unknown keys in *data* are silently ignored so that configuration
@@ -294,7 +293,7 @@ class ProbeConfig:
         )
 
     @classmethod
-    def from_yaml(cls, path: str) -> "ProbeConfig":
+    def from_yaml(cls, path: str) -> ProbeConfig:
         """Load configuration from a YAML file.
 
         Args:
@@ -313,7 +312,7 @@ class ProbeConfig:
         if not _os.path.isfile(path):
             raise FileNotFoundError(f"Configuration file not found: {path}")
 
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             data = yaml.safe_load(fh)
 
         if not isinstance(data, dict):
@@ -340,7 +339,7 @@ def _expand_env_recursive(obj: Any) -> Any:
     return obj
 
 
-def _build_http_response_mapping(raw: Dict[str, Any]) -> HttpResponseMapping:
+def _build_http_response_mapping(raw: dict[str, Any]) -> HttpResponseMapping:
     """Construct an :class:`HttpResponseMapping` from a raw dict."""
     if not isinstance(raw, dict):
         raw = {}
@@ -352,7 +351,7 @@ def _build_http_response_mapping(raw: Dict[str, Any]) -> HttpResponseMapping:
     )
 
 
-def _build_http_config(raw: Dict[str, Any]) -> HttpRetrieverConfig:
+def _build_http_config(raw: dict[str, Any]) -> HttpRetrieverConfig:
     """Construct an :class:`HttpRetrieverConfig` from a raw dict."""
     if not isinstance(raw, dict):
         raw = {}
@@ -369,7 +368,7 @@ def _build_http_config(raw: Dict[str, Any]) -> HttpRetrieverConfig:
     )
 
 
-def _build_retriever_config(raw: Dict[str, Any]) -> RetrieverConfig:
+def _build_retriever_config(raw: dict[str, Any]) -> RetrieverConfig:
     """Construct a :class:`RetrieverConfig`, isolating unknown fields into
     ``extra``."""
     if not isinstance(raw, dict):
@@ -395,7 +394,7 @@ def _build_retriever_config(raw: Dict[str, Any]) -> RetrieverConfig:
     )
 
 
-def _build_embedder_config(raw: Dict[str, Any]) -> EmbedderConfig:
+def _build_embedder_config(raw: dict[str, Any]) -> EmbedderConfig:
     if not isinstance(raw, dict):
         raw = {}
 
@@ -407,7 +406,7 @@ def _build_embedder_config(raw: Dict[str, Any]) -> EmbedderConfig:
     )
 
 
-def _build_scoring_config(raw: Dict[str, Any]) -> ScoringConfig:
+def _build_scoring_config(raw: dict[str, Any]) -> ScoringConfig:
     if not isinstance(raw, dict):
         raw = {}
 
@@ -417,7 +416,7 @@ def _build_scoring_config(raw: Dict[str, Any]) -> ScoringConfig:
     )
 
 
-def _build_baseline_config(raw: Dict[str, Any]) -> BaselineConfig:
+def _build_baseline_config(raw: dict[str, Any]) -> BaselineConfig:
     if not isinstance(raw, dict):
         raw = {}
 
@@ -427,7 +426,7 @@ def _build_baseline_config(raw: Dict[str, Any]) -> BaselineConfig:
     )
 
 
-def _build_generator_config(raw: Dict[str, Any]) -> GeneratorConfig:
+def _build_generator_config(raw: dict[str, Any]) -> GeneratorConfig:
     if not isinstance(raw, dict):
         raw = {}
 
@@ -446,12 +445,12 @@ def _build_generator_config(raw: Dict[str, Any]) -> GeneratorConfig:
 # Type-safe field extractors
 # ---------------------------------------------------------------------------
 
-def _str(d: Dict[str, Any], key: str, default: str) -> str:
+def _str(d: dict[str, Any], key: str, default: str) -> str:
     val = d.get(key, default)
     return str(val) if val is not None else default
 
 
-def _int(d: Dict[str, Any], key: str, default: int) -> int:
+def _int(d: dict[str, Any], key: str, default: int) -> int:
     val = d.get(key, default)
     if val is None:
         return default
@@ -461,7 +460,7 @@ def _int(d: Dict[str, Any], key: str, default: int) -> int:
         return default
 
 
-def _float(d: Dict[str, Any], key: str, default: float) -> float:
+def _float(d: dict[str, Any], key: str, default: float) -> float:
     val = d.get(key, default)
     if val is None:
         return default
@@ -471,7 +470,7 @@ def _float(d: Dict[str, Any], key: str, default: float) -> float:
         return default
 
 
-def _bool(d: Dict[str, Any], key: str, default: bool) -> bool:
+def _bool(d: dict[str, Any], key: str, default: bool) -> bool:
     val = d.get(key, default)
     if val is None:
         return default

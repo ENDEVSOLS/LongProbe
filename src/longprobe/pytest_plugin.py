@@ -124,7 +124,7 @@ def longprobe_fail_threshold(request: FixtureRequest) -> float | None:
 
 
 # ---------------------------------------------------------------------------
-# Optional convenience fixture – auto-build a LongProbe instance
+# Optional convenience fixture - auto-build a LongProbe instance
 # ---------------------------------------------------------------------------
 
 
@@ -142,7 +142,7 @@ def longprobe_adapter(
         from longprobe.config import load_config
     except ImportError:
         pytest.skip("longprobe is not installed; skipping adapter fixture")
-        return None  # pragma: no cover – unreachable, satisfies type checker
+        return None  # pragma: no cover - unreachable, satisfies type checker
 
     try:
         cfg = load_config(longprobe_config_path)

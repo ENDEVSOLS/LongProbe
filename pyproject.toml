@@ -95,7 +95,16 @@ src = ["src"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "SIM", "RUF"]
-ignore = ["E501"]
+ignore = [
+    "E501",    # Line too long
+    "B008",    # Do not perform function calls in argument defaults (Typer uses this pattern)
+    "B904",    # Within except clause, raise from err (not always necessary)
+    "RUF002",  # Docstring contains ambiguous characters (EN DASH is fine in docs)
+    "RUF003",  # Comment contains ambiguous characters (EN DASH is fine in comments)
+    "RUF012",  # Mutable class attributes (intentional in some cases)
+    "E402",    # Module level import not at top (intentional in some cases)
+    "SIM108",  # Use ternary operator (readability preference)
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

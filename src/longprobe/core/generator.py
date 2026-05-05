@@ -20,7 +20,6 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import List, Tuple
 
 from ..config import GeneratorConfig
 
@@ -75,9 +74,9 @@ class QuestionGenerator:
 
     def generate(
         self,
-        documents: List[Tuple[str, str]],
+        documents: list[tuple[str, str]],
         num_questions: int | None = None,
-    ) -> List[str]:
+    ) -> list[str]:
         """Generate questions from a list of documents.
 
         Documents are chunked to fit within the model's context window.
@@ -115,7 +114,7 @@ class QuestionGenerator:
 
         # Distribute questions across chunks.
         questions_per_chunk = max(1, n // len(chunks))
-        all_questions: List[str] = []
+        all_questions: list[str] = []
 
         for i, chunk in enumerate(chunks):
             # For the last chunk, generate remaining questions.
@@ -155,7 +154,7 @@ class QuestionGenerator:
                 "Or install LongProbe with:  pip install longprobe[generate]"
             )
 
-    def _generate_for_chunk(self, chunk: str, num_questions: int) -> List[str]:
+    def _generate_for_chunk(self, chunk: str, num_questions: int) -> list[str]:
         """Call the LLM to generate questions from a single chunk."""
         import litellm
 
@@ -215,16 +214,16 @@ class QuestionGenerator:
         return self._parse_questions(content)
 
     @staticmethod
-    def _concatenate_documents(documents: List[Tuple[str, str]]) -> str:
+    def _concatenate_documents(documents: list[tuple[str, str]]) -> str:
         """Merge documents into a single text with source headers."""
-        parts: List[str] = []
+        parts: list[str] = []
         for filename, text in documents:
             if text.strip():
                 parts.append(f"[Source: {filename}]\n{text}")
         return "\n\n".join(parts)
 
     @staticmethod
-    def _chunk_text(text: str, max_chars: int) -> List[str]:
+    def _chunk_text(text: str, max_chars: int) -> list[str]:
         """Split text into chunks of roughly *max_chars* characters.
 
         Tries to split on paragraph boundaries (double newlines) to keep
@@ -233,7 +232,7 @@ class QuestionGenerator:
         if len(text) <= max_chars:
             return [text]
 
-        chunks: List[str] = []
+        chunks: list[str] = []
         current = ""
 
         # Split on double newlines (paragraph boundaries).
@@ -259,14 +258,14 @@ class QuestionGenerator:
         return chunks if chunks else [text[:max_chars]]
 
     @staticmethod
-    def _parse_questions(raw: str) -> List[str]:
+    def _parse_questions(raw: str) -> list[str]:
         """Parse LLM output into a list of question strings.
 
         Handles numbered lists (``1. What is...?``), bullet points, and
         plain one-per-line format.
         """
         lines = raw.strip().splitlines()
-        questions: List[str] = []
+        questions: list[str] = []
 
         for line in lines:
             line = line.strip()
@@ -283,10 +282,10 @@ class QuestionGenerator:
         return questions
 
     @staticmethod
-    def _deduplicate(questions: List[str]) -> List[str]:
+    def _deduplicate(questions: list[str]) -> list[str]:
         """Remove duplicate questions (case-insensitive)."""
         seen: set[str] = set()
-        unique: List[str] = []
+        unique: list[str] = []
         for q in questions:
             key = q.lower().strip()
             if key not in seen:

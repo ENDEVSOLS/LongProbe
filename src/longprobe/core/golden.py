@@ -18,16 +18,15 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Set
+from typing import Any
 
 import yaml
-
 
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
 
-_VALID_MATCH_MODES: Set[str] = {"id", "text", "semantic"}
+_VALID_MATCH_MODES: set[str] = {"id", "text", "semantic"}
 
 
 # ---------------------------------------------------------------------------
@@ -56,12 +55,12 @@ class GoldenQuestion:
 
     id: str
     question: str
-    required_chunks: List[str]
+    required_chunks: list[str]
     match_mode: str = "id"
     semantic_threshold: float = 0.85
     top_k: int = 5
-    tags: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    tags: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------------------
@@ -81,21 +80,21 @@ class GoldenSet:
 
     name: str
     version: str
-    questions: List[GoldenQuestion] = field(default_factory=list)
+    questions: list[GoldenQuestion] = field(default_factory=list)
 
     # ------------------------------------------------------------------
     # Validation helpers
     # ------------------------------------------------------------------
 
     @staticmethod
-    def _validate_questions(questions: List[Dict[str, Any]]) -> None:
+    def _validate_questions(questions: list[dict[str, Any]]) -> None:
         """Run all validation rules over the raw question dicts.
 
         Raises:
             ValueError: On the *first* validation failure encountered, with a
                 human-readable message.
         """
-        seen_ids: Set[str] = set()
+        seen_ids: set[str] = set()
 
         for idx, raw in enumerate(questions):
             qid = raw.get("id")
@@ -185,7 +184,7 @@ class GoldenSet:
     # ------------------------------------------------------------------
 
     @classmethod
-    def from_yaml(cls, path: str) -> "GoldenSet":
+    def from_yaml(cls, path: str) -> GoldenSet:
         """Load a golden set from a YAML file.
 
         The file must contain ``name``, ``version``, and ``questions`` keys.
@@ -206,7 +205,7 @@ class GoldenSet:
         if not os.path.isfile(path):
             raise FileNotFoundError(f"Golden-set file not found: {path}")
 
-        with open(path, "r", encoding="utf-8") as fh:
+        with open(path, encoding="utf-8") as fh:
             data = yaml.safe_load(fh)
 
         if not isinstance(data, dict):
@@ -235,7 +234,7 @@ class GoldenSet:
         # clear message.
         cls._validate_questions(raw_questions)
 
-        questions: List[GoldenQuestion] = []
+        questions: list[GoldenQuestion] = []
         for raw in raw_questions:
             questions.append(
                 GoldenQuestion(
@@ -294,7 +293,7 @@ class GoldenSet:
     # Filtering & merging
     # ------------------------------------------------------------------
 
-    def filter_by_tags(self, tags: List[str]) -> "GoldenSet":
+    def filter_by_tags(self, tags: list[str]) -> GoldenSet:
         """Return a new :class:`GoldenSet` containing only questions whose
         ``tags`` list contains **all** of the specified *tags*.
 
@@ -323,7 +322,7 @@ class GoldenSet:
             questions=filtered,
         )
 
-    def merge(self, new_questions: List[GoldenQuestion]) -> int:
+    def merge(self, new_questions: list[GoldenQuestion]) -> int:
         """Append questions that do not already exist (matched by ``id``).
 
         Duplicate IDs are silently skipped.
@@ -334,7 +333,7 @@ class GoldenSet:
         Returns:
             The number of questions actually added.
         """
-        existing_ids: Set[str] = {q.id for q in self.questions}
+        existing_ids: set[str] = {q.id for q in self.questions}
         added = 0
         for q in new_questions:
             if q.id not in existing_ids:
@@ -356,7 +355,7 @@ _SLUG_RE = _re.compile(r"[^a-z0-9]+")
 def generate_question_id(
     question_text: str,
     prefix: str = "q",
-    existing_ids: Set[str] | None = None,
+    existing_ids: set[str] | None = None,
     max_words: int = 5,
 ) -> str:
     """Generate a URL-safe, unique question ID from the question text.

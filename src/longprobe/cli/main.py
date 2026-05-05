@@ -19,16 +19,16 @@ import json
 import sys
 import time
 from dataclasses import asdict
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import typer
 from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from rich.table import Table
 from rich.prompt import Prompt
+from rich.table import Table
 
 from longprobe.adapters import (
     ChromaAdapter,
@@ -40,7 +40,6 @@ from longprobe.config import GeneratorConfig, ProbeConfig
 from longprobe.core.baseline import BaselineStore
 from longprobe.core.diff import DiffReporter
 from longprobe.core.docparser import DocumentParser
-from longprobe.core.embedder import QueryEmbedder
 from longprobe.core.generator import QuestionGenerator
 from longprobe.core.golden import GoldenQuestion, GoldenSet, generate_question_id
 from longprobe.core.scorer import ProbeReport, RecallScorer
@@ -500,7 +499,7 @@ def _run_probe(
         golden_set = _load_golden_set(goldens_path)
         if golden_set is None:
             raise typer.Exit(1)
-            
+
         if tags:
             golden_set = golden_set.filter_by_tags(tags)
             if not golden_set.questions:
@@ -657,7 +656,7 @@ def check(
     ),
 ) -> None:
     """Run probes against the golden set and report retrieval quality."""
-    cfg, adapter, report = _run_probe(
+    cfg, _adapter, report = _run_probe(
         goldens_path=goldens,
         config_path=config,
         top_k_override=top_k,
@@ -726,7 +725,7 @@ def baseline_save(
     ),
 ) -> None:
     """Run probes and persist the report as a named baseline snapshot."""
-    cfg, adapter, report = _run_probe(
+    cfg, _adapter, report = _run_probe(
         goldens_path=goldens,
         config_path=config,
         top_k_override=top_k,
@@ -879,7 +878,7 @@ def diff(
     ),
 ) -> None:
     """Compare current probe results against a saved baseline."""
-    cfg, adapter, report = _run_probe(
+    cfg, _adapter, report = _run_probe(
         goldens_path=goldens,
         config_path=config,
         top_k_override=top_k,
@@ -989,7 +988,7 @@ def watch(
                 )
 
                 try:
-                    cfg, adapter, report = _run_probe(
+                    cfg, _adapter, report = _run_probe(
                         goldens_path=goldens_path,
                         config_path=config_path,
                         tags=tag,
@@ -1109,7 +1108,7 @@ def capture(
 
     existing_ids = {q.id for q in golden_set.questions}
     new_questions: list[GoldenQuestion] = []
-    
+
     # 4. Iterate over questions
     for q_text in questions_to_ask:
         console.print(f"\n[bold cyan]🔍 Querying retriever for:[/bold cyan] [italic]\"{q_text}\"[/italic]")
@@ -1138,7 +1137,7 @@ def capture(
             for idx, r in enumerate(results, 1):
                 chunk_id = r.get("id", "unknown")
                 chunk_text = r.get("text", "")
-                
+
                 # Truncate text for display
                 display_text = chunk_text
                 if len(display_text) > 200:
@@ -1146,14 +1145,14 @@ def capture(
 
                 content = f"[bold]Chunk {idx}: {chunk_id}[/bold]\n\n[dim]{display_text}[/dim]"
                 console.print(Panel(content, border_style="blue"))
-                
+
                 ans = Prompt.ask(
-                    "   ✅ Include this chunk?", 
-                    choices=["y", "n", "s", "q"], 
+                    "   ✅ Include this chunk?",
+                    choices=["y", "n", "s", "q"],
                     default="y",
                     show_choices=True
                 )
-                
+
                 if ans == "y":
                     if match_mode == "id":
                         approved_chunks.append(chunk_id)
@@ -1170,11 +1169,11 @@ def capture(
                         golden_set.to_yaml(str(goldens))
                         console.print(f"\n[green]Saved {added} question(s) to {goldens}[/green]")
                     raise typer.Exit(0)
-            
+
             if skip_question:
                 console.print("   [yellow]Skipping question...[/yellow]")
                 continue
-                
+
         if not approved_chunks:
             console.print("   [yellow]No chunks approved. Skipping question...[/yellow]")
             continue
@@ -1182,7 +1181,7 @@ def capture(
         # Generate ID and save
         q_id = generate_question_id(q_text, prefix=id_prefix, existing_ids=existing_ids)
         existing_ids.add(q_id)
-        
+
         golden_q = GoldenQuestion(
             id=q_id,
             question=q_text,
@@ -1476,7 +1475,7 @@ def generate(
 
         # 5d. Merge and save.
         if new_questions:
-            added = golden_set.merge(new_questions)
+            _added = golden_set.merge(new_questions)
             try:
                 golden_set.to_yaml(str(goldens))
             except OSError as exc:

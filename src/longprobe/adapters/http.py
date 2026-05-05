@@ -30,8 +30,8 @@ from typing import Any
 
 import requests
 
-from .base import AbstractRetrieverAdapter
 from ..config import HttpRetrieverConfig
+from .base import AbstractRetrieverAdapter
 
 logger = logging.getLogger(__name__)
 

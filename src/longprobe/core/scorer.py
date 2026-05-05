@@ -24,12 +24,11 @@ from __future__ import annotations
 import math
 import time
 from collections import Counter
-from dataclasses import dataclass, field
+from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Callable
 
 from .golden import GoldenQuestion, GoldenSet
-
 
 # ---------------------------------------------------------------------------
 # Result dataclasses

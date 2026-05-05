@@ -24,7 +24,6 @@ from datetime import datetime, timezone
 
 from .scorer import ProbeReport, QuestionResult
 
-
 # ---------------------------------------------------------------------------
 # Internal helpers
 # ---------------------------------------------------------------------------
@@ -342,7 +341,6 @@ class BaselineStore:
 
             if cur_recall < base_recall:
                 # Regression: recall went down.
-                baseline_found = set(base_result.found_chunks)
                 current_found = set(cur_result.found_chunks)
                 newly_lost = sorted(
                     c for c in base_result.found_chunks if c not in current_found

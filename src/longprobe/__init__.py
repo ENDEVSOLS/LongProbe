@@ -5,29 +5,29 @@ Define Golden Questions once. Run ``longprobe check`` on every commit.
 Get an exact diff of which document chunks were lost — before your users notice.
 """
 
-from longprobe.core.golden import GoldenQuestion, GoldenSet
-from longprobe.core.scorer import RecallScorer, QuestionResult, ProbeReport
-from longprobe.core.embedder import QueryEmbedder
+from longprobe.adapters import create_adapter
+from longprobe.adapters.base import AbstractRetrieverAdapter
+from longprobe.config import ProbeConfig
 from longprobe.core.baseline import BaselineStore
 from longprobe.core.diff import DiffReporter, RegressionDiff
-from longprobe.config import ProbeConfig
-from longprobe.adapters.base import AbstractRetrieverAdapter
-from longprobe.adapters import create_adapter
+from longprobe.core.embedder import QueryEmbedder
+from longprobe.core.golden import GoldenQuestion, GoldenSet
+from longprobe.core.scorer import ProbeReport, QuestionResult, RecallScorer
 
 __version__ = "0.1.0"
 
 __all__ = [
-    "GoldenQuestion",
-    "GoldenSet",
-    "RecallScorer",
-    "QuestionResult",
-    "ProbeReport",
-    "QueryEmbedder",
+    "AbstractRetrieverAdapter",
     "BaselineStore",
     "DiffReporter",
-    "RegressionDiff",
+    "GoldenQuestion",
+    "GoldenSet",
     "ProbeConfig",
-    "AbstractRetrieverAdapter",
+    "ProbeReport",
+    "QueryEmbedder",
+    "QuestionResult",
+    "RecallScorer",
+    "RegressionDiff",
     "create_adapter",
 ]
 

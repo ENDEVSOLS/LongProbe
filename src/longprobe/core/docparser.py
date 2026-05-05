@@ -23,7 +23,6 @@ from __future__ import annotations
 import logging
 import os
 from pathlib import Path
-from typing import List, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +94,7 @@ class DocumentParser:
         # Unknown extension: try text read as last resort.
         return self._read_text(file_path)
 
-    def parse_directory(self, path: str) -> List[Tuple[str, str]]:
+    def parse_directory(self, path: str) -> list[tuple[str, str]]:
         """Recursively parse all supported files in a directory.
 
         Args:
@@ -111,7 +110,7 @@ class DocumentParser:
             logger.warning("Not a directory: %s", path)
             return []
 
-        results: List[Tuple[str, str]] = []
+        results: list[tuple[str, str]] = []
 
         for file_path in sorted(dir_path.rglob("*")):
             if not file_path.is_file():
@@ -129,7 +128,7 @@ class DocumentParser:
 
         return results
 
-    def parse_path(self, path: str) -> List[Tuple[str, str]]:
+    def parse_path(self, path: str) -> list[tuple[str, str]]:
         """Parse a file or directory.
 
         If *path* is a file, returns a single-element list.

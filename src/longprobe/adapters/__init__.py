@@ -1,10 +1,10 @@
 from .base import AbstractRetrieverAdapter
+from .chroma import ChromaAdapter
 from .http import HttpAdapter
 from .langchain import LangChainRetrieverAdapter
 from .llamaindex import LlamaIndexRetrieverAdapter
 from .pinecone import PineconeAdapter
 from .qdrant import QdrantAdapter
-from .chroma import ChromaAdapter
 
 
 def create_adapter(adapter_type: str, **kwargs) -> AbstractRetrieverAdapter:
@@ -46,11 +46,11 @@ def create_adapter(adapter_type: str, **kwargs) -> AbstractRetrieverAdapter:
 
 __all__ = [
     "AbstractRetrieverAdapter",
+    "ChromaAdapter",
     "HttpAdapter",
     "LangChainRetrieverAdapter",
     "LlamaIndexRetrieverAdapter",
     "PineconeAdapter",
     "QdrantAdapter",
-    "ChromaAdapter",
     "create_adapter",
 ]
