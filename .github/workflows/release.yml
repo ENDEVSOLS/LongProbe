@@ -1,0 +1,107 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggers on version tags like v0.1.0, v1.2.3, etc.
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          VERSION=${TAG#v}
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Creating release for $TAG"
+
+      - name: Extract release notes from CHANGELOG
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          
+          # Extract the section for this version from CHANGELOG.md
+          awk -v ver="$VERSION" '
+            /^## \['"$VERSION"'\]/ { found=1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > release_notes.md
+          
+          if [ ! -s release_notes.md ]; then
+            echo "⚠️ No changelog entry found for version $VERSION"
+            echo "No changelog entry found for this version." > release_notes.md
+          fi
+          
+          # Format release notes
+          {
+            echo "# LongProbe ${{ steps.version.outputs.tag }}"
+            echo ""
+            cat release_notes.md
+            echo ""
+            echo "---"
+            echo ""
+            echo "## 📦 Installation"
+            echo ""
+            echo "\`\`\`bash"
+            echo "pip install longprobe==$VERSION"
+            echo "\`\`\`"
+            echo ""
+            echo "## 📚 Documentation"
+            echo ""
+            echo "- [README](https://github.com/ENDEVSOLS/LongProbe#readme)"
+            echo "- [CHANGELOG](https://github.com/ENDEVSOLS/LongProbe/blob/main/CHANGELOG.md)"
+            echo "- [CONTRIBUTING](https://github.com/ENDEVSOLS/LongProbe/blob/main/CONTRIBUTING.md)"
+            echo ""
+            echo "## 🔗 Links"
+            echo ""
+            echo "- **PyPI**: https://pypi.org/project/longprobe/$VERSION/"
+            echo "- **Homepage**: https://endevsols.com/open-source/longprobe"
+            echo "- **Issues**: https://github.com/ENDEVSOLS/LongProbe/issues"
+            echo ""
+            echo "---"
+            echo ""
+            echo "**Part of the [EnDevSols Long Suite](https://endevsols.com/open-source)** 🔬"
+          } > final_release_notes.md
+          
+          echo "✅ Release notes prepared"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Build package
+        run: |
+          echo "🔨 Building package..."
+          uv build
+          ls -lh dist/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: LongProbe ${{ steps.version.outputs.tag }}
+          body_path: final_release_notes.md
+          files: |
+            dist/*.whl
+            dist/*.tar.gz
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.tag, 'alpha') || contains(steps.version.outputs.tag, 'beta') || contains(steps.version.outputs.tag, 'rc') }}
+          generate_release_notes: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
