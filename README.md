@@ -1,6 +1,6 @@
 <div align="center">
 
-![LongProbe](assets/longProbe-with-bg.png)
+<p align="center"><img src="assets/longProbe-with-bg.png" alt="LongProbe Logo" width="320"/></p>
 
 **Sub-second RAG regression testing for production pipelines**
 
