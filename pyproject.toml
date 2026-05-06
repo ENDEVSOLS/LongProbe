@@ -40,7 +40,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://endevsols.com/open-source/longprobe"
-Documentation = "https://github.com/ENDEVSOLS/LongProbe#readme"
+Documentation = "https://endevsols.github.io/LongProbe"
 Repository = "https://github.com/ENDEVSOLS/LongProbe"
 Issues = "https://github.com/ENDEVSOLS/LongProbe/issues"
 Changelog = "https://github.com/ENDEVSOLS/LongProbe/blob/main/CHANGELOG.md"

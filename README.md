@@ -9,8 +9,9 @@
 [![Python Versions](https://img.shields.io/pypi/pyversions/longprobe.svg)](https://pypi.org/project/longprobe/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/ENDEVSOLS/LongProbe/workflows/LongProbe%20CI/badge.svg)](https://github.com/ENDEVSOLS/LongProbe/actions)
+[![Documentation](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://endevsols.github.io/LongProbe)
 
-[Quick Start](#quick-start) • [Documentation](#features) • [Python API](#python-api) • [CI/CD](#github-actions)
+[Quick Start](#quick-start) • [Documentation](https://endevsols.github.io/LongProbe) • [Python API](#python-api) • [CI/CD](#github-actions)
 
 </div>
 
