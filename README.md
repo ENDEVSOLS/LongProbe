@@ -1,15 +1,57 @@
-# LongProbe 🔬
+<div align="center">
+
+![LongProbe](assets/longProbe-with-bg.png)
+
+**Sub-second RAG regression testing for production pipelines**
 
 [![PyPI version](https://badge.fury.io/py/longprobe.svg)](https://badge.fury.io/py/longprobe)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/longprobe?period=total&units=international_system&left_color=black&right_color=green&left_text=downloads)](https://pepy.tech/projects/longprobe)
 [![Python Versions](https://img.shields.io/pypi/pyversions/longprobe.svg)](https://pypi.org/project/longprobe/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CI](https://github.com/ENDEVSOLS/LongProbe/workflows/LongProbe%20CI/badge.svg)](https://github.com/ENDEVSOLS/LongProbe/actions)
 
+[Quick Start](#quick-start) • [Documentation](#features) • [Python API](#python-api) • [CI/CD](#github-actions)
+
+</div>
+
+---
+
+## Overview
+
 > "Did my last commit break retrieval?" — now you know in seconds.
 
-LongProbe is a sub-second RAG regression harness. Define your Golden Questions once.
-Run `longprobe check` on every commit. Get an exact diff of which document chunks
-were lost in your latest change — before your users notice.
+LongProbe is a **sub-second RAG regression harness**. Define your Golden Questions once, run `longprobe check` on every commit, and get an exact diff of which document chunks were lost in your latest change — before your users notice.
+
+**Think `pytest --watch` for your RAG pipeline.**
+
+## 🎬 Demos
+
+### Test RAG Retrieval
+Quick validation of retrieval quality with live progress tracking.
+
+![Test RAG Retrieval](demos/01-quick-check.gif)
+
+### Monitor RAG Quality
+Detailed quality monitoring with Python API and comprehensive results.
+
+![Monitor RAG Quality](demos/02-python-api.gif)
+
+### Detect Regressions
+Baseline comparison and regression detection with deployment verdict.
+
+![Detect Regressions](demos/03-baseline-tracking.gif)
+
+## Why LongProbe?
+
+Every RAG developer faces the same silent killer: you refactor chunking strategy, upgrade LangChain, or add a new document — and your retrieval silently degrades. DeepEval and RAGChecker are heavyweight evaluation frameworks meant for batch analysis, not fast regression checks in a dev loop.
+
+**LongProbe gives you instant feedback:**
+- ⚡ **Sub-second checks** on small golden sets
+- 🔍 **Exact diffs** showing which chunks were lost/gained
+- 📊 **Recall scores** with per-question breakdown
+- 💾 **Baseline tracking** to catch regressions over time
+- 🧪 **pytest integration** for existing test suites
+- 🔌 **Pluggable adapters** for any vector store
 
 ## Part of the Long Suite
 
@@ -21,15 +63,6 @@ LongProbe is part of the [EnDevSols Long Suite](https://endevsols.com/open-sourc
 - **[LongProbe](https://github.com/ENDEVSOLS/LongProbe)** - Retrieval regression testing ← You are here
 
 Together they cover the full RAG pipeline from ingestion to production monitoring.
-
-## Why LongProbe?
-
-Every RAG developer faces the same silent killer: you refactor chunking strategy,
-upgrade LangChain, or add a new document — and your retrieval silently degrades.
-DeepEval and RAGChecker are heavyweight evaluation frameworks meant for batch analysis,
-not fast regression checks in a dev loop.
-
-**LongProbe gives you `pytest --watch` for your RAG pipeline.**
 
 ## Features
 
@@ -50,7 +83,7 @@ not fast regression checks in a dev loop.
 ### Installation
 
 ```bash
-# Install with UV
+# Install with UV (recommended)
 uv pip install longprobe
 
 # Install with pip
@@ -60,12 +93,6 @@ pip install longprobe
 uv pip install longprobe[chroma]      # ChromaDB support
 uv pip install longprobe[openai]      # OpenAI embeddings
 uv pip install longprobe[all]         # Everything
-uv pip install longprobe[chroma,openai]  # Specific extras
-
-# Install for development
-git clone https://github.com/ENDEVSOLS/LongProbe.git
-cd LongProbe
-uv sync --dev
 ```
 
 ### Initialize
@@ -109,7 +136,7 @@ questions:
     match_mode: "semantic"      # embedding similarity
     semantic_threshold: 0.80
     required_chunks:
-      - "The following officers are authorized to sign on behalf of the company"
+      - "The following officers are authorized to sign"
     top_k: 10
 ```
 
@@ -119,20 +146,13 @@ Edit `longprobe.yaml`:
 
 ```yaml
 retriever:
-  type: "chroma"                 # Or "http" to test a RAG API
+  type: "chroma"
   chroma:
     persist_directory: "./chroma_db"
     collection: "my_documents"
-  # http:
-  #   url: "http://localhost:8000/api/retrieve"
-  #   method: "POST"
-  #   body_template: '{"query": "{question}"}'
-  #   response_mapping:
-  #     results_path: "data.chunks"
-  #     text_field: "content"
 
 embedder:
-  provider: "local"              # openai | huggingface | local
+  provider: "local"
   model: "text-embedding-3-small"
 
 scoring:
@@ -162,106 +182,39 @@ longprobe check --output github
 
 ## CLI Reference
 
-### `longprobe init`
-Create starter configuration files.
+### Core Commands
+
+| Command | Description |
+|---------|-------------|
+| `longprobe init` | Create starter configuration files |
+| `longprobe check` | Run probes against the golden set |
+| `longprobe diff` | Compare current results against baseline |
+| `longprobe baseline save` | Save current results as baseline |
+| `longprobe baseline list` | List all saved baselines |
+| `longprobe watch` | Watch golden file and re-run on changes |
+| `longprobe generate` | Auto-generate Golden Questions from documents |
+| `longprobe capture` | Build goldens.yaml by querying your retriever |
+
+### Examples
+
 ```bash
-longprobe init          # Create goldens.yaml and longprobe.yaml
-longprobe init --force  # Overwrite existing files
-```
+# Initialize project
+longprobe init
 
-### `longprobe generate`
-Automatically generate Golden Questions by analyzing your documents with an LLM.
-```bash
-longprobe generate ./docs                    # Read markdown/PDFs and save to questions.txt
-longprobe generate ./docs --capture --auto   # Generate AND automatically save the chunks
-```
+# Run checks with custom config
+longprobe check -g goldens.yaml -c longprobe.yaml
 
-### `longprobe capture`
-Build your `goldens.yaml` file by automatically querying your retriever.
-```bash
-longprobe capture -q "What is the refund policy?"        # Interactive mode
-longprobe capture --auto --questions-file questions.txt  # Auto-save whatever is retrieved
-longprobe capture --auto -q "What is X?" --tag doc:legal # Scope the test to a tag
-```
+# Save baseline for comparison
+longprobe baseline save --label v1.0
 
-### `longprobe check`
-Run probes against the golden set.
-```bash
-longprobe check                                    # Use defaults
-longprobe check -g goldens.yaml -c longprobe.yaml  # Specify files
-longprobe check -o json                            # JSON output
-longprobe check -o github                          # GitHub Actions format
-longprobe check -o table                           # Rich table (default)
-longprobe check -k 10                              # Override top_k
-longprobe check -t 0.9                             # Override threshold
-```
+# Compare against baseline
+longprobe diff --baseline v1.0
 
-### `longprobe baseline save`
-Save current results as a named baseline.
-```bash
-longprobe baseline save                  # Save as "latest"
-longprobe baseline save --label v1.2     # Save with custom label
-```
+# Watch mode for development
+longprobe watch --interval 2
 
-### `longprobe baseline list`
-List all saved baselines.
-```bash
-longprobe baseline list
-```
-
-### `longprobe baseline delete`
-Delete a saved baseline.
-```bash
-longprobe baseline delete --label v1.2
-```
-
-### `longprobe diff`
-Compare current results against a saved baseline.
-```bash
-longprobe diff                          # Compare against "latest"
-longprobe diff --baseline v1.2          # Compare against specific label
-longprobe diff --output json            # JSON diff output
-```
-
-### `longprobe watch`
-Watch golden file and re-run on changes.
-```bash
-longprobe watch                         # 2s interval (default)
-longprobe watch --interval 5            # 5s interval
-```
-
-## Match Modes
-
-### ID Match (`match_mode: "id"`)
-Exact string match on chunk/document IDs. Best when you control the IDs in your vector store.
-```yaml
-- id: "q1"
-  question: "What is X?"
-  match_mode: "id"
-  required_chunks:
-    - "doc_a_chunk_3"
-    - "doc_b_chunk_7"
-```
-
-### Text Match (`match_mode: "text"`)
-Case-insensitive substring matching. Checks if the required text appears anywhere in the retrieved documents.
-```yaml
-- id: "q2"
-  question: "What are the payment terms?"
-  match_mode: "text"
-  required_chunks:
-    - "net 30 days from invoice"
-```
-
-### Semantic Match (`match_mode: "semantic"`)
-Word-frequency cosine similarity. Useful when exact text may vary but meaning should be preserved.
-```yaml
-- id: "q3"
-  question: "Who can authorize payments?"
-  match_mode: "semantic"
-  semantic_threshold: 0.80
-  required_chunks:
-    - "Only the CFO and CEO may authorize payments exceeding $10,000"
+# Generate questions from documents
+longprobe generate ./docs --capture --auto
 ```
 
 ## Python API
@@ -270,10 +223,11 @@ Word-frequency cosine similarity. Useful when exact text may vary but meaning sh
 
 ```python
 from longprobe import LongProbe
-from longprobe.adapters import ChromaAdapter
+from longprobe.adapters import create_adapter
 
 # Create adapter for your vector store
-adapter = ChromaAdapter(
+adapter = create_adapter(
+    "chroma",
     collection_name="my_documents",
     persist_directory="./chroma_db"
 )
@@ -286,13 +240,30 @@ probe = LongProbe(
 )
 report = probe.run()
 
-print(f"Overall Recall: {report.overall_recall:.2f}")
-print(f"Pass Rate: {report.pass_rate:.2f}")
+print(f"Overall Recall: {report.overall_recall:.2%}")
+print(f"Pass Rate: {report.pass_rate:.2%}")
+```
 
-# Check missing chunks
-missing = probe.get_missing_chunks()
-for q_id, chunks in missing.items():
-    print(f"  {q_id}: {chunks}")
+### Baseline Management
+
+```python
+from longprobe import LongProbe
+from longprobe.adapters import create_adapter
+
+adapter = create_adapter("chroma", collection_name="docs", persist_directory="./db")
+probe = LongProbe(adapter=adapter, goldens_path="goldens.yaml")
+
+# Run and save baseline
+report = probe.run()
+probe.save_baseline(label="v1.0")
+
+# After making changes...
+report2 = probe.run()
+
+# Compare against baseline
+diff = probe.diff(baseline_label="v1.0")
+print(f"Regressions: {len(diff['regressions'])}")
+print(f"Improvements: {len(diff['improvements'])}")
 ```
 
 ### With LangChain
@@ -303,7 +274,6 @@ from longprobe.adapters import LangChainRetrieverAdapter
 
 # Wrap your existing LangChain retriever
 adapter = LangChainRetrieverAdapter(your_langchain_retriever)
-
 probe = LongProbe(adapter=adapter, goldens_path="goldens.yaml")
 report = probe.run()
 
@@ -321,44 +291,20 @@ probe = LongProbe(adapter=adapter, goldens_path="goldens.yaml")
 report = probe.run()
 ```
 
-### Baseline Management
-
-```python
-from longprobe import LongProbe, ChromaAdapter
-
-probe = LongProbe(
-    adapter=ChromaAdapter(collection_name="docs", persist_directory="./db"),
-    goldens_path="goldens.yaml"
-)
-
-# Run and save baseline
-report = probe.run()
-probe.save_baseline(label="v1.0")
-
-# After making changes...
-report2 = probe.run()
-
-# Compare against baseline
-diff = probe.diff(baseline_label="v1.0")
-print(f"Regressions: {len(diff['regressions'])}")
-print(f"Improvements: {len(diff['improvements'])}")
-```
-
 ## Pytest Integration
 
 ### Configuration
-
-Install the pytest plugin (it auto-registers via entry points):
 
 ```python
 # conftest.py
 import pytest
 from longprobe import LongProbe
-from longprobe.adapters import ChromaAdapter
+from longprobe.adapters import create_adapter
 
 @pytest.fixture
 def probe():
-    adapter = ChromaAdapter(
+    adapter = create_adapter(
+        "chroma",
         collection_name="test_docs",
         persist_directory="./test_db"
     )
@@ -375,19 +321,8 @@ def probe():
 def test_retrieval_recall(probe):
     report = probe.run()
     assert report.overall_recall >= 0.85, (
-        f"Recall dropped to {report.overall_recall:.2f}. "
-        f"Lost chunks: {probe.get_missing_chunks()}"
+        f"Recall dropped to {report.overall_recall:.2f}"
     )
-
-def test_critical_questions_found(probe):
-    report = probe.run()
-    missing = probe.get_missing_chunks()
-    critical_missing = {
-        q_id: chunks for q_id, chunks in missing.items()
-        if any("critical" in tag for tag in
-               next(r.tags for r in report.results if r.question_id == q_id))
-    }
-    assert not critical_missing, f"Critical chunks missing: {critical_missing}"
 
 def test_no_regression_vs_baseline(probe):
     report = probe.run()
@@ -396,16 +331,21 @@ def test_no_regression_vs_baseline(probe):
     )
 ```
 
-### Pytest CLI Options
-
-```bash
-pytest --longprobe-goldens goldens.yaml --longprobe-config longprobe.yaml
-pytest --longprobe-fail-threshold 0.85
-```
-
 ## Retriever Adapters
 
-### ChromaDB (Direct)
+LongProbe supports multiple vector stores and retrieval frameworks:
+
+| Adapter | Type | Configuration |
+|---------|------|---------------|
+| **ChromaDB** | Direct | `type: chroma` |
+| **Pinecone** | Direct | `type: pinecone` |
+| **Qdrant** | Direct | `type: qdrant` |
+| **HTTP API** | Direct | `type: http` |
+| **LangChain** | Programmatic | `LangChainRetrieverAdapter` |
+| **LlamaIndex** | Programmatic | `LlamaIndexRetrieverAdapter` |
+
+### ChromaDB Example
+
 ```yaml
 retriever:
   type: chroma
@@ -413,35 +353,17 @@ retriever:
   persist_directory: ./chroma_db
 ```
 
-### Pinecone (Direct)
+### HTTP API Example
+
 ```yaml
 retriever:
-  type: pinecone
-  index_name: my-index
-  api_key: ${PINECONE_API_KEY}
-  namespace: ""
-```
-
-### Qdrant (Direct)
-```yaml
-retriever:
-  type: qdrant
-  collection: my_collection
-  host: localhost
-  port: 6333
-  api_key: ${QDRANT_API_KEY}
-```
-
-### LangChain (Programmatic)
-```python
-from longprobe.adapters import LangChainRetrieverAdapter
-adapter = LangChainRetrieverAdapter(your_retriever)
-```
-
-### LlamaIndex (Programmatic)
-```python
-from longprobe.adapters import LlamaIndexRetrieverAdapter
-adapter = LlamaIndexRetrieverAdapter(your_retriever)
+  type: http
+  url: "http://localhost:8000/api/retrieve"
+  method: "POST"
+  body_template: '{"query": "{question}"}'
+  response_mapping:
+    results_path: "data.chunks"
+    text_field: "content"
 ```
 
 ## GitHub Actions
@@ -464,41 +386,31 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 ```
 
-## Configuration Reference
+## Match Modes
 
-| Section | Field | Type | Default | Description |
-|---------|-------|------|---------|-------------|
-| `retriever` | `type` | string | `"chroma"` | Adapter type |
-| `retriever` | `collection` | string | `""` | Collection name |
-| `retriever` | `persist_directory` | string | `""` | Local DB path |
-| `retriever` | `index_name` | string | `""` | Pinecone index |
-| `retriever` | `host` | string | `""` | Qdrant host |
-| `retriever` | `port` | int | `6333` | Qdrant port |
-| `retriever` | `api_key` | string | `""` | API key (supports `${ENV_VAR}`) |
-| `embedder` | `provider` | string | `"openai"` | Embedding provider |
-| `embedder` | `model` | string | `"text-embedding-3-small"` | Model name |
-| `embedder` | `dimensions` | int | `0` | Embedding dimensions |
-| `scoring` | `recall_threshold` | float | `0.8` | Min recall to pass |
-| `scoring` | `fail_on_regression` | bool | `true` | Exit 1 on regression |
-| `baseline` | `db_path` | string | `.longprobe/baselines.db` | SQLite path |
-| `baseline` | `auto_compare` | bool | `true` | Auto-compare vs baseline |
+### ID Match (`match_mode: "id"`)
+Exact string match on chunk/document IDs. Best when you control the IDs in your vector store.
+
+### Text Match (`match_mode: "text"`)
+Case-insensitive substring matching. Checks if the required text appears anywhere in the retrieved documents.
+
+### Semantic Match (`match_mode: "semantic"`)
+Word-frequency cosine similarity. Useful when exact text may vary but meaning should be preserved.
 
 ## Development
 
 ```bash
 # Install for development
+git clone https://github.com/ENDEVSOLS/LongProbe.git
+cd LongProbe
 uv sync --dev
 
-# Run unit tests
+# Run tests
 uv run pytest tests/unit/ -v
-
-# Run all tests including integration
 uv run pytest tests/ -v --run-integration
 
-# Lint
+# Lint and format
 uv run ruff check src/
-
-# Format
 uv run ruff format src/
 ```
 
@@ -517,6 +429,22 @@ goldens.yaml → GoldenLoader → QueryEmbedder → RetrieverAdapter → RecallS
 5. **Compare** against saved baselines to detect regressions
 6. **Report** a Recall Score, diff of lost chunks, and optionally fail CI/CD
 
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## Security
+
+For security issues, please see [SECURITY.md](SECURITY.md).
+
 ## License
 
 MIT License — see [LICENSE](LICENSE) for details.
+
+---
+
+<div align="center">
+
+[Website](https://endevsols.com) • [GitHub](https://github.com/ENDEVSOLS) • [Documentation](https://github.com/ENDEVSOLS/LongProbe)
+
+</div>
