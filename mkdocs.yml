@@ -95,7 +95,7 @@ nav:
       - integrations/llamaindex.md
   - Demos:
       - demos/overview.md
-      - demos/test-retrieval.md
+      - demos/complete-workflow.md
       - demos/monitor-quality.md
       - demos/detect-regressions.md
   - API Reference:
