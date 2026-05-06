@@ -1,0 +1,36 @@
+/* Increase logo size in header */
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+    height: 2.5rem;
+    width: auto;
+    border-radius: 4px;
+}
+
+/* Adjust header padding to accommodate larger logo */
+.md-header__inner {
+    padding: 0.2rem 0.8rem;
+}
+
+/* Ensure logo is centered vertically */
+.md-header__button.md-logo {
+    display: flex;
+    align-items: center;
+}
+
+/* Change header background to dark for better contrast */
+.md-header {
+    background-color: #1a1a2e !important;
+}
+
+/* Adjust search and icons color for dark header */
+.md-header__button {
+    color: rgba(255, 255, 255, 0.87);
+}
+
+.md-search__input {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.md-search__input::placeholder {
+    color: rgba(255, 255, 255, 0.54);
+}
