@@ -148,10 +148,10 @@ cython_debug/
 demo_run/.longprobe/
 demo_run/chroma_db/
 
-# Demo recordings (generated files - commit .tape scripts only)
-demos/*.gif
-demos/*.mp4
-demos/*.webm
+# Demo environment and internal files (keep .tape scripts and assets)
+demos/
+demo_run/.longprobe/
+demo_run/chroma_db/
 
 # Internal demo documentation (not for public repo)
 DEMO_GUIDE.md

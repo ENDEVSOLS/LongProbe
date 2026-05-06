@@ -29,17 +29,17 @@ LongProbe is a **sub-second RAG regression harness**. Define your Golden Questio
 ### Test RAG Retrieval
 Quick validation of retrieval quality with live progress tracking.
 
-![Test RAG Retrieval](demos/01-quick-check.gif)
+![Test RAG Retrieval](assets/01-quick-check.gif)
 
 ### Monitor RAG Quality
 Detailed quality monitoring with Python API and comprehensive results.
 
-![Monitor RAG Quality](demos/02-python-api.gif)
+![Monitor RAG Quality](assets/02-python-api.gif)
 
 ### Detect Regressions
 Baseline comparison and regression detection with deployment verdict.
 
-![Detect Regressions](demos/03-baseline-tracking.gif)
+![Detect Regressions](assets/03-baseline-tracking.gif)
 
 ## Why LongProbe?
 
