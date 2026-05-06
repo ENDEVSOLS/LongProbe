@@ -1,6 +1,6 @@
 <div align="center">
 
-<p align="center"><img src="assets/longProbe-with-bg.png" alt="LongProbe Logo" width="320"/></p>
+<p align="center"><img src="https://raw.githubusercontent.com/ENDEVSOLS/LongProbe/main/assets/longProbe-with-bg.png" alt="LongProbe Logo" width="320"/></p>
 
 **Sub-second RAG regression testing for production pipelines**
 
@@ -29,17 +29,17 @@ LongProbe is a **sub-second RAG regression harness**. Define your Golden Questio
 ### Test RAG Retrieval
 Quick validation of retrieval quality with live progress tracking.
 
-![Test RAG Retrieval](assets/01-quick-check.gif)
+![Test RAG Retrieval](https://raw.githubusercontent.com/ENDEVSOLS/LongProbe/main/assets/01-quick-check.gif)
 
 ### Monitor RAG Quality
 Detailed quality monitoring with Python API and comprehensive results.
 
-![Monitor RAG Quality](assets/02-python-api.gif)
+![Monitor RAG Quality](https://raw.githubusercontent.com/ENDEVSOLS/LongProbe/main/assets/02-python-api.gif)
 
 ### Detect Regressions
 Baseline comparison and regression detection with deployment verdict.
 
-![Detect Regressions](assets/03-baseline-tracking.gif)
+![Detect Regressions](https://raw.githubusercontent.com/ENDEVSOLS/LongProbe/main/assets/03-baseline-tracking.gif)
 
 ## Why LongProbe?
 

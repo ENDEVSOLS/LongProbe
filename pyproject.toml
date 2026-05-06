@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "longprobe"
-version = "0.1.0"
+version = "0.1.1"
 description = "RAG retrieval regression testing — define Golden Questions, detect lost chunks in CI"
 readme = "README.md"
 license = { text = "MIT" }
@@ -70,6 +70,11 @@ dev = [
     "pytest-asyncio>=0.23.0",
     "ruff>=0.4.0",
     "longprobe[chroma,huggingface]",
+]
+docs = [
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.5.0",
+    "mkdocstrings[python]>=0.24.0",
 ]
 
 [project.scripts]
