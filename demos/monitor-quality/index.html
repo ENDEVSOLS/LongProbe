@@ -12,13 +12,13 @@
         <meta name="author" content="EnDevSols">
       
       
-        <link rel="canonical" href="https://endevsols.github.io/LongProbe/guide/match-modes/">
+        <link rel="canonical" href="https://endevsols.github.io/LongProbe/demos/monitor-quality/">
       
       
-        <link rel="prev" href="../golden-questions/">
+        <link rel="prev" href="../complete-workflow/">
       
       
-        <link rel="next" href="../cli-reference/">
+        <link rel="next" href="../detect-regressions/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Match Modes - </title>
+        <title>Monitor RAG Quality Demo - </title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#match-modes" class="md-skip">
+        <a href="#monitor-rag-quality-demo" class="md-skip">
           Skip to content
         </a>
       
@@ -123,7 +123,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Match Modes
+              Monitor RAG Quality Demo
             
           </span>
         </div>
@@ -449,10 +449,8 @@
       
   
   
-    
   
   
-  
     
     
       
@@ -475,11 +473,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -500,7 +500,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -518,7 +518,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../golden-questions/" class="md-nav__link">
+      <a href="../../guide/golden-questions/" class="md-nav__link">
         
   
   
@@ -543,37 +543,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Match Modes
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../guide/match-modes/" class="md-nav__link">
         
   
   
@@ -589,70 +562,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#id-match" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        ID Match
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#text-match" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Text Match
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#semantic-match" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Semantic Match
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#choosing-a-match-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Choosing a Match Mode
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -665,7 +574,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../cli-reference/" class="md-nav__link">
+      <a href="../../guide/cli-reference/" class="md-nav__link">
         
   
   
@@ -693,7 +602,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../python-api/" class="md-nav__link">
+      <a href="../../guide/python-api/" class="md-nav__link">
         
   
   
@@ -721,7 +630,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../baseline-management/" class="md-nav__link">
+      <a href="../../guide/baseline-management/" class="md-nav__link">
         
   
   
@@ -966,8 +875,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -988,13 +899,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
@@ -1015,7 +924,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1033,7 +942,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../demos/overview/" class="md-nav__link">
+      <a href="../overview/" class="md-nav__link">
         
   
   
@@ -1061,7 +970,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../demos/complete-workflow/" class="md-nav__link">
+      <a href="../complete-workflow/" class="md-nav__link">
         
   
   
@@ -1086,10 +995,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../demos/monitor-quality/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monitor RAG Quality Demo
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1105,6 +1041,98 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-the-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running the Demo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interactive-tui-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interactive TUI Output
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Interactive TUI Output">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sample-output-display" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sample Output Display:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works-under-the-hood" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Works Under the Hood
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quality-threshold-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quality Threshold Enforcement
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1117,7 +1145,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../demos/detect-regressions/" class="md-nav__link">
+      <a href="../detect-regressions/" class="md-nav__link">
         
   
   
@@ -1372,34 +1400,86 @@
   
 
 
-<h1 id="match-modes">Match Modes<a class="headerlink" href="#match-modes" title="Permanent link">&para;</a></h1>
-<p>LongProbe supports three match modes for verifying retrieved chunks.</p>
-<h2 id="id-match">ID Match<a class="headerlink" href="#id-match" title="Permanent link">&para;</a></h2>
-<p>Exact string match on chunk/document IDs.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">match_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;id&quot;</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">required_chunks</span><span class="p">:</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;doc_a_chunk_3&quot;</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;doc_b_chunk_7&quot;</span>
+<h1 id="monitor-rag-quality-demo">Monitor RAG Quality Demo<a class="headerlink" href="#monitor-rag-quality-demo" title="Permanent link">&para;</a></h1>
+<p>The <strong>Monitor RAG Quality</strong> demonstration illustrates how to continuously measure RAG retrieval performance against saved Golden Questions using LongProbe.</p>
+<hr />
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>In production RAG systems, monitoring retrieval quality is critical to ensure that changes to documents, embeddings, or vector databases do not silently degrade recall. </p>
+<p>This demo connects LongProbe to a vector store (ChromaDB), evaluates a set of approved golden questions, and renders an interactive Rich TUI table displaying recall scores, pass/fail status, and retrieved chunk counts.</p>
+<hr />
+<h2 id="running-the-demo">Running the Demo<a class="headerlink" href="#running-the-demo" title="Permanent link">&para;</a></h2>
+<p>To run the RAG quality monitoring demo locally:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>demo_run/monitor_rag_quality.py
 </code></pre></div>
-<h2 id="text-match">Text Match<a class="headerlink" href="#text-match" title="Permanent link">&para;</a></h2>
-<p>Case-insensitive substring matching.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">match_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;text&quot;</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">required_chunks</span><span class="p">:</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;30-day</span><span class="nv"> </span><span class="s">money-back</span><span class="nv"> </span><span class="s">guarantee&quot;</span>
+<hr />
+<h2 id="interactive-tui-output">Interactive TUI Output<a class="headerlink" href="#interactive-tui-output" title="Permanent link">&para;</a></h2>
+<p>When executed, LongProbe performs three live setup and evaluation phases:</p>
+<ol>
+<li><strong>Setup</strong>: Connects to the vector store and seeds/loads sample documents.</li>
+<li><strong>Loading</strong>: Loads approved golden questions from <code>goldens.yaml</code>.</li>
+<li><strong>Testing</strong>: Queries the vector store for each question and calculates recall.</li>
+</ol>
+<h3 id="sample-output-display">Sample Output Display:<a class="headerlink" href="#sample-output-display" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>🔬 RAG Quality Check with LongProbe
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>╭──────────────────────────────────────── RAG Quality Check ─────────────────────────────────────────╮
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   Setup                                      ✓                    Connected to vector store        │
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   Loading                                    ✓                    Loaded 3 golden questions        │
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│   Testing                                    ✓                    All 3 tests complete             │
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│                                                                                                    │
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│ ✓ Tests complete!                                                                                  │
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>╭────────────────────────────────────────── 📊 Test Results ──────────────────────────────────────────╮
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│  Question                                                                      Recall        Status  │
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│  What are the enterprise payment terms?                                         50.0%        ✗ FAIL  │
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│  What is the refund policy?                                                    100.0%        ✓ PASS  │
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>│  How is data encrypted?                                                        100.0%        ✓ PASS  │
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>╭───────────────────────────────────────────── 📈 Summary ───────────────────────────────────────────╮
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│ Overall Recall: 83.3%                                                                              │
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>│ Pass Rate: 66.7%                                                                                   │
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>│                                                                                                    │
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>│ ✓ Passed: 2/3                                                                                      │
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>│ ✗ Failed: 1/3                                                                                      │
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>⚠️  1 test(s) failed - review missing chunks
 </code></pre></div>
-<h2 id="semantic-match">Semantic Match<a class="headerlink" href="#semantic-match" title="Permanent link">&para;</a></h2>
-<p>Word-frequency cosine similarity.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">match_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;semantic&quot;</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">semantic_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.80</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">required_chunks</span><span class="p">:</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Only</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">CFO</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">CEO</span><span class="nv"> </span><span class="s">may</span><span class="nv"> </span><span class="s">authorize</span><span class="nv"> </span><span class="s">payments&quot;</span>
+<hr />
+<h2 id="how-it-works-under-the-hood">How It Works Under the Hood<a class="headerlink" href="#how-it-works-under-the-hood" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">longprobe</span><span class="w"> </span><span class="kn">import</span> <span class="n">LongProbe</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">longprobe.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_adapter</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># 1. Connect to vector database adapter</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">adapter</span> <span class="o">=</span> <span class="n">create_adapter</span><span class="p">(</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="s2">&quot;chroma&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">collection_name</span><span class="o">=</span><span class="s2">&quot;demo_collection&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">persist_directory</span><span class="o">=</span><span class="s2">&quot;./.demo_chroma_db&quot;</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># 2. Initialize LongProbe with Golden Questions</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="n">probe</span> <span class="o">=</span> <span class="n">LongProbe</span><span class="p">(</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">adapter</span><span class="o">=</span><span class="n">adapter</span><span class="p">,</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="n">goldens_path</span><span class="o">=</span><span class="s2">&quot;goldens.yaml&quot;</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="p">)</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="c1"># 3. Execute quality check</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="n">report</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="c1"># 4. Inspect results</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Overall Recall: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">overall_recall</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Question: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">question_id</span><span class="si">}</span><span class="s2"> -&gt; Recall: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">recall_score</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="choosing-a-match-mode">Choosing a Match Mode<a class="headerlink" href="#choosing-a-match-mode" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>ID</strong>: When you control chunk IDs</li>
-<li><strong>Text</strong>: For exact phrases</li>
-<li><strong>Semantic</strong>: When wording may vary</li>
-</ul>
+<hr />
+<h2 id="quality-threshold-enforcement">Quality Threshold Enforcement<a class="headerlink" href="#quality-threshold-enforcement" title="Permanent link">&para;</a></h2>
+<p>You can enforce hard quality gates in Python or CLI:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>uv<span class="w"> </span>run<span class="w"> </span>longprobe<span class="w"> </span>check<span class="w"> </span>--goldens<span class="w"> </span>goldens.yaml<span class="w"> </span>--threshold<span class="w"> </span><span class="m">0</span>.85
+</code></pre></div>
+<p>If overall recall falls below <code>85%</code>, LongProbe outputs a quality warning diagnostic panel and exits with status code <code>1</code>, preventing deployment of broken RAG pipelines.</p>
 
 
 
