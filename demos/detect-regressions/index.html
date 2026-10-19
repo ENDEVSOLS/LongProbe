@@ -581,7 +581,7 @@
   <span class="md-ellipsis">
     
   
-    cli reference
+    CLI Reference
   
 
     
@@ -1353,6 +1353,99 @@
   
   
   
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Release Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.1.3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.1.3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../../changelog/" class="md-nav__link">
         
@@ -1414,10 +1507,10 @@
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    participant Store as Baseline Store
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    Dev-&gt;&gt;LP: Step 1: Run &amp; Save Baseline
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    LP-&gt;&gt;Store: Save baseline (&quot;production&quot;)
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    LP-&gt;&gt;Store: Save baseline ("production")
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    Dev-&gt;&gt;LP: Pipeline Update (Chunking/Embedding Change)
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    Dev-&gt;&gt;LP: Step 2: Run Check &amp; Compare
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    LP-&gt;&gt;Store: Compare current run vs &quot;production&quot;
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    LP-&gt;&gt;Store: Compare current run vs "production"
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    LP--&gt;&gt;Dev: Alert: Display missing chunks &amp; recall delta (Δ)
 </code></pre></div>
 <hr />
@@ -1446,11 +1539,11 @@
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">longprobe.core.baseline</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaselineStore</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># 1. Initialize LongProbe</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">probe</span> <span class="o">=</span> <span class="n">LongProbe</span><span class="p">(</span><span class="n">adapter</span><span class="o">=</span><span class="n">adapter</span><span class="p">,</span> <span class="n">goldens_path</span><span class="o">=</span><span class="s2">&quot;goldens.yaml&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">probe</span> <span class="o">=</span> <span class="n">LongProbe</span><span class="p">(</span><span class="n">adapter</span><span class="o">=</span><span class="n">adapter</span><span class="p">,</span> <span class="n">goldens_path</span><span class="o">=</span><span class="s2">"goldens.yaml"</span><span class="p">)</span>
 <a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
 <a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># 2. Run initial check &amp; save production baseline</span>
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">initial_report</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">probe</span><span class="o">.</span><span class="n">save_baseline</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;production-v1&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">probe</span><span class="o">.</span><span class="n">save_baseline</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"production-v1"</span><span class="p">)</span>
 <a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
 <a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="c1"># --- Developer updates RAG pipeline or re-indexes documents ---</span>
 <a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
@@ -1458,20 +1551,20 @@
 <a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="n">new_report</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 <a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
 <a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="c1"># 4. Compare current run against baseline</span>
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">baseline_store</span> <span class="o">=</span> <span class="n">BaselineStore</span><span class="p">(</span><span class="n">db_path</span><span class="o">=</span><span class="s2">&quot;.longprobe/baselines.db&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="n">baseline_report</span> <span class="o">=</span> <span class="n">baseline_store</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;production-v1&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">baseline_store</span> <span class="o">=</span> <span class="n">BaselineStore</span><span class="p">(</span><span class="n">db_path</span><span class="o">=</span><span class="s2">".longprobe/baselines.db"</span><span class="p">)</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="n">baseline_report</span> <span class="o">=</span> <span class="n">baseline_store</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"production-v1"</span><span class="p">)</span>
 <a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>
 <a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="n">diff</span> <span class="o">=</span> <span class="n">baseline_store</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">new_report</span><span class="p">,</span> <span class="n">baseline_report</span><span class="p">)</span>
 <a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>
 <a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="c1"># 5. Check for regressions</span>
-<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="k">if</span> <span class="n">diff</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;regressions&quot;</span><span class="p">):</span>
-<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️ REGRESSIONS DETECTED!&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>    <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="n">diff</span><span class="p">[</span><span class="s2">&quot;regressions&quot;</span><span class="p">]:</span>
-<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Question: </span><span class="si">{</span><span class="n">reg</span><span class="p">[</span><span class="s1">&#39;question_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Recall Drop: </span><span class="si">{</span><span class="n">reg</span><span class="p">[</span><span class="s1">&#39;baseline_recall&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">reg</span><span class="p">[</span><span class="s1">&#39;current_recall&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lost Chunks: </span><span class="si">{</span><span class="n">reg</span><span class="p">[</span><span class="s1">&#39;lost_chunks&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="k">if</span> <span class="n">diff</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"regressions"</span><span class="p">):</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"⚠️ REGRESSIONS DETECTED!"</span><span class="p">)</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>    <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="n">diff</span><span class="p">[</span><span class="s2">"regressions"</span><span class="p">]:</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Question: </span><span class="si">{</span><span class="n">reg</span><span class="p">[</span><span class="s1">'question_id'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Recall Drop: </span><span class="si">{</span><span class="n">reg</span><span class="p">[</span><span class="s1">'baseline_recall'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">reg</span><span class="p">[</span><span class="s1">'current_recall'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Lost Chunks: </span><span class="si">{</span><span class="n">reg</span><span class="p">[</span><span class="s1">'lost_chunks'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 <a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ No regressions detected - safe to deploy!&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"✅ No regressions detected - safe to deploy!"</span><span class="p">)</span>
 </code></pre></div>
 <hr />
 <h2 id="command-line-interface-cli-baseline-workflow">Command Line Interface (CLI) Baseline Workflow<a class="headerlink" href="#command-line-interface-cli-baseline-workflow" title="Permanent link">&para;</a></h2>

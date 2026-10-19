@@ -29,7 +29,7 @@
     
     
       
-        <title>cli reference - </title>
+        <title>CLI Reference - </title>
       
     
     
@@ -123,7 +123,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              cli reference
+              CLI Reference
             
           </span>
         </div>
@@ -583,6 +583,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -590,7 +608,7 @@
   <span class="md-ellipsis">
     
   
-    cli reference
+    CLI Reference
   
 
     
@@ -599,6 +617,58 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#common-evaluation-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common evaluation options
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generation-and-capture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generation and capture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#baselines-and-watch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Baselines and watch
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1250,6 +1320,99 @@
   
   
   
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Release Notes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Release Notes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.1.3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.1.3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     <li class="md-nav__item">
       <a href="../../changelog/" class="md-nav__link">
         
@@ -1291,9 +1454,96 @@
   
 
 
-<h1 id="cli-reference">cli reference<a class="headerlink" href="#cli-reference" title="Permanent link">&para;</a></h1>
-<p>Documentation coming soon.</p>
-<p>See the <a href="../../README.md">README</a> for now.</p>
+<h1 id="cli-reference">CLI Reference<a class="headerlink" href="#cli-reference" title="Permanent link">&para;</a></h1>
+<p>Use <code>longprobe COMMAND --help</code> for all implemented options. Unless overridden, golden/config paths are <code>goldens.yaml</code> and <code>longprobe.yaml</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>init</code></td>
+<td>Create example files; preserve existing files unless <code>--force</code></td>
+</tr>
+<tr>
+<td><code>check</code></td>
+<td>Evaluate selected approved questions against the configured retriever</td>
+</tr>
+<tr>
+<td><code>capture</code></td>
+<td>Query supplied questions and select evidence; <code>--auto</code> creates drafts</td>
+</tr>
+<tr>
+<td><code>generate PATH</code></td>
+<td>Generate questions from document text</td>
+</tr>
+<tr>
+<td><code>edit</code></td>
+<td>Review statuses, edit question text/mode, approve drafts, and save</td>
+</tr>
+<tr>
+<td><code>baseline save</code></td>
+<td>Evaluate approved questions and save a labeled snapshot subject to the existing overall-recall gate</td>
+</tr>
+<tr>
+<td><code>baseline list</code></td>
+<td>List snapshots at <code>--db-path</code></td>
+</tr>
+<tr>
+<td><code>baseline delete --label LABEL</code></td>
+<td>Delete a snapshot at <code>--db-path</code></td>
+</tr>
+<tr>
+<td><code>diff --baseline LABEL</code></td>
+<td>Compare a live run with a stored snapshot</td>
+</tr>
+<tr>
+<td><code>diff LABEL_A LABEL_B</code></td>
+<td>Compare two stored snapshots</td>
+</tr>
+<tr>
+<td><code>explain QUESTION_ID</code></td>
+<td>Rerun evaluation and show a question's requirements and missing evidence</td>
+</tr>
+<tr>
+<td><code>watch</code></td>
+<td>Poll the golden file and rerun after changes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="common-evaluation-options">Common evaluation options<a class="headerlink" href="#common-evaluation-options" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>longprobe<span class="w"> </span>check<span class="w"> </span>--goldens<span class="w"> </span>tests/goldens.yaml<span class="w"> </span>--config<span class="w"> </span>longprobe.yaml
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>longprobe<span class="w"> </span>check<span class="w"> </span>--threshold<span class="w"> </span><span class="m">0</span>.9<span class="w"> </span>--top-k<span class="w"> </span><span class="m">10</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>longprobe<span class="w"> </span>check<span class="w"> </span>--tag<span class="w"> </span>critical<span class="w"> </span>--tag<span class="w"> </span>billing
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>longprobe<span class="w"> </span>check<span class="w"> </span>--include-drafts
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>longprobe<span class="w"> </span>check<span class="w"> </span>--output<span class="w"> </span>json
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>longprobe<span class="w"> </span>check<span class="w"> </span>--output<span class="w"> </span>github
+</code></pre></div>
+<p>Multiple tags require all specified tags. Empty input, no matching tags, and no approved selected questions fail rather than pass. <code>--include-drafts</code> does not allow a genuinely empty evaluation. Configuration/input errors fail even when <code>fail_on_regression</code> is false.</p>
+<p>JSON output can still contain notices or command-specific trailing status text; a general machine-output cleanup is deferred. The default pytest adapter fixture also remains limited; supply your own adapter fixture. Explanations do not implement rank deltas or distance-drop analysis.</p>
+<h2 id="generation-and-capture">Generation and capture<a class="headerlink" href="#generation-and-capture" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>longprobe<span class="w"> </span>capture<span class="w"> </span>--question<span class="w"> </span><span class="s2">"What is the refund policy?"</span><span class="w"> </span>--auto
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>longprobe<span class="w"> </span>capture<span class="w"> </span>--questions-file<span class="w"> </span>questions.txt<span class="w"> </span>--match-mode<span class="w"> </span>id
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>longprobe<span class="w"> </span>generate<span class="w"> </span>./documents<span class="w"> </span>--num-questions<span class="w"> </span><span class="m">20</span><span class="w"> </span>--auto-capture
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>longprobe<span class="w"> </span>edit
+</code></pre></div>
+<p>Generate requires the optional generation dependencies and a configured provider/model. Auto-capture requires a retriever and saves drafts. Existing invalid/unreadable goldens fail preflight before LLM/retrieval calls and are never reset automatically.</p>
+<p>Question-list export is a separate mode:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>longprobe<span class="w"> </span>generate<span class="w"> </span>./documents<span class="w"> </span>--output<span class="w"> </span>questions.yaml
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>longprobe<span class="w"> </span>generate<span class="w"> </span>./documents<span class="w"> </span>--output<span class="w"> </span>questions.yaml<span class="w"> </span>--overwrite
+</code></pre></div>
+<p>The second command explicitly replaces an existing question-list output. <code>--overwrite</code> requires <code>--output</code> and cannot be combined with <code>--auto-capture</code>. <code>--output</code> and <code>--auto-capture</code> cannot be combined. Exported question lists need verified expected evidence before evaluation; they are not editable golden sets.</p>
+<h2 id="baselines-and-watch">Baselines and watch<a class="headerlink" href="#baselines-and-watch" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>longprobe<span class="w"> </span>baseline<span class="w"> </span>save<span class="w"> </span>--label<span class="w"> </span>latest
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>longprobe<span class="w"> </span>baseline<span class="w"> </span>list<span class="w"> </span>--db-path<span class="w"> </span>.longprobe/baselines.db
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>longprobe<span class="w"> </span>diff<span class="w"> </span>--baseline<span class="w"> </span>latest
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>longprobe<span class="w"> </span>watch<span class="w"> </span>--interval<span class="w"> </span><span class="m">2</span>
+</code></pre></div>
+<p>Saving another label does not update <code>latest</code>. Baseline-save policy and historical comparison behavior are unchanged by this reliability patch. Watch runs only after a golden-file change, not immediately or on configuration/index changes. A failed watch iteration is reported and the watcher keeps waiting.</p>
+<p>See <a href="../../getting-started/configuration/">configuration and recovery</a> and the <a href="../../getting-started/quick-start/">quick start</a>.</p>
 
 
 
