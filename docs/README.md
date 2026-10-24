@@ -1,5 +1,7 @@
 # LongProbe Documentation
 
+For current behavior, see the [v0.2.0 release guide](releases/v0.2.0.md) and [verification record](releases/v0.2.0-verification.md). Local implementation is complete; hosted acceptance and publication are pending.
+
 This directory contains the source files for LongProbe's documentation, built with [MkDocs](https://www.mkdocs.org/) and [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/).
 
 ## Building Documentation Locally
@@ -27,7 +29,7 @@ mkdocs serve
 
 ```bash
 # Build documentation
-mkdocs build
+mkdocs build --strict
 
 # Output will be in site/ directory
 ```
@@ -55,13 +57,16 @@ docs/
 │   └── llamaindex.md           # LlamaIndex integration
 ├── demos/
 │   ├── overview.md             # Demos overview
-│   ├── test-retrieval.md       # Demo 1
+│   ├── complete-workflow.md    # Demo 1
 │   ├── monitor-quality.md      # Demo 2
 │   └── detect-regressions.md   # Demo 3
 ├── api/
 │   ├── core.md                 # Core API reference
 │   ├── adapters.md             # Adapter API
 │   └── scoring.md              # Scoring API
+├── releases/
+│   ├── v0.2.0.md               # Release behavior and migration
+│   └── v0.2.0-verification.md  # Actual results and pending checks
 ├── contributing.md             # Contribution guide
 └── changelog.md                # Version history
 ```

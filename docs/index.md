@@ -15,6 +15,12 @@
 
 ---
 
+## v0.2.0 status
+
+This documentation describes the locally implemented **v0.2.0 candidate**. Publication and hosted GitHub Actions acceptance remain pending. Install the checkout or a locally built wheel to use these changes before publication.
+
+The main purpose is consistent evaluation across CLI, Python, pytest, and CI: explicit baseline selection, per-question quality gates, comparable reports, and reliable automation output. See the [release and migration guide](releases/v0.2.0.md) and [verification record](releases/v0.2.0-verification.md).
+
 ## Overview
 
 > "Did my last commit break retrieval?" — now you know in seconds.
@@ -37,6 +43,8 @@ Every RAG developer faces the same silent killer: you refactor chunking strategy
 - 🔌 **Pluggable adapters** for any vector store
 
 ## Quick Example
+
+The package-index command below installs the published version. For the unreleased candidate, follow [checkout installation](getting-started/installation.md#install-the-v020-candidate). Configure a working retriever and review golden evidence before saving a baseline.
 
 ```bash
 # Install
@@ -75,7 +83,7 @@ Together they cover the full RAG pipeline from ingestion to production monitorin
 
 - ⚡ **Sub-second checks** on small golden sets
 - 📋 **Golden Questions + Required Chunks** defined in simple YAML
-- 🔍 **Three match modes**: exact ID, text substring, semantic similarity
+- 🔍 **Three match modes**: exact ID, text substring, and lexical cosine similarity (`semantic` mode)
 - 📊 **Recall Score** with per-question breakdown
 - 🔄 **Regression diff**: exactly which chunks were lost/gained
 - 💾 **SQLite baseline store**: compare against any previous run

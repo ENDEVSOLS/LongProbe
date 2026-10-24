@@ -2,177 +2,200 @@ name: LongProbe RAG Regression Test
 
 on:
   workflow_call:
+    secrets:
+      retriever-api-key:
+        description: Optional credential referenced as LONGPROBE_RETRIEVER_API_KEY in configuration
+        required: false
     inputs:
       python-version:
-        description: "Python version to use"
-        required: false
+        description: Python version (3.11 or newer)
+        type: string
         default: "3.12"
-        type: string
       config-path:
-        description: "Path to longprobe.yaml config file"
-        required: false
-        default: "longprobe.yaml"
+        description: Path to longprobe.yaml
         type: string
+        default: longprobe.yaml
       goldens-path:
-        description: "Path to golden questions YAML file"
-        required: false
-        default: "goldens.yaml"
+        description: Path to approved golden questions
         type: string
+        default: goldens.yaml
       fail-on-regression:
-        description: "Fail the workflow when regressions are detected"
-        required: false
-        default: true
+        description: Block completed quality failures; setup and execution failures always block
         type: boolean
+        default: true
       longprobe-version:
-        description: "LongProbe package version or extras (e.g. 'chroma', 'http,chroma')"
-        required: false
-        default: ""
+        description: Exact package version (0.2.0 or newer); empty installs the available default
         type: string
+        default: ""
       install-extras:
-        description: "Comma-separated extras to install (e.g. 'chroma,generate')"
-        required: false
-        default: ""
+        description: Comma-separated optional dependencies; HTTP requires no extra
         type: string
+        default: ""
+      baseline-artifact-name:
+        description: Optional trusted baseline artifact containing one SQLite .db file
+        type: string
+        default: ""
+      baseline-run-id:
+        description: Successful source run on the caller repository default branch
+        type: string
+        default: ""
+      baseline-label:
+        description: Explicit label required when restoring an artifact
+        type: string
+        default: latest
+      baseline-path:
+        description: Restored database destination; must match baseline.db_path in configuration
+        type: string
+        default: .longprobe/baselines.db
 
 jobs:
   longprobe-check:
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: write
       contents: read
-
+      actions: read
+      pull-requests: write
+    env:
+      LONGPROBE_CONFIG: ${{ inputs.config-path }}
+      LONGPROBE_GOLDENS: ${{ inputs.goldens-path }}
+      LONGPROBE_VERSION: ${{ inputs.longprobe-version }}
+      LONGPROBE_EXTRAS: ${{ inputs.install-extras }}
+      LONGPROBE_BASELINE_ARTIFACT: ${{ inputs.baseline-artifact-name }}
+      LONGPROBE_BASELINE_RUN: ${{ inputs.baseline-run-id }}
+      LONGPROBE_BASELINE_LABEL: ${{ inputs.baseline-label }}
+      LONGPROBE_BASELINE_PATH: ${{ inputs.baseline-path }}
+      LONGPROBE_BLOCKING: ${{ inputs.fail-on-regression }}
+      LONGPROBE_RETRIEVER_API_KEY: ${{ secrets.retriever-api-key }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ inputs.python-version }}
 
-      - name: Install LongProbe
+      - name: Install requested LongProbe version
         run: |
-          if [ -n "${{ inputs.install-extras }}" ]; then
-            pip install "longprobe[${{ inputs.install-extras }}]"
-          else
-            pip install longprobe
-          fi
+          python - <<'PY'
+          import importlib.metadata
+          import os
+          import re
+          import subprocess
+          import sys
+          version = os.environ["LONGPROBE_VERSION"]
+          extras = [x.strip() for x in os.environ["LONGPROBE_EXTRAS"].split(",") if x.strip()]
+          if version and not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:[A-Za-z0-9.+_-]*)", version):
+              raise SystemExit("longprobe-version must be an exact package version")
+          allowed = {"chroma", "pinecone", "qdrant", "langchain", "llamaindex", "openai", "huggingface", "generate", "all"}
+          if set(extras) - allowed:
+              raise SystemExit("Unsupported installation extras; HTTP uses the base package")
+          requirement = "longprobe" + ("[" + ",".join(extras) + "]" if extras else "")
+          if version:
+              requirement += "==" + version
+          subprocess.run([sys.executable, "-m", "pip", "install", requirement], check=True)
+          installed = importlib.metadata.version("longprobe")
+          match = re.match(r"(\d+)\.(\d+)\.(\d+)", installed)
+          if not match or tuple(map(int, match.groups())) < (0, 2, 0):
+              raise SystemExit("This workflow requires LongProbe 0.2.0 or newer")
+          print("Installed LongProbe", installed)
+          PY
 
-      - name: Verify config and goldens exist
+      - name: Validate baseline input pair
         run: |
-          if [ ! -f "${{ inputs.config-path }}" ]; then
-            echo "::error file=longprobe::Config file not found: ${{ inputs.config-path }}"
-            echo "Create one with: longprobe init"
-            exit 1
-          fi
-          if [ ! -f "${{ inputs.goldens-path }}" ]; then
-            echo "::error file=longprobe::Goldens file not found: ${{ inputs.goldens-path }}"
-            echo "Create one with: longprobe init"
-            exit 1
-          fi
+          python -m longprobe.ci validate-inputs \
+            --artifact "$LONGPROBE_BASELINE_ARTIFACT" \
+            --run-id "$LONGPROBE_BASELINE_RUN" \
+            --label "$LONGPROBE_BASELINE_LABEL"
 
-      - name: Run LongProbe check
+      - name: Verify trusted baseline source run
+        if: inputs.baseline-artifact-name != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runId = process.env.LONGPROBE_BASELINE_RUN;
+            const {data: run} = await github.rest.actions.getWorkflowRun({...context.repo, run_id: runId});
+            const {data: repo} = await github.rest.repos.get(context.repo);
+            const allowedEvents = ['push', 'schedule', 'workflow_dispatch'];
+            if (run.conclusion !== 'success' || run.head_branch !== repo.default_branch ||
+                run.head_repository?.full_name !== repo.full_name || !allowedEvents.includes(run.event)) {
+              core.setFailed('Baseline source must be a successful trusted run on the default branch.');
+            }
+
+      - name: Download selected baseline artifact
+        if: inputs.baseline-artifact-name != ''
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ inputs.baseline-artifact-name }}
+          path: ${{ runner.temp }}/longprobe-baseline
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.baseline-run-id }}
+
+      - name: Validate and restore baseline
+        if: inputs.baseline-artifact-name != ''
+        env:
+          LONGPROBE_ARTIFACT_DIR: ${{ runner.temp }}/longprobe-baseline
+        run: |
+          python -m longprobe.ci restore \
+            --artifact-dir "$LONGPROBE_ARTIFACT_DIR" \
+            --destination "$LONGPROBE_BASELINE_PATH" \
+            --config "$LONGPROBE_CONFIG" \
+            --goldens "$LONGPROBE_GOLDENS" \
+            --label "$LONGPROBE_BASELINE_LABEL"
+
+      - name: Evaluate once and derive feedback
         id: longprobe
+        shell: bash
         run: |
-          set +e
-          longprobe check \
-            --config "${{ inputs.config-path }}" \
-            --goldens "${{ inputs.goldens-path }}" \
-            --output json \
-            > longprobe-result.json 2>/dev/null
-          LONGPROBE_EXIT=$?
-          set -e
-
-          # Always output GitHub annotations by re-running with --output github.
-          set +e
-          longprobe check \
-            --config "${{ inputs.config-path }}" \
-            --goldens "${{ inputs.goldens-path }}" \
-            --output github
-          set -e
-
-          # Extract summary for the PR comment.
-          if [ -f longprobe-result.json ] && [ -s longprobe-result.json ]; then
-            echo "has-result=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "has-result=false" >> "$GITHUB_OUTPUT"
+          args=(--config "$LONGPROBE_CONFIG" --goldens "$LONGPROBE_GOLDENS")
+          if [ -n "$LONGPROBE_BASELINE_ARTIFACT" ]; then
+            args+=(--baseline "$LONGPROBE_BASELINE_LABEL")
           fi
-
-          if [ "$LONGPROBE_EXIT" -ne 0 ] && [ "${{ inputs.fail-on-regression }}" = "true" ]; then
-            echo "::error file=longprobe::LongProbe detected regressions or failures. See PR comment for details."
-            exit 1
+          if [ "$LONGPROBE_BLOCKING" = "false" ]; then
+            args+=(--nonblocking)
           fi
+          python -m longprobe.ci run "${args[@]}"
 
-      - name: Comment PR with results
-        if: always() && steps.longprobe.outputs.has-result == 'true' && github.event_name == 'pull_request'
+      - name: Retain report and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: longprobe-report-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            longprobe-result.json
+            longprobe-diagnostics.txt
+            longprobe-comment.md
+          if-no-files-found: warn
+
+      - name: Publish PR report when permitted
+        if: always() && steps.longprobe.outputs.has-result == 'true' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            let result;
+            const body = fs.readFileSync('longprobe-comment.md', 'utf8');
             try {
-              result = JSON.parse(fs.readFileSync('longprobe-result.json', 'utf8'));
-            } catch (e) {
-              console.log('Could not parse LongProbe result JSON');
-              return;
-            }
-
-            const passed = result.passed_questions || 0;
-            const failed = result.failed_questions || 0;
-            const total = result.total_questions || 0;
-            const recall = ((result.overall_recall || 0) * 100).toFixed(1);
-            const regressions = (result.diff && result.diff.regressions) || [];
-            const improvements = (result.diff && result.diff.improvements) || [];
-            const status = failed === 0 && regressions.length === 0 ? '✅' : '❌';
-
-            let body = `## ${status} LongProbe RAG Regression Report\n\n`;
-            body += `| Metric | Value |\n`;
-            body += `|--------|-------|\n`;
-            body += `| Overall Recall | **${recall}%** |\n`;
-            body += `| Pass Rate | **${passed}/${total}** (${((result.pass_rate || 0) * 100).toFixed(1)}%) |\n`;
-            body += `| Regressions | **${regressions.length}** |\n`;
-            body += `| Improvements | **${improvements.length}** |\n`;
-
-            if (regressions.length > 0) {
-              body += `\n### ⚠️ Regressions\n`;
-              for (const reg of regressions) {
-                const lost = reg.newly_lost_chunks ? reg.newly_lost_chunks.join(', ') : '—';
-                body += `- **${reg.question_id}**: recall dropped from ${(reg.baseline_recall * 100).toFixed(0)}% to ${(reg.current_recall * 100).toFixed(0)}% — lost: ${lost}\n`;
+              const comments = await github.paginate(github.rest.issues.listComments, {...context.repo, issue_number: context.issue.number});
+              const existing = comments.find(c => c.user.type === 'Bot' && c.body.includes('<!-- longprobe-report -->'));
+              if (existing) {
+                await github.rest.issues.updateComment({...context.repo, comment_id: existing.id, body});
+              } else {
+                await github.rest.issues.createComment({...context.repo, issue_number: context.issue.number, body});
               }
+            } catch (error) {
+              core.warning('PR comment could not be published. Evaluation verdict and report artifact remain available.');
             }
 
-            if (improvements.length > 0) {
-              body += `\n### ✨ Improvements\n`;
-              for (const imp of improvements) {
-                body += `- **${imp.question_id}**: recall improved from ${(imp.baseline_recall * 100).toFixed(0)}% to ${(imp.current_recall * 100).toFixed(0)}%\n`;
-              }
-            }
+      - name: Explain restricted PR comments
+        if: always() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == true
+        run: echo "PR comment skipped for fork permissions; use annotations and the report artifact."
 
-            body += `\n---\n*Config: \`${{ inputs.config-path }}\` | Goldens: \`${{ inputs.goldens-path }}\`*`;
-
-            // Find existing comment to update, or create new.
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-            });
-
-            const botComment = comments.find(c =>
-              c.user.type === 'Bot' && c.body.includes('LongProbe RAG Regression Report')
-            );
-
-            if (botComment) {
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: body,
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number,
-                body: body,
-              });
-            }
+      - name: Enforce recorded evaluation verdict
+        if: always()
+        env:
+          LONGPROBE_EXIT: ${{ steps.longprobe.outputs.exit-code }}
+        run: |
+          case "$LONGPROBE_EXIT" in
+            0|1|2|3) exit "$LONGPROBE_EXIT" ;;
+            *) echo "Evaluation did not complete; inspect earlier setup steps."; exit 3 ;;
+          esac

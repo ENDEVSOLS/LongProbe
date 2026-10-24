@@ -1,187 +1,161 @@
 # Complete Workflow
 
-Full RAG regression testing workflow from auto-capture to regression detection.
+Follow a retrieval change from reviewed golden questions to a saved baseline and a detected regression. This demonstration shows which question failed, what evidence disappeared, and why the quality check failed.
 
 ## Demo
 
 ![Complete Workflow](../assets/01-complete-workflow.gif)
 
+The dashboard uses animated progress panels, color-coded results, and a before-and-after comparison. It displays no Python source code. The GIF plays at twice the original recording speed.
+
 ## Overview
 
-This demo demonstrates the complete LongProbe workflow in action. Perfect for:
+The demo tests three questions about refund policy, payment terms, and encryption. All three initially pass. After the sample retriever stops returning refund evidence, LongProbe detects one regression while the other two questions continue to pass.
 
-- ✅ Understanding how LongProbe works end-to-end
-- ✅ First-time users learning the tool
-- ✅ Seeing all features in one comprehensive demo
-- ✅ Understanding the regression detection process
+It uses fixed sample documents and an in-memory retriever to exercise real LongProbe evaluation, comparison, and SQLite baseline promotion. No external API, vector database, embedding model, or credentials are needed. The sample is a retrieval regression demonstration; it does not evaluate generated answers or establish overall deployment readiness.
 
-## What It Shows
+## What You Will Learn
 
-### 1. Test Questions
+- How draft questions become reviewed, approved test cases.
+- How recall percentages relate to required evidence.
+- When a report is eligible to become a trusted baseline.
+- How to select a reference explicitly and identify lost evidence.
+- Why a failed check should leave the trusted reference unchanged.
 
-Shows the questions being tested upfront:
+## Workflow Steps
 
-- Sample questions from your golden set
-- Clear visibility into what's being validated
-- Understanding the scope of testing
+### 1. Prepare Golden Questions
 
-### 2. Workflow Progress (Animated)
+Prepare three candidate questions with expected evidence and `draft` status. Drafts are excluded from ordinary checks until approved.
 
-A single, continuously updating progress panel showing:
+In your own project, write candidates manually or use `capture` or `generate --auto-capture`. Retrieved evidence is a candidate requirement: the retriever may already be returning incomplete or incorrect results.
 
-- **Step 1**: Start Mock RAG API - Simulates your RAG backend
-- **Step 2**: Build Golden Set - Auto-capture questions and expected chunks
-- **Step 3**: Run Initial Check - Test retrieval quality (100% pass)
-- **Step 4**: Save Baseline - Store results for future comparison
-- **Step 5**: Break API - Simulate a regression (remove a document)
-- **Step 6**: Detect Regression - Catch the issue automatically
+### 2. Review and Approve Evidence
 
-### 3. Retrieval Example
+Check each question and required evidence item against its source document before changing its status to `approved`.
 
-Shows what the API returns:
+The recording displays the sample source evidence and illustrates approval using fixed, pre-reviewed fixtures. It does not perform human review or provide a separate approval system. In a real project, a person makes that review decision.
 
-- Actual question being tested
-- Retrieved chunks with similarity scores
-- Understanding how retrieval works
+### 3. Run the Initial Evaluation
 
-### 4. Regression Detection
+Evaluate the approved questions using an 85% recall threshold. The dashboard shows each question's recall, evidence found / required, and PASS/FAIL result.
 
-Shows exactly what broke:
+All three sample questions initially find their required evidence. Overall recall and pass rate are both 100%.
 
-- Which question failed
-- What chunk went missing
-- Clear explanation of the regression
+### 4. Save a Trusted Baseline
 
-### 5. Results Table
+Explicitly save the eligible report as `production-v1`. Under the default `all_questions` promotion policy, every evaluated approved question must pass. A good average cannot compensate for a failing question.
 
-Provides before/after comparison:
+A passing check does not save a reference automatically. Python promotion reuses the retained evaluation snapshot; the CLI `baseline save` command performs a fresh evaluation.
 
-- Overall recall (100% → 86.7%)
-- Pass rate (100% → 60%)
-- Number of failed tests (0 → 2)
+### 5. Simulate a Retrieval Change
 
-## Use Case
+Remove refund evidence from the sample retriever while keeping the reviewed golden requirements unchanged.
 
-**Scenario**: You're building a RAG application and want to ensure changes don't break retrieval quality.
+This illustrates a failure that could follow an index update, document removal, or change to your retrieval pipeline. Keeping the requirements unchanged allows LongProbe to compare the same expectations before and after the change.
 
-**Workflow**:
+### 6. Detect and Explain the Regression
 
-1. **Capture baseline** - Auto-generate golden questions from your RAG API
-2. **Run tests** - Verify everything works (100% pass)
-3. **Save baseline** - Store the perfect state
-4. **Make changes** - Refactor, upgrade, or modify your RAG pipeline
-5. **Detect regressions** - LongProbe catches issues automatically
-6. **Fix and verify** - Address issues and re-run tests
+Evaluate again with `production-v1` explicitly selected. The reports have compatible evaluation contracts, so LongProbe can identify the lost refund evidence and report a regression.
 
-## Code Example
+The final dashboard shows one failed question, one regression, zero improvements, and a failed quality verdict. The trusted baseline remains unchanged for investigation and recovery.
 
-The demo script shows the complete workflow:
+## Before-and-After Results
+
+| Metric | Initial evaluation | After refund evidence is removed |
+|---|---|---|
+| Overall recall | 100.0% | 66.7% |
+| Pass rate | 100.0% | 66.7% |
+| Passing questions | 3 of 3 | 2 of 3 |
+| Failing questions | 0 | 1 |
+| Quality verdict | PASS | FAIL |
+| Historical comparison | No reference exists yet | Compatible with `production-v1` |
+| Regressions / improvements | Not applicable | 1 / 0 |
+
+Each sample question requires one evidence item:
+
+| Result | Recall | Evidence found / required | Status |
+|---|---|---|---|
+| Required evidence returned | 100.0% | 1 / 1 | PASS |
+| Required evidence missing | 0.0% | 0 / 1 | FAIL |
+
+Recall measures required evidence found. A retriever's similarity score is a different measurement and is not a correctness percentage. This synthetic demo does not display similarity scores.
+
+## Run Locally
+
+From the repository root containing `pyproject.toml`:
+
+```bash
+make setup-demos
+demos/.recording_venv/bin/python demo_run/complete_workflow.py
+```
+
+For a run without presentation pauses:
+
+```bash
+demos/.recording_venv/bin/python demo_run/complete_workflow.py --no-delay
+```
+
+Setup requires Python 3.11 or newer and may download package dependencies. Once installed, the scenario runs without external services. It creates temporary golden, configuration, and baseline files, then removes them afterward.
+
+The script verifies that the deliberate regression is detected and exits successfully when the demonstration behaves as expected. Its successful exit does not mean the second retrieval evaluation passed. To regenerate the GIFs, follow `demos/README.md`.
+
+## Python API Example
+
+For your application, supply its configured retriever adapter, reviewed golden suite, and scoring configuration. The example assumes those files and the `adapter` object already exist; set `scoring.recall_threshold: 0.85` in `longprobe.yaml` to match the demo.
 
 ```python
 from longprobe import LongProbe
-from longprobe.adapters import HttpAdapter
-from longprobe.core.golden import GoldenSet, GoldenQuestion
 
-# 1. Configure HTTP adapter for your RAG API
-adapter = HttpAdapter(config=http_config)
+probe = LongProbe(
+    adapter=adapter,
+    goldens_path="goldens.yaml",
+    config_path="longprobe.yaml",
+)
 
-# 2. Auto-capture golden questions
-golden_questions = []
-for question_text, tags in test_questions:
-    results = adapter.retrieve(query=question_text, top_k=3)
-    required_chunks = [r["text"] for r in results]
-    golden_questions.append(GoldenQuestion(
-        question=question_text,
-        required_chunks=required_chunks,
-        tags=tags
-    ))
-
-golden_set = GoldenSet(questions=golden_questions)
-golden_set.to_yaml("goldens.yaml")
-
-# 3. Run initial check
-probe = LongProbe(adapter=adapter, goldens_path="goldens.yaml")
+# Evaluate the reviewed suite and explicitly promote an eligible reference.
 report = probe.run()
-print(f"Recall: {report.overall_recall:.1%}")
+assert report.quality["passed"], report.quality["reasons"]
+probe.save_baseline(label="production-v1")
 
-# 4. Save baseline
-probe.save_baseline(label="latest")
-
-# 5. After making changes...
-report_after = probe.run()
-
-# 6. Detect regression
-diff = probe.diff(baseline_label="latest")
-if diff["regressions"]:
-    print(f"⚠️  {len(diff['regressions'])} regressions detected!")
+# After changing your application's retrieval pipeline:
+report2 = probe.run(baseline_label="production-v1")
+diff = report2.comparison
+print(f"Compatible: {diff['compatible']}")
+print(f"Regressions: {len(diff['regressions'])}")
+print(f"Improvements: {len(diff['improvements'])}")
+assert report2.quality["passed"], report2.quality["reasons"]
 ```
 
-## Key Features Demonstrated
+The final assertion fails for the deliberate missing-evidence scenario. It also catches individual question failures and incompatible comparisons. The recording shows that verdict through its dashboard without displaying code or a traceback.
 
-- 🎯 **Auto-capture** - Generate golden questions from your API
-- 📊 **Live progress** - Single animated workflow panel
-- 🔍 **Retrieval visibility** - See what chunks are retrieved
-- 💾 **Baseline tracking** - Save and compare results
-- 🚨 **Regression detection** - Catch issues automatically
-- 📈 **Before/after comparison** - Clear metrics on what changed
+## CLI Workflow for Your Application
 
-## Workflow Steps Explained
-
-### Step 1: Start Mock RAG API
-Simulates your RAG backend with a simple HTTP server. In production, this would be your actual RAG API (LongTrainer, LangServe, etc.).
-
-### Step 2: Build Golden Set
-Auto-captures golden questions by querying your API and saving the retrieved chunks as expected results. This is the "capture" workflow.
-
-### Step 3: Run Initial Check
-Tests all questions against your RAG API and verifies 100% recall. This establishes your baseline.
-
-### Step 4: Save Baseline
-Stores the perfect state in SQLite for future comparison. You can have multiple baselines (v1.0, v2.0, etc.).
-
-### Step 5: Break API
-Simulates a regression by removing a document. In real scenarios, this could be:
-- Refactoring chunking strategy
-- Upgrading embedding model
-- Changing retrieval parameters
-- Accidentally deleting documents
-
-### Step 6: Detect Regression
-Re-runs tests and compares against baseline. LongProbe automatically detects:
-- Which questions failed
-- What chunks went missing
-- Exact recall delta
-
-## When to Use
-
-Use this workflow when you need:
-
-- Complete understanding of LongProbe
-- End-to-end regression testing
-- Baseline tracking and comparison
-- Confidence before deployment
-
-## CLI Equivalent
-
-You can achieve similar results with CLI commands:
+Configure a working application retriever in `longprobe.yaml` before using these commands. This workflow operates on your application's data, rather than the recording's temporary fixtures.
 
 ```bash
-# Capture golden questions
-longprobe capture --url http://localhost:8000/retrieve
+# Capture a candidate question and evidence as a draft.
+longprobe capture --question "What is the refund policy?" --auto
 
-# Run initial check
-longprobe check --goldens goldens.yaml
+# Review the question and source evidence before approving it.
+longprobe edit
 
-# Save baseline
-longprobe baseline save --label v1.0
+# Inspect approved-question quality before establishing a reference.
+longprobe check --no-compare
+longprobe baseline save --label production-v1
 
-# After changes, compare
-longprobe diff --baseline v1.0
+# After changing your application's retrieval pipeline:
+longprobe check --baseline production-v1
 ```
+
+Inspect required evidence in YAML when needed; the editor does not expose every field. `longprobe diff --baseline production-v1` is another way to run a live comparison. Each live command performs its own evaluation.
+
+Intentional changes to question coverage or evaluation contracts can make strict comparison incompatible. Review those changes and explicitly establish a new reference when appropriate; do not replace expected evidence simply to make a failing check pass.
 
 ## Next Steps
 
-- [Monitor RAG Quality](monitor-quality.md) - For detailed monitoring
-- [Detect Regressions](detect-regressions.md) - For CI/CD integration
-- [Python API Guide](../guide/python-api.md) - Learn more about the API
-- [Baseline Management](../guide/baseline-management.md) - Advanced baseline workflows
+- [Golden Questions](../guide/golden-questions.md) — create, review, and maintain expected evidence.
+- [Monitor RAG Quality](monitor-quality.md) — inspect individual results and the shared verdict.
+- [Detect Retrieval Regressions](detect-regressions.md) — compare against a selected reference.
+- [Baseline Management](../guide/baseline-management.md) — understand promotion, compatibility, and migration.
+- [Python API](../guide/python-api.md) — connect your application's retriever.

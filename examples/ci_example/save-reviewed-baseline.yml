@@ -1,0 +1,33 @@
+# Maintainer invokes this after reviewing the approved questions/evidence.
+# Run on the default branch; use the successful run ID in the check workflow.
+name: Save Reviewed Retrieval Baseline
+on:
+  workflow_dispatch:
+    inputs:
+      label:
+        description: Explicit baseline label to promote
+        required: true
+        default: latest
+permissions:
+  contents: read
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    env:
+      BASELINE_LABEL: ${{ inputs.label }}
+      LONGPROBE_RETRIEVER_API_KEY: ${{ secrets.RAG_RETRIEVER_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install longprobe==0.2.0
+      - run: longprobe baseline save --label "$BASELINE_LABEL"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: longprobe-baseline
+          path: .longprobe/baselines.db
+          include-hidden-files: true
+          if-no-files-found: error

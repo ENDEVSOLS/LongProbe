@@ -36,6 +36,7 @@ def _expand_env(value: str) -> str:
     If an environment variable is referenced but not set, the placeholder is
     left intact so that downstream code can raise a more contextual error.
     """
+
     def _replacer(match: re.Match) -> str:
         env_name = match.group(1)
         env_val = os.environ.get(env_name)
@@ -49,6 +50,7 @@ def _expand_env(value: str) -> str:
 # ---------------------------------------------------------------------------
 # RetrieverConfig
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class HttpResponseMapping:
@@ -128,6 +130,7 @@ class RetrieverConfig:
 # EmbedderConfig
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class EmbedderConfig:
     """Configuration for the embedding model.
@@ -151,6 +154,7 @@ class EmbedderConfig:
 # ScoringConfig
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class ScoringConfig:
     """Configuration for the scoring / evaluation step.
@@ -164,11 +168,13 @@ class ScoringConfig:
 
     recall_threshold: float = 0.8
     fail_on_regression: bool = True
+    question_thresholds: dict[str, float] = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------------------
 # BaselineConfig
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class BaselineConfig:
@@ -178,16 +184,18 @@ class BaselineConfig:
         db_path: Path to the SQLite database used to store historical
             baseline results.
         auto_compare: When ``True``, automatically compare current results
-            against the most recent stored baseline.
+            against the literal label ``latest`` when it exists.
     """
 
     db_path: str = ".longprobe/baselines.db"
     auto_compare: bool = True
+    quality_gate: str = "all_questions"
 
 
 # ---------------------------------------------------------------------------
 # ProbeConfig
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class GeneratorConfig:
@@ -253,7 +261,9 @@ class ProbeConfig:
         except yaml.YAMLError as exc:
             mark = getattr(exc, "problem_mark", None)
             location = f" at line {mark.line + 1}, column {mark.column + 1}" if mark else ""
-            raise ConfigurationError(f"Invalid YAML in {path}{location}; correct the syntax.") from None
+            raise ConfigurationError(
+                f"Invalid YAML in {path}{location}; correct the syntax."
+            ) from None
         except UnicodeError:
             raise ConfigurationError(f"Configuration {path} must contain UTF-8 text.") from None
         return cls.from_dict(data)
@@ -272,7 +282,9 @@ class ProbeConfig:
         if owns_retriever and operation in {"evaluate", "capture", "auto_capture"}:
             r = self.retriever
             if r.type not in {"chroma", "pinecone", "qdrant", "http"}:
-                raise ConfigurationError("retriever.type must select chroma, pinecone, qdrant, or http; use the Python API for framework retrievers.")
+                raise ConfigurationError(
+                    "retriever.type must select chroma, pinecone, qdrant, or http; use the Python API for framework retrievers."
+                )
             if r.type == "chroma":
                 _active(r.collection, "retriever.collection", required=True)
                 _active(r.persist_directory, "retriever.persist_directory")
@@ -302,7 +314,12 @@ class ProbeConfig:
             _active(g.provider, "generator.provider", required=True)
             _active(g.model, "generator.model", required=True)
             if g.provider.lower() not in {"ollama", "local"}:
-                env_name = {"openai": "OPENAI_API_KEY", "anthropic": "ANTHROPIC_API_KEY", "gemini": "GEMINI_API_KEY", "google": "GOOGLE_API_KEY"}.get(g.provider.lower(), f"{g.provider.upper()}_API_KEY")
+                env_name = {
+                    "openai": "OPENAI_API_KEY",
+                    "anthropic": "ANTHROPIC_API_KEY",
+                    "gemini": "GEMINI_API_KEY",
+                    "google": "GOOGLE_API_KEY",
+                }.get(g.provider.lower(), f"{g.provider.upper()}_API_KEY")
                 _credential(g.api_key, "generator.api_key", env_name)
 
 
@@ -339,10 +356,33 @@ def _build_section(cls, raw: Any, path: str):
         if isinstance(default, dict):
             if not isinstance(value, dict):
                 raise ConfigurationError(f"{key} must be a mapping.")
-            if f.name == "headers" and any(not isinstance(k, str) or not isinstance(v, str) for k, v in value.items()):
+            if f.name == "headers" and any(
+                not isinstance(k, str) or not isinstance(v, str) for k, v in value.items()
+            ):
                 raise ConfigurationError(f"{key} must map header names to strings.")
+            if key == "scoring.question_thresholds" and any(
+                not isinstance(k, str)
+                or not k.strip()
+                or isinstance(v, bool)
+                or not isinstance(v, (int, float))
+                or not math.isfinite(v)
+                or not 0 <= v <= 1
+                for k, v in value.items()
+            ):
+                raise ConfigurationError(
+                    "scoring.question_thresholds must map question IDs to finite numbers between 0 and 1."
+                )
         elif isinstance(default, bool):
-            forms = {"true": True, "1": True, "yes": True, "on": True, "false": False, "0": False, "no": False, "off": False}
+            forms = {
+                "true": True,
+                "1": True,
+                "yes": True,
+                "on": True,
+                "false": False,
+                "0": False,
+                "no": False,
+                "off": False,
+            }
             if isinstance(value, str) and value.lower() in forms:
                 value = forms[value.lower()]
             if not isinstance(value, bool):
@@ -358,7 +398,11 @@ def _build_section(cls, raw: Any, path: str):
                     value = float(value)
                 except ValueError:
                     raise ConfigurationError(f"{key} must be a finite number.") from None
-            if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, (int, float))
+                or not math.isfinite(value)
+            ):
                 raise ConfigurationError(f"{key} must be a finite number.")
             value = float(value)
         elif not isinstance(value, str):
@@ -367,6 +411,8 @@ def _build_section(cls, raw: Any, path: str):
             raise ConfigurationError(f"{key} must be positive.")
         if key == "scoring.recall_threshold" and not 0 <= value <= 1:
             raise ConfigurationError(f"{key} must be between 0 and 1.")
+        if key == "baseline.quality_gate" and value not in {"all_questions", "aggregate"}:
+            raise ConfigurationError("baseline.quality_gate must be all_questions or aggregate.")
         if key == "retriever.port" and not 1 <= value <= 65535:
             raise ConfigurationError(f"{key} must be between 1 and 65535.")
         if key == "embedder.dimensions" and value < 0:
@@ -386,7 +432,9 @@ def _active(value: Any, path: str, *, required: bool = False) -> None:
     elif isinstance(value, str):
         missing = _ENV_PATTERN.search(value)
         if missing:
-            raise ConfigurationError(f"{path} references unset environment variable {missing.group(1)}; set it before running.")
+            raise ConfigurationError(
+                f"{path} references unset environment variable {missing.group(1)}; set it before running."
+            )
         if required and not value.strip():
             raise ConfigurationError(f"{path} must be non-empty.")
 

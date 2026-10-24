@@ -84,7 +84,7 @@ longprobe generate ./documents --num-questions 20 --auto-capture
 longprobe edit
 ```
 
-PDF/Word extraction depends on installed parsing capabilities. Generating questions without `--auto-capture` produces a question list rather than a complete evaluable golden set. The terminal editor currently edits question text, status, and mode; use YAML to review/change required evidence.
+PDF/Word extraction depends on installed parsing capabilities. Generating questions without `--auto-capture` produces a question list rather than a complete evaluable golden set. A fixed question count does not guarantee full document coverage; add reviewed cases for important topics and real retrieval failures. LongProbe checks selected golden questions, not arbitrary live user queries. The terminal editor currently edits question text, status, and mode; use YAML to review/change required evidence.
 
 ## 4. Check and save a baseline
 
@@ -95,7 +95,7 @@ longprobe baseline save --label latest
 
 Every approved question is sent to the retriever. LongProbe matches the returned evidence, calculates recall, and applies the passing threshold. With `fail_on_regression: true`, a below-threshold question or detected baseline regression makes `check` fail.
 
-`latest` is a literal baseline label. Saving a different label does not update it. Baseline-save quality policy is unchanged in this patch: the CLI checks overall recall, while the Python save API has no equivalent quality gate.
+`latest` is a literal baseline label. Saving another label does not update it. Both CLI and Python baseline promotion default to every evaluated question passing. Saving is explicit and never edits golden questions. Legacy references remain readable but need a reviewed new evaluation before strict comparison; see [baseline management](../guide/baseline-management.md).
 
 After changing your retrieval pipeline:
 
@@ -127,4 +127,4 @@ longprobe watch
 
 Watch polls the golden file and runs after a change; it does not initially run or watch configuration/remote index changes. Configuration edits take effect the next time a check is invoked.
 
-See [configuration](configuration.md), [CLI reference](../guide/cli-reference.md), and [v0.1.3 release notes](../releases/v0.1.3.md) for limits and compatibility changes.
+See [configuration](configuration.md), [CLI reference](../guide/cli-reference.md), and [v0.2.0 migration notes](../releases/v0.2.0.md) for limits and compatibility changes.

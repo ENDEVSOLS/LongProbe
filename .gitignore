@@ -165,3 +165,6 @@ demos/.demo_venv/
 LONGPROBE_ROADMAP_v2.md
 DEMO_GUIDE.md
 DEMOS_CREATED.md
+
+# Generated portable demo recording environment
+demos/.recording_venv/

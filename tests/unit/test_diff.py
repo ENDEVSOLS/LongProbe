@@ -20,10 +20,10 @@ from longprobe.core.diff import (
 )
 from longprobe.core.scorer import ProbeReport, QuestionResult
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _make_question_result(
     question_id: str,
@@ -37,7 +37,7 @@ def _make_question_result(
     if retrieved_chunk_ids is None:
         retrieved_chunk_ids = list(found_chunks)
     if required_chunks is None:
-        required_chunks = list(found_chunks) + ["missing-placeholder"]
+        required_chunks = [*found_chunks, "missing-placeholder"]
         # Adjust required_chunks so recall_score is consistent
         if recall_score == 1.0:
             required_chunks = list(found_chunks)
@@ -70,9 +70,7 @@ def _make_report(
     results: list[QuestionResult],
 ) -> ProbeReport:
     """Build a ProbeReport with the given results and computed pass_rate."""
-    pass_rate = (
-        sum(1 for r in results if r.passed) / len(results) if results else 1.0
-    )
+    pass_rate = sum(1 for r in results if r.passed) / len(results) if results else 1.0
     return ProbeReport(
         golden_set_name=name,
         golden_set_version=version,
@@ -87,8 +85,8 @@ def _make_report(
 # Regression detection
 # ---------------------------------------------------------------------------
 
-class TestRegressionDetection:
 
+class TestRegressionDetection:
     def test_recall_drop_appears_in_regressions(self):
         """When current recall < baseline recall, the question is a regression."""
         reporter = DiffReporter()
@@ -124,8 +122,8 @@ class TestRegressionDetection:
 # Improvement detection
 # ---------------------------------------------------------------------------
 
-class TestImprovementDetection:
 
+class TestImprovementDetection:
     def test_recall_increase_appears_in_improvements(self):
         """When current recall > baseline recall, the question is an improvement."""
         reporter = DiffReporter()
@@ -161,8 +159,8 @@ class TestImprovementDetection:
 # Unchanged detection
 # ---------------------------------------------------------------------------
 
-class TestUnchangedDetection:
 
+class TestUnchangedDetection:
     def test_same_recall_appears_in_unchanged(self):
         """When recall is identical, the question appears in the unchanged list."""
         reporter = DiffReporter()
@@ -218,8 +216,8 @@ class TestUnchangedDetection:
 # newly_lost_chunks
 # ---------------------------------------------------------------------------
 
-class TestNewlyLostChunks:
 
+class TestNewlyLostChunks:
     def test_newly_lost_chunks_computed_correctly(self):
         """newly_lost_chunks = baseline found chunks ∖ current found chunks."""
         reporter = DiffReporter()
@@ -253,8 +251,8 @@ class TestNewlyLostChunks:
 # newly_found_chunks
 # ---------------------------------------------------------------------------
 
-class TestNewlyFoundChunks:
 
+class TestNewlyFoundChunks:
     def test_newly_found_chunks_computed_correctly(self):
         """newly_found_chunks = current found chunks ∖ baseline found chunks."""
         reporter = DiffReporter()
@@ -288,19 +286,23 @@ class TestNewlyFoundChunks:
 # overall_delta
 # ---------------------------------------------------------------------------
 
-class TestOverallDelta:
 
+class TestOverallDelta:
     def test_positive_delta_for_improvement(self):
         reporter = DiffReporter()
 
         baseline = _make_report(
-            "gs", "1.0", 0.5,
+            "gs",
+            "1.0",
+            0.5,
             [
                 _make_question_result("q1", "test", 0.5, ["c1"], ["c1", "c2"]),
             ],
         )
         current = _make_report(
-            "gs", "1.0", 1.0,
+            "gs",
+            "1.0",
+            1.0,
             [
                 _make_question_result("q1", "test", 1.0, ["c1", "c2"], ["c1", "c2"]),
             ],
@@ -308,19 +310,23 @@ class TestOverallDelta:
 
         diff = reporter.diff(current, baseline)
 
-        assert diff.overall_delta == pytest.approx(0.5)
+        assert diff.overall_delta is None  # Legacy reports cannot establish a comparable delta.
 
     def test_negative_delta_for_regression(self):
         reporter = DiffReporter()
 
         baseline = _make_report(
-            "gs", "1.0", 1.0,
+            "gs",
+            "1.0",
+            1.0,
             [
                 _make_question_result("q1", "test", 1.0, ["c1", "c2"], ["c1", "c2"]),
             ],
         )
         current = _make_report(
-            "gs", "1.0", 0.5,
+            "gs",
+            "1.0",
+            0.5,
             [
                 _make_question_result("q1", "test", 0.5, ["c1"], ["c1", "c2"]),
             ],
@@ -328,7 +334,7 @@ class TestOverallDelta:
 
         diff = reporter.diff(current, baseline)
 
-        assert diff.overall_delta == pytest.approx(-0.5)
+        assert diff.overall_delta is None  # Legacy reports cannot establish a comparable delta.
 
     def test_zero_delta_for_unchanged(self):
         reporter = DiffReporter()
@@ -339,15 +345,15 @@ class TestOverallDelta:
 
         diff = reporter.diff(current, baseline)
 
-        assert diff.overall_delta == pytest.approx(0.0)
+        assert diff.overall_delta is None  # Legacy reports cannot establish a comparable delta.
 
 
 # ---------------------------------------------------------------------------
 # format_json
 # ---------------------------------------------------------------------------
 
-class TestFormatJson:
 
+class TestFormatJson:
     def test_format_json_returns_valid_json(self):
         reporter = DiffReporter()
         diff = RegressionDiff(
@@ -390,8 +396,8 @@ class TestFormatJson:
 # format_table
 # ---------------------------------------------------------------------------
 
-class TestFormatTable:
 
+class TestFormatTable:
     def test_format_table_returns_non_empty_string(self):
         reporter = DiffReporter()
         diff = RegressionDiff(
@@ -451,8 +457,8 @@ class TestFormatTable:
 # format_github
 # ---------------------------------------------------------------------------
 
-class TestFormatGithub:
 
+class TestFormatGithub:
     def test_regression_contains_error_annotation(self):
         """Regressions must use the ::error workflow command."""
         reporter = DiffReporter()
@@ -519,9 +525,9 @@ class TestFormatGithub:
 # New question not in baseline → skipped
 # ---------------------------------------------------------------------------
 
-class TestNewQuestionHandling:
 
-    def test_new_question_not_in_baseline_is_ignored(self):
+class TestNewQuestionHandling:
+    def test_new_question_not_in_baseline_is_reported(self):
         """Questions that exist in current but not baseline should not appear
         in regressions, improvements, or unchanged."""
         reporter = DiffReporter()
@@ -542,45 +548,66 @@ class TestNewQuestionHandling:
         assert len(diff.regressions) == 0
         assert len(diff.improvements) == 0
         assert len(diff.unchanged) == 0
+        assert diff.added_questions == ["q-new"]
+        assert not diff.compatible
 
 
 # ---------------------------------------------------------------------------
 # Mixed scenario
 # ---------------------------------------------------------------------------
 
-class TestMixedScenario:
 
+class TestMixedScenario:
     def test_mixed_regression_improvement_and_unchanged(self):
         """A single golden set can produce all three categories."""
         reporter = DiffReporter()
 
         q1_baseline = _make_question_result(
-            "q1", "regression Q", 1.0,
-            found_chunks=["a", "b"], required_chunks=["a", "b"],
+            "q1",
+            "regression Q",
+            1.0,
+            found_chunks=["a", "b"],
+            required_chunks=["a", "b"],
         )
         q1_current = _make_question_result(
-            "q1", "regression Q", 0.5,
-            found_chunks=["a"], required_chunks=["a", "b"],
+            "q1",
+            "regression Q",
+            0.5,
+            found_chunks=["a"],
+            required_chunks=["a", "b"],
         )
         q2_baseline = _make_question_result(
-            "q2", "improvement Q", 0.5,
-            found_chunks=["c"], required_chunks=["c", "d"],
+            "q2",
+            "improvement Q",
+            0.5,
+            found_chunks=["c"],
+            required_chunks=["c", "d"],
         )
         q2_current = _make_question_result(
-            "q2", "improvement Q", 1.0,
-            found_chunks=["c", "d"], required_chunks=["c", "d"],
+            "q2",
+            "improvement Q",
+            1.0,
+            found_chunks=["c", "d"],
+            required_chunks=["c", "d"],
         )
         q3_result = _make_question_result(
-            "q3", "unchanged Q", 0.8,
-            found_chunks=["e"], required_chunks=["e", "f"],
+            "q3",
+            "unchanged Q",
+            0.8,
+            found_chunks=["e"],
+            required_chunks=["e", "f"],
         )
 
         baseline = _make_report(
-            "gs", "1.0", (1.0 + 0.5 + 0.8) / 3,
+            "gs",
+            "1.0",
+            (1.0 + 0.5 + 0.8) / 3,
             [q1_baseline, q2_baseline, q3_result],
         )
         current = _make_report(
-            "gs", "1.0", (0.5 + 1.0 + 0.8) / 3,
+            "gs",
+            "1.0",
+            (0.5 + 1.0 + 0.8) / 3,
             [q1_current, q2_current, q3_result],
         )
 
@@ -594,9 +621,9 @@ class TestMixedScenario:
 
 
 class TestTwoBaselineDiffCLI:
-
-    def test_two_baseline_diff_with_threshold_failure(self, tmp_path, monkeypatch):
+    def test_legacy_two_baseline_diff_is_noncomparable(self, tmp_path, monkeypatch):
         import yaml
+
         from longprobe.cli.main import diff as cli_diff
         from longprobe.core.baseline import BaselineStore
 
@@ -626,4 +653,4 @@ class TestTwoBaselineDiffCLI:
                 include_drafts=False,
             )
 
-        assert exc.value.code == 1
+        assert exc.value.code == 2

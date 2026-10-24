@@ -1,20 +1,41 @@
+# Minimal single-job example. Configure your application retriever first.
+# The reusable workflow additionally supports baseline restoration and PR comments.
 name: RAG Regression Check
-
 on: [push, pull_request]
-
+permissions:
+  contents: read
 jobs:
   rag-probe:
     runs-on: ubuntu-latest
+    env:
+      LONGPROBE_RETRIEVER_API_KEY: ${{ secrets.RAG_RETRIEVER_API_KEY }}
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v4
         with:
-          version: "latest"
-
-      - name: Install LongProbe with Chroma support
-        run: uv pip install longprobe[chroma]
-
-      - name: Run RAG regression check
-        run: longprobe check --goldens goldens.yaml --output github
-
-      # Posts PR comment with recall table + lost chunks diff via GitHub annotations
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install longprobe==0.2.0
+      - name: Evaluate once and emit annotations
+        id: probe
+        run: python -m longprobe.ci run --config longprobe.yaml --goldens goldens.yaml
+      - name: Retain report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: longprobe-report
+          path: |
+            longprobe-result.json
+            longprobe-diagnostics.txt
+            longprobe-comment.md
+          if-no-files-found: warn
+      - name: Enforce recorded verdict
+        if: always()
+        env:
+          LONGPROBE_EXIT: ${{ steps.probe.outputs.exit-code }}
+        run: |
+          case "$LONGPROBE_EXIT" in
+            0|1|2|3) exit "$LONGPROBE_EXIT" ;;
+            *) exit 3 ;;
+          esac

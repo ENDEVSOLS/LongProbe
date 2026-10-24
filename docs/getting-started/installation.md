@@ -5,6 +5,20 @@
 - Python 3.11 or higher
 - pip or uv package manager
 
+## Install the v0.2.0 candidate
+
+Version 0.2.0 is implemented locally but has not been published by this work. The package-index commands below install an available published version; they do not guarantee these new features.
+
+From the repository root containing `pyproject.toml`, choose one installation method:
+
+```bash
+pip install -e .
+# Alternatively, after building the candidate locally:
+pip install dist/longprobe-0.2.0-py3-none-any.whl
+```
+
+See [development installation](#development-installation) and the [build verification record](../releases/v0.2.0-verification.md). Confirm the installed version under [verify installation](#verify-installation).
+
 ## Install with pip
 
 ```bash

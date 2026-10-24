@@ -1,358 +1,134 @@
-"""
-LongProbe pytest plugin.
+"""Opt-in pytest fixtures for shared LongProbe evaluation.
 
-Registers pytest options and provides fixtures for RAG regression testing.
-
-Usage in conftest.py::
-
-    from longprobe import LongProbe, ChromaAdapter
-
-    @pytest.fixture
-    def probe():
-        adapter = ChromaAdapter(collection_name="my_docs", persist_directory="./db")
-        return LongProbe(adapter=adapter, goldens_path="goldens.yaml")
-
-Usage in tests::
-
-    def test_retrieval_recall(probe):
-        report = probe.run()
-        assert report.overall_recall >= 0.85, (
-            f"Recall dropped to {report.overall_recall:.2f}. "
-            f"Lost chunks: {probe.get_missing_chunks()}"
-        )
-
-Command line::
-
-    pytest --longprobe-goldens goldens.yaml --longprobe-config longprobe.yaml
+Use ``longprobe_report`` to evaluate once per pytest session. The enforcement
+option activates that fixture automatically; unrelated pytest runs stay idle.
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+import math
+from copy import deepcopy
+from typing import TYPE_CHECKING
 
 import pytest
 
 if TYPE_CHECKING:
-    from _pytest.config import Config
-    from _pytest.config.argparsing import Parser
-    from _pytest.fixtures import FixtureRequest
-    from _pytest.nodes import Item
+    from longprobe.core.scorer import ProbeReport
+
+_REPORT_KEY: pytest.StashKey[ProbeReport] = pytest.StashKey()
 
 
-# ---------------------------------------------------------------------------
-# Command-line options
-# ---------------------------------------------------------------------------
-
-
-def pytest_addoption(parser: Parser) -> None:
-    """Register longprobe-specific pytest command line options."""
+def pytest_addoption(parser: pytest.Parser) -> None:
     group = parser.getgroup("longprobe")
     group.addoption(
-        "--longprobe-goldens",
-        action="store",
-        dest="longprobe_goldens",
-        default="goldens.yaml",
-        help="Path to LongProbe golden questions YAML file (default: goldens.yaml)",
+        "--longprobe-goldens", default="goldens.yaml", help="Golden questions YAML path."
     )
     group.addoption(
-        "--longprobe-config",
-        action="store",
-        dest="longprobe_config",
-        default="longprobe.yaml",
-        help="Path to LongProbe configuration YAML file (default: longprobe.yaml)",
+        "--longprobe-config", default="longprobe.yaml", help="LongProbe configuration YAML path."
     )
     group.addoption(
         "--longprobe-fail-threshold",
-        action="store",
-        dest="longprobe_fail_threshold",
         type=float,
         default=None,
-        help=(
-            "Minimum overall recall to pass. "
-            "Fail tests if recall drops below this value."
-        ),
+        help="Run LongProbe and enforce per-question passing with this global threshold; explicit question thresholds take precedence.",
     )
     group.addoption(
         "--longprobe-include-drafts",
         action="store_true",
-        dest="longprobe_include_drafts",
         default=False,
-        help="Include draft questions in pytest evaluation runs.",
+        help="Include drafts in pytest analysis (not baseline promotion).",
     )
 
 
-# ---------------------------------------------------------------------------
-# Configuration hook
-# ---------------------------------------------------------------------------
-
-
-@pytest.hookimpl(trylast=True)
-def pytest_configure(config: Config) -> None:
-    """Store longprobe options on the config object for later access."""
-    config._longprobe_goldens = config.getoption("longprobe_goldens", "goldens.yaml")  # type: ignore[attr-defined]
-    config._longprobe_config = config.getoption("longprobe_config", "longprobe.yaml")  # type: ignore[attr-defined]
-    config._longprobe_fail_threshold = config.getoption("longprobe_fail_threshold", None)  # type: ignore[attr-defined]
-    config._longprobe_include_drafts = config.getoption("longprobe_include_drafts", False)  # type: ignore[attr-defined]
-    config._longprobe_report = None  # type: ignore[attr-defined]
-
-
-# ---------------------------------------------------------------------------
-# Fixtures
-# ---------------------------------------------------------------------------
+def pytest_configure(config: pytest.Config) -> None:
+    threshold = config.getoption("longprobe_fail_threshold")
+    if threshold is not None and (not math.isfinite(threshold) or not 0 <= threshold <= 1):
+        raise pytest.UsageError("--longprobe-fail-threshold must be a finite number in [0, 1].")
 
 
 @pytest.fixture(scope="session")
-def longprobe_goldens_path(request: FixtureRequest) -> str:
-    """Fixture that returns the path to the golden questions file.
-
-    The path is determined by the ``--longprobe-goldens`` CLI option (defaults
-    to ``goldens.yaml``).
-    """
-    return request.config._longprobe_goldens  # type: ignore[attr-defined]
+def longprobe_goldens_path(request: pytest.FixtureRequest) -> str:
+    return request.config.getoption("longprobe_goldens")
 
 
 @pytest.fixture(scope="session")
-def longprobe_config_path(request: FixtureRequest) -> str:
-    """Fixture that returns the path to the longprobe config file.
-
-    The path is determined by the ``--longprobe-config`` CLI option (defaults
-    to ``longprobe.yaml``).
-    """
-    return request.config._longprobe_config  # type: ignore[attr-defined]
+def longprobe_config_path(request: pytest.FixtureRequest) -> str:
+    return request.config.getoption("longprobe_config")
 
 
 @pytest.fixture(scope="session")
-def longprobe_fail_threshold(request: FixtureRequest) -> float | None:
-    """Fixture that returns the configured fail threshold (or ``None``).
-
-    Set via ``--longprobe-fail-threshold``.  When *None*, no automatic
-    threshold check is applied.
-    """
-    return request.config._longprobe_fail_threshold  # type: ignore[attr-defined]
+def longprobe_fail_threshold(request: pytest.FixtureRequest) -> float | None:
+    return request.config.getoption("longprobe_fail_threshold")
 
 
 @pytest.fixture(scope="session")
-def longprobe_include_drafts(request: FixtureRequest) -> bool:
-    """Fixture that returns whether draft questions are included in evaluation runs."""
-    return request.config._longprobe_include_drafts  # type: ignore[attr-defined]
-
-
-# ---------------------------------------------------------------------------
-# Optional convenience fixture - auto-build a LongProbe instance
-# ---------------------------------------------------------------------------
+def longprobe_include_drafts(request: pytest.FixtureRequest) -> bool:
+    return request.config.getoption("longprobe_include_drafts")
 
 
 @pytest.fixture(scope="session")
-def longprobe_adapter(
-    longprobe_config_path: str,
-) -> Any:
-    """Lazily build an adapter from the longprobe configuration file.
+def longprobe_adapter(longprobe_config_path: str):
+    """Build the configured adapter; override this fixture for an application retriever."""
+    from longprobe.adapters import create_adapter_from_config
+    from longprobe.config import ProbeConfig
 
-    Override this fixture in your ``conftest.py`` if you need a custom adapter
-    (e.g. ``ChromaAdapter``, ``PineconeAdapter``, etc.) or different
-    initialisation logic.
-    """
-    try:
-        from longprobe.config import load_config
-    except ImportError:
-        pytest.skip("longprobe is not installed; skipping adapter fixture")
-        return None  # pragma: no cover - unreachable, satisfies type checker
-
-    try:
-        cfg = load_config(longprobe_config_path)
-    except (FileNotFoundError, ValueError) as exc:
-        pytest.skip(f"Cannot load longprobe config: {exc}")
-        return None  # pragma: no cover
-
-    adapter_cls = cfg.get("adapter_class")
-    if adapter_cls is None:
-        pytest.skip(
-            "No adapter_class specified in longprobe config; "
-            "provide a custom longprobe_adapter fixture instead"
-        )
-        return None  # pragma: no cover
-
-    # Resolve dotted-path strings, e.g. "longprobe.ChromaAdapter"
-    parts = adapter_cls.rsplit(".", 1)
-    if len(parts) == 2:
-        import importlib
-
-        mod_path, attr_name = parts
-        try:
-            mod = importlib.import_module(mod_path)
-            adapter_cls = getattr(mod, attr_name)
-        except (ImportError, AttributeError) as exc:
-            pytest.skip(f"Cannot resolve adapter class '{adapter_cls}': {exc}")
-            return None  # pragma: no cover
-
-    # Forward remaining config keys as kwargs to the adapter constructor.
-    adapter_kwargs = {
-        k: v for k, v in cfg.items() if k not in ("adapter_class",)
-    }
-    return adapter_cls(**adapter_kwargs)
+    return create_adapter_from_config(ProbeConfig.from_yaml(longprobe_config_path))
 
 
 @pytest.fixture(scope="session")
 def longprobe_probe(
-    longprobe_adapter: Any,
+    longprobe_adapter,
     longprobe_goldens_path: str,
+    longprobe_config_path: str,
     longprobe_include_drafts: bool,
-) -> Any:
-    """Return a fully-initialised :class:`~longprobe.LongProbe` instance.
+    longprobe_fail_threshold: float | None,
+):
+    from longprobe import LongProbe
+    from longprobe.config import ProbeConfig
 
-    This fixture depends on :fixture:`longprobe_adapter` which, by default,
-    reads adapter settings from the config file.  Override either fixture in
-    ``conftest.py`` for full control.
-    """
-    try:
-        from longprobe import LongProbe
-    except ImportError:
-        pytest.skip("longprobe is not installed; skipping probe fixture")
-        return None  # pragma: no cover
-
-    if longprobe_adapter is None:
-        pytest.skip("No adapter available; skipping probe fixture")
-        return None  # pragma: no cover
-
+    # A selected pytest path is required even for a custom application adapter.
+    ProbeConfig.from_yaml(longprobe_config_path)
     return LongProbe(
         adapter=longprobe_adapter,
         goldens_path=longprobe_goldens_path,
+        config_path=longprobe_config_path,
         include_drafts=longprobe_include_drafts,
+        recall_threshold=longprobe_fail_threshold,
     )
 
 
-# ---------------------------------------------------------------------------
-# Automatic threshold enforcement
-# ---------------------------------------------------------------------------
+@pytest.fixture(scope="session")
+def longprobe_report(longprobe_probe, request: pytest.FixtureRequest):
+    """Return one completed evaluation; no private config assignment is required."""
+    report = longprobe_probe.run()
+    request.config.stash[_REPORT_KEY] = deepcopy(report)
+    return report
 
 
-@pytest.hookimpl(trylast=True)
-def pytest_collection_modifyitems(
-    session: Any,
-    config: Config,
-    items: list[Item],
-) -> None:
-    """Optionally inject a final summarising test that enforces the threshold.
-
-    A synthetic test item is appended to the collected list when
-    ``--longprobe-fail-threshold`` is provided.  The test reads
-    ``config._longprobe_report`` (which a user's test is expected to store)
-    and fails if the overall recall is below the threshold.
-    """
-    threshold = config._longprobe_fail_threshold  # type: ignore[attr-defined]
-    if threshold is None:
+@pytest.fixture(scope="session", autouse=True)
+def _longprobe_enforce(request: pytest.FixtureRequest):
+    if request.config.getoption("longprobe_fail_threshold") is None:
         return
-
-    from _pytest.python import Function
-
-    # Define the test function inline.
-    def _longprobe_threshold_check() -> None:
-        report = config._longprobe_report  # type: ignore[attr-defined]
-        if report is None:
-            pytest.fail(
-                "No LongProbe report was generated.  Make sure at least one "
-                "test calls ``probe.run()`` and stores the result in "
-                "``request.config._longprobe_report``."
-            )
-            return  # pragma: no cover
-        if report.overall_recall < threshold:
-            pytest.fail(
-                f"LongProbe overall recall ({report.overall_recall:.2f}) is below "
-                f"the configured threshold ({threshold:.2f})."
-            )
-
-    # Build a lightweight synthetic Function item.
-    synthetic = Function.from_parent(
-        parent=session,  # type: ignore[arg-type]
-        name="longprobe_threshold_check",
-        callobj=_longprobe_threshold_check,
-    )
-    items.append(synthetic)
+    report = request.getfixturevalue("longprobe_report")
+    if not report.quality["passed"]:
+        pytest.fail(
+            "LongProbe quality gate failed: " + "; ".join(report.quality["reasons"]), pytrace=False
+        )
 
 
-# ---------------------------------------------------------------------------
-# Session-finish summary
-# ---------------------------------------------------------------------------
-
-
-@pytest.hookimpl(trylast=True)
-def pytest_sessionfinish(session: Any, exitstatus: int) -> None:
-    """Print a LongProbe summary table if a report was generated.
-
-    The report is expected to be stored on the config object by user tests::
-
-        request.config._longprobe_report = probe.run()
-    """
-    report = session.config._longprobe_report  # type: ignore[attr-defined]
+def pytest_terminal_summary(terminalreporter, exitstatus: int, config: pytest.Config) -> None:
+    report = config.stash.get(_REPORT_KEY, None)
     if report is None:
         return
-
-    try:
-        from rich.console import Console
-        from rich.panel import Panel
-        from rich.table import Table
-    except ImportError:
-        # Fall back to plain-text output when rich is unavailable.
-        _print_plain_summary(report)
-        return
-
-    console = Console()
-
-    table = Table(title="LongProbe Results", show_header=True, header_style="bold cyan")
-    table.add_column("Question ID", style="dim")
-    table.add_column("Recall", justify="right")
-    table.add_column("Missing Chunks")
-    table.add_column("Status")
-
-    for result in report.results:
-        status = "[green]PASS[/green]" if result.passed else "[red]FAIL[/red]"
-        chunks_str = ", ".join(result.missing_chunks) if result.missing_chunks else "-"
-        table.add_row(
-            result.question_id,
-            f"{result.recall_score:.2f}",
-            chunks_str,
-            status,
-        )
-
-    console.print()
-    console.print(table)
-    console.print(
-        Panel(
-            f"Overall Recall: {report.overall_recall:.2f} | "
-            f"Pass Rate: {report.pass_rate:.2f}",
-            style="bold",
-        )
+    terminalreporter.write_sep("=", "LongProbe Results")
+    terminalreporter.write_line(
+        f"Overall recall: {report.overall_recall:.2%}; pass rate: {report.pass_rate:.2%}"
     )
-
-
-# ---------------------------------------------------------------------------
-# Plain-text fallback summary (when rich is not installed)
-# ---------------------------------------------------------------------------
-
-
-def _print_plain_summary(report: Any) -> None:
-    """Print a minimal plain-text summary of a LongProbe report.
-
-    This fallback is used when the ``rich`` library is not installed.
-    It relies only on the Python standard library.
-    """
-    divider = "=" * 72
-    print()
-    print(divider)
-    print("  LongProbe Results")
-    print(divider)
-    header = f"  {'Question ID':<30} {'Recall':>8}  {'Missing Chunks':<24} {'Status'}"
-    print(header)
-    print("-" * 72)
-    for result in report.results:
-        status = "PASS" if result.passed else "FAIL"
-        chunks_str = ", ".join(result.missing_chunks) if result.missing_chunks else "-"
-        line = f"  {result.question_id:<30} {result.recall_score:>8.2f}  {chunks_str:<24} {status}"
-        print(line)
-    print(divider)
-    print(
-        f"  Overall Recall: {report.overall_recall:.2f}  |  "
-        f"Pass Rate: {report.pass_rate:.2f}"
+    identity = report.baseline_identity
+    terminalreporter.write_line(
+        f"Baseline: {identity.get('resolved_label') or identity.get('requested_label') or 'none'}; comparison: {identity.get('status', 'not_requested')}"
     )
-    print(divider)
-    print()
+    for result in report.results:
+        terminalreporter.write_line(
+            f"{result.question_id}: {'PASS' if result.passed else 'FAIL'}; missing: {', '.join(result.missing_chunks) or 'none'}"
+        )

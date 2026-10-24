@@ -22,9 +22,13 @@ retriever:
 scoring:
   recall_threshold: 0.8
   fail_on_regression: true
+  # Optional; replace with an ID in your full golden set:
+  # question_thresholds:
+  #   refund-policy: 1.0
 baseline:
   db_path: .longprobe/baselines.db
   auto_compare: true
+  quality_gate: all_questions
 ```
 
 Remove the Authorization header when your local endpoint does not require authentication. HTTP settings live under `retriever.http`. Chroma/Pinecone/Qdrant connection fields live directly under `retriever`:
@@ -36,7 +40,7 @@ retriever:
   persist_directory: ./chroma_db
 ```
 
-Pinecone uses `index_name`, `api_key`, and `namespace`. Qdrant uses `collection`, `host`, `port`, and optional `api_key`. Their normal text-question flow is not connected to query embeddings in v0.1.3; use a properly configured application HTTP endpoint or custom Python adapter until that integration is implemented. Framework retrievers require the Python API.
+Pinecone uses `index_name`, `api_key`, and `namespace`. Qdrant uses `collection`, `host`, `port`, and optional `api_key`. Their normal text-question flow is not connected to query embeddings in this release; use a properly configured application HTTP endpoint or custom Python adapter until that integration is implemented. Framework retrievers require the Python API.
 
 ## Strict loading and accepted values
 
@@ -50,7 +54,7 @@ Python callers supplying an adapter may omit the conventional `longprobe.yaml`; 
 - Floats must be finite. Recall threshold must be between 0 and 1.
 - Ports must be 1–65535, dimensions nonnegative, and timeouts/batch sizes/generation counts/token limits positive.
 - Booleans accept YAML booleans or case-insensitive strings `true/false`, `1/0`, `yes/no`, `on/off`.
-- Provider-specific `extra` mappings are preserved; this patch does not redesign unknown-key handling.
+- Provider-specific `extra` mappings are preserved; this release does not redesign unknown-key handling.
 
 Validation errors identify fields without printing their values. Correct misspelled or incorrectly nested known settings; extra fields are not automatically used by every CLI adapter.
 
@@ -74,9 +78,13 @@ Cloud generation may use `generator.api_key` or the provider environment variabl
 
 ## Scoring and baselines
 
-`recall_threshold` controls per-question pass/fail. `fail_on_regression: true` makes `check` exit unsuccessfully for a failed question or detected question-level baseline recall decrease. Setting it to false does not suppress configuration or empty-suite failures.
+`recall_threshold` controls the global per-question threshold. Invocation overrides supersede it, while explicit `question_thresholds` take precedence for their IDs. Values must be finite numbers in `[0, 1]`; unknown IDs fail against the full loaded suite, even when selection later filters questions.
 
-`baseline.db_path` selects SQLite storage. `auto_compare` compares with the literal label `latest`, if it exists. CI must restore this database explicitly when historical comparison is needed. No baseline schema migration is introduced.
+`baseline.quality_gate` defaults to `all_questions` for both CLI and Python promotion. `aggregate` is an explicit alternative that permits individual failures if the mean meets the global threshold. Regular evaluation still reports every failed question.
+
+`fail_on_regression: true` makes `check` fail for question failures or lost required evidence, including equal-recall evidence swaps. Setting it to false only relaxes completed quality failures; configuration, empty suites, incompatible comparisons, and execution failures remain nonzero. It never bypasses baseline promotion policy.
+
+`baseline.db_path` selects SQLite storage. `auto_compare` uses literal `latest` when present. Explicit `--baseline` labels are required; `--no-compare` skips comparison. CI restores its database explicitly when configured. New report JSON metadata does not require an SQL table migration, but legacy references must be re-established before strict comparison. See [baseline management](../guide/baseline-management.md).
 
 ## Embedding and matching limitations
 

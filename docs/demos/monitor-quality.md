@@ -1,105 +1,34 @@
-# Monitor RAG Quality Demo
+# Monitor RAG quality
 
-The **Monitor RAG Quality** demonstration illustrates how to continuously measure RAG retrieval performance against saved Golden Questions using LongProbe.
+![Monitor RAG Quality](../assets/02-python-api.gif)
 
----
+The v0.2.0 dashboard shows one evaluation with per-question recall, required evidence found, pass/fail results, and the shared quality verdict. It also shows that no historical comparison occurred when a baseline is absent. Progress panels and result tables are displayed without source code.
 
-## Overview
+Evidence is displayed as **found / required**, alongside recall percentage and PASS/FAIL. For example, **0 / 1** means zero of one required items was retrieved, giving **0% recall**. Similarity scores are not correctness percentages and are not displayed by this synthetic demonstration.
 
-In production RAG systems, monitoring retrieval quality is critical to ensure that changes to documents, embeddings, or vector databases do not silently degrade recall. 
+## Run locally
 
-This demo connects LongProbe to a vector store (ChromaDB), evaluates a set of approved golden questions, and renders an interactive Rich TUI table displaying recall scores, pass/fail status, and retrieved chunk counts.
-
----
-
-## Running the Demo
-
-To run the RAG quality monitoring demo locally:
+From the repository root:
 
 ```bash
-uv run python demo_run/monitor_rag_quality.py
+make setup-demos
+demos/.recording_venv/bin/python demo_run/monitor_rag_quality.py
 ```
 
----
+The script uses three reviewed sample cases, an 85% threshold, and a deterministic in-memory adapter. Refund evidence is deliberately omitted: two questions pass and one fails. Overall recall and pass rate are 66.7%, and the quality summary identifies the missing evidence. This is an expected demonstration failure; the script verifies it and exits successfully. It runs without an external service or optional vector SDK. Temporary files are removed after each run. Add `--no-delay` for immediate output.
 
-## Interactive TUI Output
-
-When executed, LongProbe performs three live setup and evaluation phases:
-
-1. **Setup**: Connects to the vector store and seeds/loads sample documents.
-2. **Loading**: Loads approved golden questions from `goldens.yaml`.
-3. **Testing**: Queries the vector store for each question and calculates recall.
-
-### Sample Output Display:
-
-```text
-🔬 RAG Quality Check with LongProbe
-
-╭──────────────────────────────────────── RAG Quality Check ─────────────────────────────────────────╮
-│   Setup                                      ✓                    Connected to vector store        │
-│   Loading                                    ✓                    Loaded 3 golden questions        │
-│   Testing                                    ✓                    All 3 tests complete             │
-│                                                                                                    │
-│ ✓ Tests complete!                                                                                  │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
-
-╭────────────────────────────────────────── 📊 Test Results ──────────────────────────────────────────╮
-│  Question                                                                      Recall        Status  │
-│  What are the enterprise payment terms?                                         50.0%        ✗ FAIL  │
-│  What is the refund policy?                                                    100.0%        ✓ PASS  │
-│  How is data encrypted?                                                        100.0%        ✓ PASS  │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
-
-╭───────────────────────────────────────────── 📈 Summary ───────────────────────────────────────────╮
-│ Overall Recall: 83.3%                                                                              │
-│ Pass Rate: 66.7%                                                                                   │
-│                                                                                                    │
-│ ✓ Passed: 2/3                                                                                      │
-│ ✗ Failed: 1/3                                                                                      │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
-
-⚠️  1 test(s) failed - review missing chunks
-```
-
----
-
-## How It Works Under the Hood
+## Inspect the verdict
 
 ```python
-import os
-from longprobe import LongProbe
-from longprobe.adapters import create_adapter
-
-# 1. Connect to vector database adapter
-adapter = create_adapter(
-    "chroma",
-    collection_name="demo_collection",
-    persist_directory="./.demo_chroma_db"
-)
-
-# 2. Initialize LongProbe with Golden Questions
-probe = LongProbe(
-    adapter=adapter,
-    goldens_path="goldens.yaml"
-)
-
-# 3. Execute quality check
 report = probe.run()
-
-# 4. Inspect results
-print(f"Overall Recall: {report.overall_recall:.1%}")
-for result in report.results:
-    print(f"Question: {result.question_id} -> Recall: {result.recall_score:.1%}")
+print(f"Overall recall: {report.overall_recall:.1%}")
+print(f"Pass rate: {report.pass_rate:.1%}")
+print(report.baseline_identity)
+assert report.quality["passed"], report.quality["reasons"]
 ```
 
----
+A strong average can hide a failed question. Use the shared quality verdict to enforce each selected question's effective threshold and any available comparison. Passing does not automatically approve questions or save a baseline.
 
-## Quality Threshold Enforcement
+The fixture demonstrates evaluation behavior rather than live production monitoring. To evaluate your own application, supply its retriever and reviewed goldens. See the [Python guide](../guide/python-api.md) and [pytest integration](../integrations/pytest.md).
 
-You can enforce hard quality gates in Python or CLI:
-
-```bash
-uv run longprobe check --goldens goldens.yaml --threshold 0.85
-```
-
-If overall recall falls below `85%`, LongProbe outputs a quality warning diagnostic panel and exits with status code `1`, preventing deployment of broken RAG pipelines.
+Regenerate the GIF with `make demos` after installing the recording tools listed in `demos/README.md`.

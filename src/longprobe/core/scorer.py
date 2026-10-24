@@ -25,7 +25,7 @@ import math
 import time
 from collections import Counter
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 
 from .golden import GoldenQuestion, GoldenSet
@@ -60,6 +60,7 @@ class QuestionResult:
     found_chunks: list[str]
     passed: bool
     latency_ms: float
+    contract: dict | None = None
 
 
 @dataclass
@@ -76,8 +77,8 @@ class ProbeReport:
         baseline_recall: Previously recorded recall value (if available)
             used to detect regressions.
         recall_delta: Difference between current and baseline recall.
-        regression_detected: Whether a statistically meaningful regression
-            was observed (``recall_delta`` is negative).
+        regression_detected: Whether required evidence regressed against the
+            selected reference, including equal-recall evidence loss.
     """
 
     golden_set_name: str
@@ -89,6 +90,12 @@ class ProbeReport:
     baseline_recall: float | None = None
     recall_delta: float | None = None
     regression_detected: bool = False
+    schema_version: int | None = None
+    selection: dict = field(default_factory=dict)
+    policy: dict = field(default_factory=dict)
+    baseline_identity: dict = field(default_factory=lambda: {"status": "not_requested"})
+    comparison: dict | None = None
+    quality: dict = field(default_factory=dict)
 
 
 # ---------------------------------------------------------------------------
@@ -109,13 +116,31 @@ class RecallScorer:
             considered *passed*.
     """
 
-    def __init__(self, recall_threshold: float = 0.8) -> None:
-        if not 0.0 <= recall_threshold <= 1.0:
+    def __init__(
+        self, recall_threshold: float = 0.8, question_thresholds: dict[str, float] | None = None
+    ) -> None:
+        if (
+            isinstance(recall_threshold, bool)
+            or not isinstance(recall_threshold, (int, float))
+            or not math.isfinite(recall_threshold)
+            or not 0.0 <= recall_threshold <= 1.0
+        ):
             raise ValueError(
-                f"recall_threshold must be between 0.0 and 1.0, "
-                f"got {recall_threshold}"
+                f"recall_threshold must be between 0.0 and 1.0, got {recall_threshold}"
             )
         self.recall_threshold = recall_threshold
+        self.question_thresholds = dict(question_thresholds or {})
+        if any(
+            not isinstance(k, str)
+            or isinstance(v, bool)
+            or not isinstance(v, (int, float))
+            or not math.isfinite(v)
+            or not 0 <= v <= 1
+            for k, v in self.question_thresholds.items()
+        ):
+            raise ValueError(
+                "question_thresholds must map question IDs to finite thresholds in [0, 1]."
+            )
 
     # ------------------------------------------------------------------
     # Public API
@@ -153,8 +178,7 @@ class RecallScorer:
             )
         else:
             raise ValueError(
-                f"Unsupported match_mode '{match_mode}'. "
-                f"Expected 'id', 'text', or 'semantic'."
+                f"Unsupported match_mode '{match_mode}'. Expected 'id', 'text', or 'semantic'."
             )
 
         # Compute recall with division-by-zero guard.
@@ -173,7 +197,7 @@ class RecallScorer:
             required_chunks=required_chunks,
             missing_chunks=missing_chunks,
             found_chunks=found,
-            passed=recall >= self.recall_threshold,
+            passed=recall >= self.question_thresholds.get(question.id, self.recall_threshold),
             latency_ms=0.0,
         )
 
@@ -195,8 +219,12 @@ class RecallScorer:
         Returns:
             A :class:`ProbeReport` summarising the evaluation run.
         """
+        from .reporting import question_contract
+
         if not golden_set.questions:
             raise EmptyEvaluationError("No questions to evaluate; add or approve golden questions.")
+        if set(self.question_thresholds) - {q.id for q in golden_set.questions}:
+            raise ValueError("question_thresholds references unknown question IDs.")
         if top_k_override is not None and (type(top_k_override) is not int or top_k_override <= 0):
             raise ValueError("top_k_override must be a positive integer.")
         results: list[QuestionResult] = []
@@ -209,6 +237,9 @@ class RecallScorer:
             elapsed = time.perf_counter() - start
 
             result = self.score(question, retrieved_docs)
+            result.contract = question_contract(
+                question, top_k, self.question_thresholds.get(question.id, self.recall_threshold)
+            )
             result.latency_ms = elapsed * 1000.0
             results.append(result)
 
@@ -223,6 +254,8 @@ class RecallScorer:
             overall_recall=overall_recall,
             pass_rate=pass_rate,
             results=results,
+            schema_version=2,
+            policy={"mode": "all_questions", "recall_threshold": self.recall_threshold},
         )
 
     # ------------------------------------------------------------------

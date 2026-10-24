@@ -28,7 +28,7 @@ from rich.table import Table
 from rich.text import Text
 
 if TYPE_CHECKING:
-    from .scorer import ProbeReport, QuestionResult
+    from .scorer import ProbeReport
 
 
 # ---------------------------------------------------------------------------
@@ -90,10 +90,16 @@ class RegressionDiff:
         unchanged: Question IDs whose recall did not change (within epsilon).
     """
 
-    overall_delta: float = 0.0
+    overall_delta: float | None = 0.0
     regressions: list[ChunkRegression] = field(default_factory=list)
     improvements: list[ChunkImprovement] = field(default_factory=list)
     unchanged: list[str] = field(default_factory=list)
+    compatible: bool = True
+    compatibility_reasons: list[str] = field(default_factory=list)
+    added_questions: list[str] = field(default_factory=list)
+    removed_questions: list[str] = field(default_factory=list)
+    changed_questions: list[dict] = field(default_factory=list)
+    evidence_changes: list[dict] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -121,82 +127,74 @@ class DiffReporter:
     # ------------------------------------------------------------------
 
     def diff(self, current: ProbeReport, baseline: ProbeReport) -> RegressionDiff:
-        """Compare *current* against *baseline* and return a structured diff.
+        """Classify structural changes first, then compare identical contracts.
 
-        For every question present in both reports the per-question recall
-        scores are compared.  A small epsilon (``1e-9``) is used to decide
-        equality so that floating-point noise does not produce spurious
-        diffs.
-
-        Args:
-            current: The probe report from the run under test.
-            baseline: The reference (previous) probe report.
-
-        Returns:
-            A :class:`RegressionDiff` with regressions, improvements, and
-            unchanged question IDs.
+        Legacy reports expose available diagnostics but cannot certify strict
+        compatibility. Whole-suite deltas are unavailable on incompatible sets.
         """
-        # Build a lookup from question_id -> QuestionResult for the baseline.
-        baseline_map: dict[str, QuestionResult] = {
-            r.question_id: r for r in baseline.results
-        }
+        from .reporting import report_to_dict
 
-        regressions: list[ChunkRegression] = []
-        improvements: list[ChunkImprovement] = []
-        unchanged: list[str] = []
-
-        for cur_result in current.results:
-            base_result = baseline_map.get(cur_result.question_id)
-            if base_result is None:
-                # New question that did not exist in the baseline — skip.
-                continue
-
-            baseline_found_set = set(base_result.found_chunks)
-            current_found_set = set(cur_result.found_chunks)
-
-            if cur_result.recall_score < base_result.recall_score - _EPSILON:
-                # Regression: recall dropped.
-                lost = sorted(
-                    [c for c in base_result.found_chunks if c not in current_found_set]
-                )
-                regressions.append(
-                    ChunkRegression(
-                        question_id=cur_result.question_id,
-                        question=cur_result.question,
-                        newly_lost_chunks=lost,
-                        baseline_recall=base_result.recall_score,
-                        current_recall=cur_result.recall_score,
-                    )
-                )
-            elif cur_result.recall_score > base_result.recall_score + _EPSILON:
-                # Improvement: recall increased.
-                found = sorted(
-                    [c for c in cur_result.found_chunks if c not in baseline_found_set]
-                )
-                improvements.append(
-                    ChunkImprovement(
-                        question_id=cur_result.question_id,
-                        question=cur_result.question,
-                        newly_found_chunks=found,
-                        baseline_recall=base_result.recall_score,
-                        current_recall=cur_result.recall_score,
-                    )
+        for report in (current, baseline):
+            if report.schema_version is not None:
+                report_to_dict(report)
+        current_map = {r.question_id: r for r in current.results}
+        baseline_map = {r.question_id: r for r in baseline.results}
+        result = RegressionDiff(
+            added_questions=sorted(current_map.keys() - baseline_map.keys()),
+            removed_questions=sorted(baseline_map.keys() - current_map.keys()),
+        )
+        reasons = result.compatibility_reasons
+        if current.schema_version != 2 or baseline.schema_version != 2:
+            reasons.append("Legacy report metadata is missing; compatibility is unverified.")
+        if not current.results or not baseline.results:
+            reasons.append("An empty report cannot establish a comparison.")
+        if (current.golden_set_name, current.golden_set_version) != (
+            baseline.golden_set_name,
+            baseline.golden_set_version,
+        ):
+            reasons.append("Golden set name or version changed.")
+        if result.added_questions or result.removed_questions:
+            reasons.append("Evaluated question coverage changed.")
+        for qid in sorted(current_map.keys() & baseline_map.keys()):
+            cur, base = current_map[qid], baseline_map[qid]
+            if cur.contract is not None and base.contract is not None:
+                fields = sorted(
+                    k
+                    for k in cur.contract.keys() | base.contract.keys()
+                    if k != "fingerprint" and cur.contract.get(k) != base.contract.get(k)
                 )
             else:
-                unchanged.append(cur_result.question_id)
-
-        overall_delta = current.overall_recall - baseline.overall_recall
-
-        return RegressionDiff(
-            overall_delta=overall_delta,
-            regressions=regressions,
-            improvements=improvements,
-            unchanged=unchanged,
+                fields = []
+                if cur.question != base.question:
+                    fields.append("question")
+                if sorted(cur.required_chunks) != sorted(base.required_chunks):
+                    fields.append("required_chunks")
+            if fields:
+                result.changed_questions.append({"question_id": qid, "fields": fields})
+                continue
+            lost = sorted(set(base.found_chunks) - set(cur.found_chunks))
+            gained = sorted(set(cur.found_chunks) - set(base.found_chunks))
+            if lost or gained:
+                result.evidence_changes.append(
+                    {"question_id": qid, "newly_lost_chunks": lost, "newly_found_chunks": gained}
+                )
+            if lost or cur.recall_score < base.recall_score - _EPSILON:
+                result.regressions.append(
+                    ChunkRegression(qid, cur.question, lost, base.recall_score, cur.recall_score)
+                )
+            elif gained or cur.recall_score > base.recall_score + _EPSILON:
+                result.improvements.append(
+                    ChunkImprovement(qid, cur.question, gained, base.recall_score, cur.recall_score)
+                )
+            else:
+                result.unchanged.append(qid)
+        if result.changed_questions:
+            reasons.append("Question requirements or evaluation settings changed.")
+        result.compatible = not reasons
+        result.overall_delta = (
+            current.overall_recall - baseline.overall_recall if result.compatible else None
         )
-
-    # ------------------------------------------------------------------
-    # Formatters
-    # ------------------------------------------------------------------
+        return result
 
     def format_table(self, diff: RegressionDiff) -> str:
         """Render the diff as a rich terminal table.
@@ -215,11 +213,11 @@ class DiffReporter:
         console = Console(file=buf, force_terminal=False, no_color=False)
 
         # --- Header panel ------------------------------------------------
-        delta_sign = "+" if diff.overall_delta >= 0 else ""
+        delta_sign = "+" if diff.overall_delta is not None and diff.overall_delta >= 0 else ""
         header_text = Text.assemble(
             ("LongProbe Regression Report\n", "bold"),
             (
-                f"Overall recall delta: {delta_sign}{diff.overall_delta:.4f}  |  "
+                f"Overall recall delta: {delta_sign + format(diff.overall_delta, '.4f') if diff.overall_delta is not None else 'unavailable (incompatible)'}  |  "
                 f"Regressions: {len(diff.regressions)}  |  "
                 f"Improvements: {len(diff.improvements)}  |  "
                 f"Unchanged: {len(diff.unchanged)}",
@@ -227,6 +225,20 @@ class DiffReporter:
             ),
         )
         console.print(Panel(header_text, border_style="bold blue"))
+        if not diff.compatible:
+            console.print(
+                "Comparison incompatible: " + "; ".join(diff.compatibility_reasons), markup=False
+            )
+        for label, values in (
+            ("Added questions", diff.added_questions),
+            ("Removed questions", diff.removed_questions),
+        ):
+            if values:
+                console.print(label + ": " + ", ".join(values), markup=False)
+        for change in diff.changed_questions:
+            console.print(
+                f"Changed {change['question_id']}: {', '.join(change['fields'])}", markup=False
+            )
 
         # --- Regressions table -------------------------------------------
         if diff.regressions:
@@ -244,9 +256,7 @@ class DiffReporter:
             reg_table.add_column("Current", justify="right", max_width=10)
 
             for r in diff.regressions:
-                question_display = (
-                    r.question[:47] + "..." if len(r.question) > 50 else r.question
-                )
+                question_display = r.question[:47] + "..." if len(r.question) > 50 else r.question
                 chunks_display = ", ".join(r.newly_lost_chunks)
                 if len(chunks_display) > 38:
                     chunks_display = chunks_display[:35] + "..."
@@ -277,9 +287,7 @@ class DiffReporter:
             imp_table.add_column("Current", justify="right", max_width=10)
 
             for i in diff.improvements:
-                question_display = (
-                    i.question[:47] + "..." if len(i.question) > 50 else i.question
-                )
+                question_display = i.question[:47] + "..." if len(i.question) > 50 else i.question
                 chunks_display = ", ".join(i.newly_found_chunks)
                 if len(chunks_display) > 38:
                     chunks_display = chunks_display[:35] + "..."
@@ -336,6 +344,10 @@ class DiffReporter:
             GitHub Actions workflow.
         """
         lines: list[str] = []
+        if not diff.compatible:
+            lines.append(
+                "::error title=Incompatible comparison::" + "; ".join(diff.compatibility_reasons)
+            )
 
         for r in diff.regressions:
             chunks_str = ", ".join(r.newly_lost_chunks) if r.newly_lost_chunks else "none"
@@ -355,9 +367,9 @@ class DiffReporter:
 
         # Summary group
         lines.append("::group::LongProbe Regression Summary")
-        delta_sign = "+" if diff.overall_delta >= 0 else ""
+        delta_sign = "+" if diff.overall_delta is not None and diff.overall_delta >= 0 else ""
         lines.append(
-            f"Overall recall delta: {delta_sign}{diff.overall_delta:.4f}"
+            f"Overall recall delta: {delta_sign + format(diff.overall_delta, '.4f') if diff.overall_delta is not None else 'unavailable (incompatible)'}"
         )
         lines.append(f"Regressions: {len(diff.regressions)}")
         lines.append(f"Improvements: {len(diff.improvements)}")

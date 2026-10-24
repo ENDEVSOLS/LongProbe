@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from unittest.mock import MagicMock
 
+import pytest
 import yaml
 
 from longprobe.cli.main import check, diff
@@ -53,13 +54,17 @@ def test_check_excludes_drafts_by_default(tmp_path: Path, monkeypatch, capsys):
     )
 
     captured = capsys.readouterr()
-    assert "Notice: 1 draft question(s) excluded" in captured.out or "Notice: 1 draft question(s) excluded" in captured.err
+    assert (
+        "Notice: 1 draft question(s) excluded" in captured.out
+        or "Notice: 1 draft question(s) excluded" in captured.err
+    )
 
 
 def test_check_includes_drafts_with_flag(tmp_path: Path, monkeypatch):
     goldens_path, config_path, _ = _setup_draft_test_files(tmp_path)
 
     calls = []
+
     def mock_retrieve(q, top_k=5):
         calls.append(q)
         return [{"id": "chunk-1"}]
@@ -112,6 +117,7 @@ def test_diff_live_run_supports_include_drafts(tmp_path: Path, monkeypatch):
     store.save(dummy_report, label="latest")
 
     calls = []
+
     def mock_retrieve(q, top_k=5):
         calls.append(q)
         return [{"id": "chunk-1"}]
@@ -120,17 +126,19 @@ def test_diff_live_run_supports_include_drafts(tmp_path: Path, monkeypatch):
     mock_adapter.retrieve.side_effect = mock_retrieve
     monkeypatch.setattr("longprobe.cli.main._create_adapter_from_config", lambda cfg: mock_adapter)
 
-    diff(
-        baseline_a=None,
-        baseline_b=None,
-        baseline_label="latest",
-        goldens=goldens_path,
-        config=config_path,
-        output="table",
-        top_k=None,
-        threshold=None,
-        tag=[],
-        include_drafts=True,
-    )
+    with pytest.raises(SystemExit) as exc:
+        diff(
+            baseline_a=None,
+            baseline_b=None,
+            baseline_label="latest",
+            goldens=goldens_path,
+            config=config_path,
+            output="table",
+            top_k=None,
+            threshold=None,
+            tag=[],
+            include_drafts=True,
+        )
+    assert exc.value.code == 2  # Legacy reference and added draft are incompatible.
 
     assert len(calls) == 2

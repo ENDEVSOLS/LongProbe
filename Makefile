@@ -1,4 +1,4 @@
-.PHONY: help install test lint format demos clean setup-demos
+.PHONY: help install test lint format demos clean setup-demos check-demos
 
 help: ## Show this help message
 	@echo "LongProbe - Development Commands"
@@ -18,21 +18,25 @@ format: ## Format code
 	ruff format src/ tests/
 	ruff check --fix src/ tests/
 
-setup-demos: ## Setup demo environment (run this first!)
-	@echo "Setting up demo environment..."
+setup-demos: ## Install this checkout for self-contained demo recordings
 	@bash demos/setup_demo_env.sh
-	@echo "Warming up (downloading models)..."
-	@source demos/.demo_venv/bin/activate && cd demo_run && longprobe check --config longprobe.yaml > /dev/null 2>&1 || true
-	@echo "✓ Demo environment ready!"
 
-demos: ## Generate all demo GIFs (requires vhs and setup-demos)
-	@echo "Generating demos..."
-	@command -v vhs >/dev/null 2>&1 || { echo "Error: vhs not installed. Run: brew install vhs"; exit 1; }
-	@test -d demos/.demo_venv || { echo "Error: Demo environment not set up. Run: make setup-demos"; exit 1; }
-	vhs demos/01-quick-start.tape
-	vhs demos/02-diff-output.tape
-	vhs demos/03-json-output.tape
-	@echo "✓ Demos generated in demos/ directory"
+check-demos: ## Execute demo scenarios without recording pauses
+	demos/.recording_venv/bin/python demo_run/complete_workflow.py --no-delay
+	demos/.recording_venv/bin/python demo_run/monitor_rag_quality.py --no-delay
+	demos/.recording_venv/bin/python demo_run/detect_regressions.py --no-delay
+	demos/.recording_venv/bin/python demo_run/test_rag_retrieval.py --no-delay
+
+demos: ## Record and synchronize GIFs (requires VHS, ttyd, Chromium, and ffmpeg)
+	@command -v vhs >/dev/null 2>&1 || { echo "VHS is required; see demos/README.md"; exit 1; }
+	@test -x demos/.recording_venv/bin/python || { echo "Run make setup-demos first"; exit 1; }
+	vhs demos/01-complete-workflow.tape
+	vhs demos/01-quick-check.tape
+	vhs demos/02-python-api.tape
+	vhs demos/03-baseline-tracking.tape
+	cp demos/01-complete-workflow.gif demos/01-quick-check.gif demos/02-python-api.gif demos/03-baseline-tracking.gif assets/
+	cp demos/01-complete-workflow.gif demos/01-quick-check.gif demos/02-python-api.gif demos/03-baseline-tracking.gif docs/assets/
+	@echo "Demo GIFs synchronized to README and documentation assets."
 
 clean: ## Clean build artifacts
 	rm -rf dist/ build/ *.egg-info

@@ -7,7 +7,6 @@ captured into a golden set file.
 
 from __future__ import annotations
 
-import os
 import tempfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
@@ -24,10 +23,10 @@ from longprobe.config import (
 )
 from longprobe.core.golden import GoldenSet
 
-
 # ---------------------------------------------------------------------------
 # Mock adapter
 # ---------------------------------------------------------------------------
+
 
 class MockAdapter(AbstractRetrieverAdapter):
     """A mock adapter that returns predictable results."""
@@ -60,6 +59,7 @@ class FailingAdapter(AbstractRetrieverAdapter):
 # Fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture
 def mock_config() -> ProbeConfig:
     """Return a config with HTTP retriever and generator settings."""
@@ -87,6 +87,7 @@ def tmp_goldens_dir() -> Path:
 # ---------------------------------------------------------------------------
 # Auto-capture logic tests
 # ---------------------------------------------------------------------------
+
 
 class TestAutoCapture:
     """Tests for the auto-capture flow within the generate command."""
@@ -127,17 +128,22 @@ class TestAutoCapture:
 
         # Run via CLI invoke.
         from typer.testing import CliRunner
+
         from longprobe.cli.main import app
 
         runner = CliRunner()
         result = runner.invoke(
             app,
             [
-                "generate", str(doc_path),
+                "generate",
+                str(doc_path),
                 "--auto-capture",
-                "--goldens", str(goldens_path),
-                "--num-questions", "2",
-                "--match-mode", "text",
+                "--goldens",
+                str(goldens_path),
+                "--num-questions",
+                "2",
+                "--match-mode",
+                "text",
             ],
             catch_exceptions=False,
         )
@@ -189,19 +195,24 @@ class TestAutoCapture:
         mock_create_adapter.return_value = MockAdapter()
 
         from typer.testing import CliRunner
+
         from longprobe.cli.main import app
 
         runner = CliRunner()
         result = runner.invoke(
             app,
             [
-                "generate", str(doc_path),
+                "generate",
+                str(doc_path),
                 "--auto-capture",
-                "--goldens", str(goldens_path),
-                "--num-questions", "1",
+                "--goldens",
+                str(goldens_path),
+                "--num-questions",
+                "1",
             ],
             catch_exceptions=False,
         )
+        assert result.exit_code == 0, result.output
 
         with open(goldens_path) as f:
             data = yaml.safe_load(f)
@@ -240,20 +251,26 @@ class TestAutoCapture:
         mock_create_adapter.return_value = MockAdapter()
 
         from typer.testing import CliRunner
+
         from longprobe.cli.main import app
 
         runner = CliRunner()
         result = runner.invoke(
             app,
             [
-                "generate", str(doc_path),
+                "generate",
+                str(doc_path),
                 "--auto-capture",
-                "--goldens", str(goldens_path),
-                "--match-mode", "id",
-                "--num-questions", "1",
+                "--goldens",
+                str(goldens_path),
+                "--match-mode",
+                "id",
+                "--num-questions",
+                "1",
             ],
             catch_exceptions=False,
         )
+        assert result.exit_code == 0, result.output
 
         with open(goldens_path) as f:
             data = yaml.safe_load(f)
@@ -291,16 +308,20 @@ class TestAutoCapture:
         mock_create_adapter.return_value = EmptyAdapter()
 
         from typer.testing import CliRunner
+
         from longprobe.cli.main import app
 
         runner = CliRunner()
         result = runner.invoke(
             app,
             [
-                "generate", str(doc_path),
+                "generate",
+                str(doc_path),
                 "--auto-capture",
-                "--goldens", str(goldens_path),
-                "--num-questions", "2",
+                "--goldens",
+                str(goldens_path),
+                "--num-questions",
+                "2",
             ],
             catch_exceptions=False,
         )
@@ -351,19 +372,24 @@ class TestAutoCapture:
         mock_create_adapter.return_value = adapter
 
         from typer.testing import CliRunner
+
         from longprobe.cli.main import app
 
         runner = CliRunner()
         result = runner.invoke(
             app,
             [
-                "generate", str(doc_path),
+                "generate",
+                str(doc_path),
                 "--auto-capture",
-                "--goldens", str(goldens_path),
-                "--num-questions", "2",
+                "--goldens",
+                str(goldens_path),
+                "--num-questions",
+                "2",
             ],
             catch_exceptions=False,
         )
+        assert result.exit_code == 0, result.output
 
         # One question should have been captured.
         assert goldens_path.exists()
@@ -404,20 +430,23 @@ class TestAutoCapture:
         mock_gen_cls.return_value = mock_generator
 
         from typer.testing import CliRunner
+
         from longprobe.cli.main import app
 
         runner = CliRunner()
         result = runner.invoke(
             app,
             [
-                "generate", str(doc_path),
+                "generate",
+                str(doc_path),
                 "--auto-capture",
-                "--goldens", str(tmp_goldens_dir / "goldens.yaml"),
+                "--goldens",
+                str(tmp_goldens_dir / "goldens.yaml"),
             ],
             catch_exceptions=False,
         )
 
-        assert result.exit_code == 1
+        assert result.exit_code == 2
         assert "retriever" in result.output.lower() or "Error" in result.output
 
     @patch("longprobe.cli.main._create_adapter_from_config")
@@ -450,21 +479,28 @@ class TestAutoCapture:
         mock_create_adapter.return_value = MockAdapter()
 
         from typer.testing import CliRunner
+
         from longprobe.cli.main import app
 
         runner = CliRunner()
         result = runner.invoke(
             app,
             [
-                "generate", str(doc_path),
+                "generate",
+                str(doc_path),
                 "--auto-capture",
-                "--goldens", str(goldens_path),
-                "--tag", "faq",
-                "--tag", "generated",
-                "--num-questions", "1",
+                "--goldens",
+                str(goldens_path),
+                "--tag",
+                "faq",
+                "--tag",
+                "generated",
+                "--num-questions",
+                "1",
             ],
             catch_exceptions=False,
         )
+        assert result.exit_code == 0, result.output
 
         with open(goldens_path) as f:
             data = yaml.safe_load(f)

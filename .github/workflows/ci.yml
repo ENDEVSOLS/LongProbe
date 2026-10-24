@@ -14,7 +14,7 @@ jobs:
       - uses: astral-sh/setup-uv@v4
         with:
           version: "latest"
-      - run: uv sync --dev
+      - run: uv sync --locked --dev
       - run: uv run ruff check src/
 
   unit-tests:
@@ -27,8 +27,8 @@ jobs:
       - uses: astral-sh/setup-uv@v4
         with:
           version: "latest"
-      - run: uv sync --dev --python "${{ matrix.python-version }}"
-      - run: uv run pytest tests/unit/ tests/integration/test_reliability_workflow.py -v --tb=short --run-integration
+      - run: uv sync --locked --dev --python "${{ matrix.python-version }}"
+      - run: uv run pytest tests/unit/ tests/integration/test_reliability_workflow.py tests/integration/test_pytest_plugin.py tests/integration/test_ci_workflow.py tests/integration/test_workflow_scripts.py -v --tb=short --run-integration
 
   integration-tests:
     runs-on: ubuntu-latest
@@ -51,6 +51,8 @@ jobs:
           version: "latest"
       - run: uv sync
       - run: uv build
+      - name: Verify PyPI README image links
+        run: uv run python examples/verify_pypi_readme.py
       - name: Verify wheel in a base-only environment outside the checkout
         run: |
           uv venv "$RUNNER_TEMP/longprobe-wheel" --python 3.12
@@ -58,3 +60,4 @@ jobs:
           cd "$RUNNER_TEMP"
           "$RUNNER_TEMP/longprobe-wheel/bin/python" -c 'import importlib.metadata as m, longprobe; assert m.version("longprobe") == longprobe.__version__'
           "$RUNNER_TEMP/longprobe-wheel/bin/longprobe" --help
+          "$RUNNER_TEMP/longprobe-wheel/bin/python" -I "$GITHUB_WORKSPACE/examples/verify_v020_release.py"

@@ -92,6 +92,9 @@ jobs:
           uv build
           ls -lh dist/
 
+      - name: Verify public PyPI GIFs
+        run: uv run python examples/verify_pypi_readme.py --check-public
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
