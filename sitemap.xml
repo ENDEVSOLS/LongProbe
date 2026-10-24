@@ -2,98 +2,106 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://endevsols.github.io/LongProbe/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/changelog/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/contributing/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/api/adapters/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/api/core/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/api/scoring/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/demos/complete-workflow/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/demos/detect-regressions/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/demos/monitor-quality/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/demos/overview/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/getting-started/configuration/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/getting-started/installation/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/getting-started/quick-start/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/guide/baseline-management/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/guide/cli-reference/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/guide/golden-questions/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/guide/match-modes/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/guide/python-api/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/integrations/cicd/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/integrations/langchain/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/integrations/llamaindex/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/integrations/pytest/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/integrations/vector-stores/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
     </url>
     <url>
          <loc>https://endevsols.github.io/LongProbe/releases/v0.1.3/</loc>
-         <lastmod>2026-10-19</lastmod>
+         <lastmod>2026-10-24</lastmod>
+    </url>
+    <url>
+         <loc>https://endevsols.github.io/LongProbe/releases/v0.2.0-verification/</loc>
+         <lastmod>2026-10-24</lastmod>
+    </url>
+    <url>
+         <loc>https://endevsols.github.io/LongProbe/releases/v0.2.0/</loc>
+         <lastmod>2026-10-24</lastmod>
     </url>
 </urlset>

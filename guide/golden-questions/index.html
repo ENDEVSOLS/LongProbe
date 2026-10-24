@@ -29,7 +29,7 @@
     
     
       
-        <title>Golden Questions - </title>
+        <title>Golden questions - </title>
       
     
     
@@ -123,7 +123,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Golden Questions
+              Golden questions
             
           </span>
         </div>
@@ -534,7 +534,7 @@
   <span class="md-ellipsis">
     
   
-    Golden Questions
+    Golden questions
   
 
     
@@ -552,7 +552,7 @@
   <span class="md-ellipsis">
     
   
-    Golden Questions
+    Golden questions
   
 
     
@@ -578,10 +578,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-is-a-golden-question" class="md-nav__link">
+  <a href="#file-structure" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What is a Golden Question?
+        File structure
       
     </span>
   </a>
@@ -589,10 +589,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#basic-example" class="md-nav__link">
+  <a href="#create-and-review-the-suite" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Basic Example
+        Create and review the suite
       
     </span>
   </a>
@@ -600,10 +600,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#match-modes" class="md-nav__link">
+  <a href="#human-review-and-approval" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Match Modes
+        Human review and approval
       
     </span>
   </a>
@@ -611,10 +611,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#best-practices" class="md-nav__link">
+  <a href="#coverage-and-maintenance" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Best Practices
+        Coverage and maintenance
       
     </span>
   </a>
@@ -622,10 +622,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
+  <a href="#scoring-example" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Next Steps
+        Scoring example
       
     </span>
   </a>
@@ -683,7 +683,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI reference
   
 
     
@@ -711,7 +711,7 @@
   <span class="md-ellipsis">
     
   
-    python api
+    Python interface
   
 
     
@@ -739,7 +739,7 @@
   <span class="md-ellipsis">
     
   
-    baseline management
+    Baseline management
   
 
     
@@ -868,7 +868,7 @@
   <span class="md-ellipsis">
     
   
-    pytest
+    Pytest integration
   
 
     
@@ -896,7 +896,7 @@
   <span class="md-ellipsis">
     
   
-    cicd
+    CI/CD integration
   
 
     
@@ -924,7 +924,7 @@
   <span class="md-ellipsis">
     
   
-    LangChain Integration Guide
+    LangChain integration
   
 
     
@@ -1107,7 +1107,7 @@
   <span class="md-ellipsis">
     
   
-    Monitor RAG Quality Demo
+    Monitor RAG quality
   
 
     
@@ -1135,7 +1135,7 @@
   <span class="md-ellipsis">
     
   
-    Detect RAG Regressions Over Time
+    Detect retrieval regressions
   
 
     
@@ -1347,6 +1347,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1393,6 +1397,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0 verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1476,43 +1536,78 @@
   
 
 
-<h1 id="golden-questions">Golden Questions<a class="headerlink" href="#golden-questions" title="Permanent link">&para;</a></h1>
-<p>Golden questions are the foundation of LongProbe testing. They define what your RAG system should retrieve.</p>
-<h2 id="what-is-a-golden-question">What is a Golden Question?<a class="headerlink" href="#what-is-a-golden-question" title="Permanent link">&para;</a></h2>
-<p>A golden question consists of:</p>
-<ul>
-<li><strong>Question</strong>: The query to test</li>
-<li><strong>Required Chunks</strong>: Document chunks that must be retrieved</li>
-<li><strong>Match Mode</strong>: How to verify chunks (ID, text, or semantic)</li>
-<li><strong>Top-K</strong>: Number of results to retrieve</li>
-<li><strong>Tags</strong>: Optional metadata for organization</li>
-</ul>
-<h2 id="basic-example">Basic Example<a class="headerlink" href="#basic-example" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">questions</span><span class="p">:</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="s">"q1"</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">question</span><span class="p">:</span><span class="w"> </span><span class="s">"What</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">refund</span><span class="nv"> </span><span class="s">policy?"</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">match_mode</span><span class="p">:</span><span class="w"> </span><span class="s">"text"</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">required_chunks</span><span class="p">:</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"30-day</span><span class="nv"> </span><span class="s">money-back</span><span class="nv"> </span><span class="s">guarantee"</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"full</span><span class="nv"> </span><span class="s">refund</span><span class="nv"> </span><span class="s">within</span><span class="nv"> </span><span class="s">30</span><span class="nv"> </span><span class="s">days"</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nt">top_k</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"policy"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"critical"</span><span class="p p-Indicator">]</span>
+<h1 id="golden-questions">Golden questions<a class="headerlink" href="#golden-questions" title="Permanent link">&para;</a></h1>
+<p>A golden suite is a reviewed set of example questions and the evidence your retriever must return. It tests retrieval after documents have been indexed and before answer generation. It does not judge the final LLM answer.</p>
+<h2 id="file-structure">File structure<a class="headerlink" href="#file-structure" title="Permanent link">&para;</a></h2>
+<p>The default filename is <code>goldens.yaml</code>; <code>golden.yaml</code> also works when selected with <code>--goldens golden.yaml</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">policy-retrieval</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">"1.0"</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">questions</span><span class="p">:</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">refund-policy</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">question</span><span class="p">:</span><span class="w"> </span><span class="s">"What</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">refund</span><span class="nv"> </span><span class="s">policy?"</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">draft</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="nt">match_mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">text</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="nt">required_chunks</span><span class="p">:</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"30-day</span><span class="nv"> </span><span class="s">money-back</span><span class="nv"> </span><span class="s">guarantee"</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"full</span><span class="nv"> </span><span class="s">refund</span><span class="nv"> </span><span class="s">within</span><span class="nv"> </span><span class="s">30</span><span class="nv"> </span><span class="s">days"</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="nt">top_k</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">policy</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">critical</span><span class="p p-Indicator">]</span>
 </code></pre></div>
-<h2 id="match-modes">Match Modes<a class="headerlink" href="#match-modes" title="Permanent link">&para;</a></h2>
-<p>See <a href="../match-modes/">Match Modes</a> for detailed explanations.</p>
-<h2 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h2>
+<p><code>required_chunks</code> contains stable chunk IDs in <code>id</code> mode or evidence text in <code>text</code>/<code>semantic</code> modes. <code>top_k</code> sets the requested result limit. Tags help select cases. Use explicit <code>status: draft</code> for unreviewed cases: omitted status defaults to <code>approved</code> for backward compatibility.</p>
+<h2 id="create-and-review-the-suite">Create and review the suite<a class="headerlink" href="#create-and-review-the-suite" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>Start Small</strong> - Begin with 5-10 critical questions</li>
-<li><strong>Be Specific</strong> - Test specific facts, not general topics</li>
-<li><strong>Use Tags</strong> - Organize by importance or category</li>
-<li><strong>Test Edge Cases</strong> - Include difficult queries</li>
-<li><strong>Update Regularly</strong> - Add questions when bugs are found</li>
+<li>Prepare documents, chunk them, and build your application's retrieval index.</li>
+<li>Write representative questions manually, or generate candidates from documents using a configured generation provider.</li>
+<li>Write required evidence from verified sources, or capture candidate results from the configured retriever.</li>
+<li>Review each question and every requirement against its source document. Current retrieval output can itself be incomplete or wrong.</li>
+<li>Change verified cases from <code>draft</code> to <code>approved</code>, using <code>longprobe edit</code> or a reviewed YAML edit. The editor does not expose every evidence field; inspect YAML when necessary.</li>
+<li>Run checks and explicitly save an eligible baseline after review.</li>
 </ol>
-<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="../match-modes/">Match Modes</a> - Understand matching strategies</li>
-<li><a href="../cli-reference/">CLI Reference</a> - Run your tests</li>
-</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>longprobe<span class="w"> </span>generate<span class="w"> </span>./documents<span class="w"> </span>--num-questions<span class="w"> </span><span class="m">20</span><span class="w"> </span>--auto-capture
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>longprobe<span class="w"> </span>edit
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>longprobe<span class="w"> </span>check<span class="w"> </span>--no-compare
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>longprobe<span class="w"> </span>baseline<span class="w"> </span>save<span class="w"> </span>--label<span class="w"> </span>latest
+</code></pre></div>
+<p>Generation needs its optional dependencies and configured provider. Ordinary <code>generate</code> produces questions; <code>--auto-capture</code> additionally retrieves candidate evidence and saves draft cases. Alternatively, <code>capture --question "What is the refund policy?" --auto</code> creates a draft from a supplied question. <code>init</code> copies examples; it does not read your documents or establish correct evidence.</p>
+<h2 id="human-review-and-approval">Human review and approval<a class="headerlink" href="#human-review-and-approval" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Human action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Generate questions or auto-capture evidence</td>
+<td>Review candidates afterward; automatic output is not trusted ground truth</td>
+</tr>
+<tr>
+<td>Promote <code>draft</code> to <code>approved</code></td>
+<td>Verify relevance, source correctness, and required evidence before changing status</td>
+</tr>
+<tr>
+<td>Run approved questions</td>
+<td>Runs automatically in CLI, pytest, or CI; no interactive approval is required</td>
+</tr>
+<tr>
+<td>Save or replace a trusted baseline</td>
+<td>Explicitly promote an eligible report after reviewing changes</td>
+</tr>
+<tr>
+<td>Change documents, questions, evidence, or settings</td>
+<td>Review the intended change and establish a new reference when contracts become incompatible</td>
+</tr>
+</tbody>
+</table>
+<p>These are explicit editing and promotion actions, not a separate enforced manager sign-off system. Passing checks never automatically rewrite approved evidence or replace a baseline. Drafts are excluded by default; <code>check --include-drafts</code> can inspect them, but draft-containing reports cannot become trusted baselines.</p>
+<h2 id="coverage-and-maintenance">Coverage and maintenance<a class="headerlink" href="#coverage-and-maintenance" title="Permanent link">&para;</a></h2>
+<p>A suite covers selected cases, not every possible document question. Start with critical facts, representative topics, and known failure cases. Add cases when documents or real query patterns expose a gap.</p>
+<p>A live user question absent from the suite has no golden expected evidence, so LongProbe cannot automatically certify that question's retrieval correctness. Review it, add expected evidence, and approve the case to include it in future checks.</p>
+<p>The file remains editable. Make deliberate, reviewable changes in version control; do not copy current retrieval output into approved requirements just to make a failed test pass. Changed coverage or evaluation contracts make strict baseline comparison incompatible. Inspect intentional changes with <code>check --no-compare</code>, then explicitly save a reviewed reference when eligible. See <a href="../baseline-management/">baseline management</a>.</p>
+<h2 id="scoring-example">Scoring example<a class="headerlink" href="#scoring-example" title="Permanent link">&para;</a></h2>
+<p>If two required evidence items are specified and only one is found, recall is <code>1 / 2 = 50%</code>. Passing depends on that question's effective threshold. An unchanged average does not hide lost required evidence when comparing compatible reports.</p>
+<p>See <a href="../match-modes/">match modes</a>, <a href="../../getting-started/configuration/">configuration</a>, and the <a href="../cli-reference/">CLI reference</a>.</p>
 
 
 

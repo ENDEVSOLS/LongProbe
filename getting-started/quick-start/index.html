@@ -638,7 +638,7 @@
   <span class="md-ellipsis">
     
   
-    Golden Questions
+    Golden questions
   
 
     
@@ -694,7 +694,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI reference
   
 
     
@@ -722,7 +722,7 @@
   <span class="md-ellipsis">
     
   
-    python api
+    Python interface
   
 
     
@@ -750,7 +750,7 @@
   <span class="md-ellipsis">
     
   
-    baseline management
+    Baseline management
   
 
     
@@ -879,7 +879,7 @@
   <span class="md-ellipsis">
     
   
-    pytest
+    Pytest integration
   
 
     
@@ -907,7 +907,7 @@
   <span class="md-ellipsis">
     
   
-    cicd
+    CI/CD integration
   
 
     
@@ -935,7 +935,7 @@
   <span class="md-ellipsis">
     
   
-    LangChain Integration Guide
+    LangChain integration
   
 
     
@@ -1118,7 +1118,7 @@
   <span class="md-ellipsis">
     
   
-    Monitor RAG Quality Demo
+    Monitor RAG quality
   
 
     
@@ -1146,7 +1146,7 @@
   <span class="md-ellipsis">
     
   
-    Detect RAG Regressions Over Time
+    Detect retrieval regressions
   
 
     
@@ -1358,6 +1358,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1404,6 +1408,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0 verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1548,13 +1608,13 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>longprobe<span class="w"> </span>generate<span class="w"> </span>./documents<span class="w"> </span>--num-questions<span class="w"> </span><span class="m">20</span><span class="w"> </span>--auto-capture
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>longprobe<span class="w"> </span>edit
 </code></pre></div>
-<p>PDF/Word extraction depends on installed parsing capabilities. Generating questions without <code>--auto-capture</code> produces a question list rather than a complete evaluable golden set. The terminal editor currently edits question text, status, and mode; use YAML to review/change required evidence.</p>
+<p>PDF/Word extraction depends on installed parsing capabilities. Generating questions without <code>--auto-capture</code> produces a question list rather than a complete evaluable golden set. A fixed question count does not guarantee full document coverage; add reviewed cases for important topics and real retrieval failures. LongProbe checks selected golden questions, not arbitrary live user queries. The terminal editor currently edits question text, status, and mode; use YAML to review/change required evidence.</p>
 <h2 id="4-check-and-save-a-baseline">4. Check and save a baseline<a class="headerlink" href="#4-check-and-save-a-baseline" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>longprobe<span class="w"> </span>check
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>longprobe<span class="w"> </span>baseline<span class="w"> </span>save<span class="w"> </span>--label<span class="w"> </span>latest
 </code></pre></div>
 <p>Every approved question is sent to the retriever. LongProbe matches the returned evidence, calculates recall, and applies the passing threshold. With <code>fail_on_regression: true</code>, a below-threshold question or detected baseline regression makes <code>check</code> fail.</p>
-<p><code>latest</code> is a literal baseline label. Saving a different label does not update it. Baseline-save quality policy is unchanged in this patch: the CLI checks overall recall, while the Python save API has no equivalent quality gate.</p>
+<p><code>latest</code> is a literal baseline label. Saving another label does not update it. Both CLI and Python baseline promotion default to every evaluated question passing. Saving is explicit and never edits golden questions. Legacy references remain readable but need a reviewed new evaluation before strict comparison; see <a href="../../guide/baseline-management/">baseline management</a>.</p>
 <p>After changing your retrieval pipeline:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>longprobe<span class="w"> </span>check
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>longprobe<span class="w"> </span>diff<span class="w"> </span>--baseline<span class="w"> </span>latest
@@ -1601,7 +1661,7 @@
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>longprobe<span class="w"> </span>watch
 </code></pre></div>
 <p>Watch polls the golden file and runs after a change; it does not initially run or watch configuration/remote index changes. Configuration edits take effect the next time a check is invoked.</p>
-<p>See <a href="../configuration/">configuration</a>, <a href="../../guide/cli-reference/">CLI reference</a>, and <a href="../../releases/v0.1.3/">v0.1.3 release notes</a> for limits and compatibility changes.</p>
+<p>See <a href="../configuration/">configuration</a>, <a href="../../guide/cli-reference/">CLI reference</a>, and <a href="../../releases/v0.2.0/">v0.2.0 migration notes</a> for limits and compatibility changes.</p>
 
 
 

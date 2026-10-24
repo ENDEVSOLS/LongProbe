@@ -432,6 +432,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#install-the-v020-candidate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install the v0.2.0 candidate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#install-with-pip" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -721,7 +732,7 @@
   <span class="md-ellipsis">
     
   
-    Golden Questions
+    Golden questions
   
 
     
@@ -777,7 +788,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI reference
   
 
     
@@ -805,7 +816,7 @@
   <span class="md-ellipsis">
     
   
-    python api
+    Python interface
   
 
     
@@ -833,7 +844,7 @@
   <span class="md-ellipsis">
     
   
-    baseline management
+    Baseline management
   
 
     
@@ -962,7 +973,7 @@
   <span class="md-ellipsis">
     
   
-    pytest
+    Pytest integration
   
 
     
@@ -990,7 +1001,7 @@
   <span class="md-ellipsis">
     
   
-    cicd
+    CI/CD integration
   
 
     
@@ -1018,7 +1029,7 @@
   <span class="md-ellipsis">
     
   
-    LangChain Integration Guide
+    LangChain integration
   
 
     
@@ -1201,7 +1212,7 @@
   <span class="md-ellipsis">
     
   
-    Monitor RAG Quality Demo
+    Monitor RAG quality
   
 
     
@@ -1229,7 +1240,7 @@
   <span class="md-ellipsis">
     
   
-    Detect RAG Regressions Over Time
+    Detect retrieval regressions
   
 
     
@@ -1441,6 +1452,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1487,6 +1502,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0 verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1576,50 +1647,58 @@
 <li>Python 3.11 or higher</li>
 <li>pip or uv package manager</li>
 </ul>
+<h2 id="install-the-v020-candidate">Install the v0.2.0 candidate<a class="headerlink" href="#install-the-v020-candidate" title="Permanent link">&para;</a></h2>
+<p>Version 0.2.0 is implemented locally but has not been published by this work. The package-index commands below install an available published version; they do not guarantee these new features.</p>
+<p>From the repository root containing <code>pyproject.toml</code>, choose one installation method:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># Alternatively, after building the candidate locally:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>pip<span class="w"> </span>install<span class="w"> </span>dist/longprobe-0.2.0-py3-none-any.whl
+</code></pre></div>
+<p>See <a href="#development-installation">development installation</a> and the <a href="../../releases/v0.2.0-verification/">build verification record</a>. Confirm the installed version under <a href="#verify-installation">verify installation</a>.</p>
 <h2 id="install-with-pip">Install with pip<a class="headerlink" href="#install-with-pip" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe
 </code></pre></div>
 <h2 id="install-with-uv-recommended">Install with uv (Recommended)<a class="headerlink" href="#install-with-uv-recommended" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/astral-sh/uv">uv</a> is a fast Python package installer:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>longprobe
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>longprobe
 </code></pre></div>
 <h2 id="optional-dependencies">Optional Dependencies<a class="headerlink" href="#optional-dependencies" title="Permanent link">&para;</a></h2>
 <p>LongProbe supports various vector stores and embedding providers through optional dependencies:</p>
 <h3 id="chromadb-support">ChromaDB Support<a class="headerlink" href="#chromadb-support" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>chroma<span class="o">]</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># or</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>chroma<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>chroma<span class="o">]</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># or</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>chroma<span class="o">]</span>
 </code></pre></div>
 <h3 id="openai-embeddings">OpenAI Embeddings<a class="headerlink" href="#openai-embeddings" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>openai<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>openai<span class="o">]</span>
 </code></pre></div>
 <h3 id="pinecone-support">Pinecone Support<a class="headerlink" href="#pinecone-support" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>pinecone<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>pinecone<span class="o">]</span>
 </code></pre></div>
 <h3 id="qdrant-support">Qdrant Support<a class="headerlink" href="#qdrant-support" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>qdrant<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>qdrant<span class="o">]</span>
 </code></pre></div>
 <h3 id="all-optional-dependencies">All Optional Dependencies<a class="headerlink" href="#all-optional-dependencies" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>all<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>all<span class="o">]</span>
 </code></pre></div>
 <h3 id="specific-combinations">Specific Combinations<a class="headerlink" href="#specific-combinations" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>chroma,openai<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe<span class="o">[</span>chroma,openai<span class="o">]</span>
 </code></pre></div>
 <h2 id="development-installation">Development Installation<a class="headerlink" href="#development-installation" title="Permanent link">&para;</a></h2>
 <p>For contributing to LongProbe:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Clone the repository</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ENDEVSOLS/LongProbe.git
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nb">cd</span><span class="w"> </span>LongProbe
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1"># Install with development dependencies</span>
-<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>uv<span class="w"> </span>sync<span class="w"> </span>--dev
-<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
-<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="c1"># Or with pip</span>
-<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[dev]"</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Clone the repository</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ENDEVSOLS/LongProbe.git
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nb">cd</span><span class="w"> </span>LongProbe
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="c1"># Install with development dependencies</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>uv<span class="w"> </span>sync<span class="w"> </span>--dev
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="c1"># Or with pip</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[dev]"</span>
 </code></pre></div>
 <h2 id="verify-installation">Verify Installation<a class="headerlink" href="#verify-installation" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s1">'import longprobe; print(longprobe.__version__)'</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>longprobe<span class="w"> </span>--help
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s1">'import longprobe; print(longprobe.__version__)'</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>longprobe<span class="w"> </span>--help
 </code></pre></div>
 <p>Python 3.10 and older are not supported. Package installers enforce the Python 3.11 minimum.</p>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>

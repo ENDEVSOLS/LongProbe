@@ -29,7 +29,7 @@
     
     
       
-        <title>cicd - </title>
+        <title>CI/CD integration - </title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#cicd" class="md-skip">
+        <a href="#cicd-integration" class="md-skip">
           Skip to content
         </a>
       
@@ -123,7 +123,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              cicd
+              CI/CD integration
             
           </span>
         </div>
@@ -525,7 +525,7 @@
   <span class="md-ellipsis">
     
   
-    Golden Questions
+    Golden questions
   
 
     
@@ -581,7 +581,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI reference
   
 
     
@@ -609,7 +609,7 @@
   <span class="md-ellipsis">
     
   
-    python api
+    Python interface
   
 
     
@@ -637,7 +637,7 @@
   <span class="md-ellipsis">
     
   
-    baseline management
+    Baseline management
   
 
     
@@ -766,7 +766,7 @@
   <span class="md-ellipsis">
     
   
-    pytest
+    Pytest integration
   
 
     
@@ -796,6 +796,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI/CD integration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -803,7 +821,7 @@
   <span class="md-ellipsis">
     
   
-    cicd
+    CI/CD integration
   
 
     
@@ -812,6 +830,91 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#call-the-reusable-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Call the reusable workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#restore-a-trusted-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restore a trusted baseline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#publish-a-baseline-deliberately" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publish a baseline deliberately
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reports-and-verdicts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reports and verdicts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-the-same-workflow-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run the same workflow locally
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-and-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration and validation
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -832,7 +935,7 @@
   <span class="md-ellipsis">
     
   
-    LangChain Integration Guide
+    LangChain integration
   
 
     
@@ -1015,7 +1118,7 @@
   <span class="md-ellipsis">
     
   
-    Monitor RAG Quality Demo
+    Monitor RAG quality
   
 
     
@@ -1043,7 +1146,7 @@
   <span class="md-ellipsis">
     
   
-    Detect RAG Regressions Over Time
+    Detect retrieval regressions
   
 
     
@@ -1255,6 +1358,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1301,6 +1408,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0 verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1384,9 +1547,76 @@
   
 
 
-<h1 id="cicd">cicd<a class="headerlink" href="#cicd" title="Permanent link">&para;</a></h1>
-<p>Documentation coming soon.</p>
-<p>See the <a href="../../getting-started/quick-start/">quick start</a> for now.</p>
+<h1 id="cicd-integration">CI/CD integration<a class="headerlink" href="#cicd-integration" title="Permanent link">&para;</a></h1>
+<p>LongProbe v0.2.0 evaluates once and derives JSON, GitHub annotations, and PR feedback from that saved report. Setup, incompatible comparisons, invalid reports, and execution failures always fail the workflow. You can explicitly make completed quality failures nonblocking.</p>
+<h2 id="call-the-reusable-workflow">Call the reusable workflow<a class="headerlink" href="#call-the-reusable-workflow" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Retrieval regression check</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">on</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">push</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pull_request</span><span class="p p-Indicator">]</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">permissions</span><span class="p">:</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">read</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">actions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">read</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">pull-requests</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nt">jobs</span><span class="p">:</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nt">retrieval</span><span class="p">:</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ENDEVSOLS/LongProbe/.github/workflows/longprobe.yml@main</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="nt">python-version</span><span class="p">:</span><span class="w"> </span><span class="s">"3.12"</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">      </span><span class="nt">longprobe-version</span><span class="p">:</span><span class="w"> </span><span class="s">"0.2.0"</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="nt">config-path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">longprobe.yaml</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="nt">goldens-path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">goldens.yaml</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="nt">fail-on-regression</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="nt">secrets</span><span class="p">:</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">      </span><span class="nt">retriever-api-key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.RAG_RETRIEVER_API_KEY }}</span>
+</code></pre></div>
+<p>Use a reviewed release tag or commit when available instead of a moving branch. The requested package version must be published before this installation path can succeed. The workflow requires v0.2.0 or newer. An empty version input installs the available default and then checks compatibility.</p>
+<p><code>install-extras</code> is a separate input, for example <code>chroma</code>. HTTP retrieval is included in the base package; there is no <code>http</code> extra.</p>
+<p>If required, reference the optional credential in your configuration:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">retriever</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">http</span><span class="p">:</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://your-application.example/retrieve</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nt">headers</span><span class="p">:</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">      </span><span class="nt">Authorization</span><span class="p">:</span><span class="w"> </span><span class="s">"Bearer</span><span class="nv"> </span><span class="s">${LONGPROBE_RETRIEVER_API_KEY}"</span>
+</code></pre></div>
+<p>Replace the URL and configure the response mapping for your endpoint. Supply other application-specific authentication through your own wrapper workflow if needed. Never put secrets in golden files or report artifacts.</p>
+<h2 id="restore-a-trusted-baseline">Restore a trusted baseline<a class="headerlink" href="#restore-a-trusted-baseline" title="Permanent link">&para;</a></h2>
+<p>Fresh GitHub runners do not retain a previous job's SQLite file. Configure an artifact and source run explicitly:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">longprobe-version</span><span class="p">:</span><span class="w"> </span><span class="s">"0.2.0"</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">baseline-artifact-name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">longprobe-baseline</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">baseline-run-id</span><span class="p">:</span><span class="w"> </span><span class="s">"123456789"</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">baseline-label</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">latest</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="nt">baseline-path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.longprobe/baselines.db</span>
+</code></pre></div>
+<p>Replace the example run ID with the actual source run. The source must be a successful <code>push</code>, <code>schedule</code>, or <code>workflow_dispatch</code> run on the caller repository's default branch. The caller must allow artifact read permissions. A PR-produced report is not selected automatically as trusted ground truth.</p>
+<p>The artifact must contain exactly one regular <code>.db</code> file from a closed standalone LongProbe SQLite database. Its requested label must exist, its contracts must match the selected approved suite/settings, and <code>baseline-path</code> must match <code>baseline.db_path</code> in configuration. Legacy metadata, missing artifacts/labels, journal sidecars, and incompatible suites fail setup; they are not treated as passing comparisons.</p>
+<p>Without restoration inputs, the helper runs <code>check --no-compare</code>. The report explicitly says no historical comparison was requested. It does not silently use an unrelated checked-out database.</p>
+<h2 id="publish-a-baseline-deliberately">Publish a baseline deliberately<a class="headerlink" href="#publish-a-baseline-deliberately" title="Permanent link">&para;</a></h2>
+<p>After reviewing the golden set and deciding to establish a new reference:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>longprobe<span class="w"> </span>baseline<span class="w"> </span>save<span class="w"> </span>--label<span class="w"> </span>latest
+</code></pre></div>
+<p>This command performs a fresh approved-only evaluation and enforces the selected baseline quality policy. A successful check does not update the reference automatically.</p>
+<p>A maintainer-controlled workflow can retain that explicitly promoted reference:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/upload-artifact@v7</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">longprobe-baseline</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.longprobe/baselines.db</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">include-hidden-files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nt">if-no-files-found</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">error</span>
+</code></pre></div>
+<p>Upload only the intended database. The hidden-file option is needed for a path under <code>.longprobe</code>; do not upload an entire configuration directory. See <code>examples/ci_example/save-reviewed-baseline.yml</code> in the repository for a manually invoked example.</p>
+<h2 id="reports-and-verdicts">Reports and verdicts<a class="headerlink" href="#reports-and-verdicts" title="Permanent link">&para;</a></h2>
+<p>The reusable workflow retains <code>longprobe-result.json</code>, <code>longprobe-diagnostics.txt</code>, and the derived <code>longprobe-comment.md</code>. It does not upload a new trusted baseline automatically.</p>
+<p>The final verdict comes from the saved report and process outcome together. <code>fail-on-regression: false</code> only relaxes completed quality failures. It cannot hide invalid configuration, missing/incompatible references, invalid JSON, or a crashed command. A report's quality status remains failed even if the process is allowed to exit successfully.</p>
+<p>Fork PRs receive annotations/artifacts without attempted write comments. A denied same-repository comment is reported separately; it does not change the evaluation result.</p>
+<h2 id="run-the-same-workflow-locally">Run the same workflow locally<a class="headerlink" href="#run-the-same-workflow-locally" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python<span class="w"> </span>-m<span class="w"> </span>longprobe.ci<span class="w"> </span>run<span class="w"> </span>--config<span class="w"> </span>longprobe.yaml<span class="w"> </span>--goldens<span class="w"> </span>goldens.yaml
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>longprobe<span class="w"> </span>report<span class="w"> </span>longprobe-result.json<span class="w"> </span>--output<span class="w"> </span>github
+</code></pre></div>
+<p>The first command evaluates once. The second only renders existing data. Use <code>--baseline LABEL</code> with the helper for an explicitly prepared local reference, or <code>--nonblocking</code> to relax quality failures. GitHub artifact download and PR publication still require the hosted workflow.</p>
+<h2 id="migration-and-validation">Migration and validation<a class="headerlink" href="#migration-and-validation" title="Permanent link">&para;</a></h2>
+<p>Version 0.2.0 adds strict report compatibility and per-question baseline gates. Re-establish a reviewed baseline when adopting an old metadata-free reference; do not invent missing historical settings. See <a href="../../releases/v0.2.0/">release notes</a> and <a href="../../guide/baseline-management/">baseline management</a>.</p>
+<p>Implementation references: <a href="https://github.com/actions/download-artifact">artifact download inputs</a>, <a href="https://github.com/actions/upload-artifact">artifact uploads and hidden files</a>. Hosted execution must still be verified after the maintainer pushes the changes.</p>
 
 
 

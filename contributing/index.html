@@ -18,7 +18,7 @@
         <link rel="prev" href="../api/scoring/">
       
       
-        <link rel="next" href="../releases/v0.1.3/">
+        <link rel="next" href="../releases/v0.2.0/">
       
       
         
@@ -525,7 +525,7 @@
   <span class="md-ellipsis">
     
   
-    Golden Questions
+    Golden questions
   
 
     
@@ -581,7 +581,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI reference
   
 
     
@@ -609,7 +609,7 @@
   <span class="md-ellipsis">
     
   
-    python api
+    Python interface
   
 
     
@@ -637,7 +637,7 @@
   <span class="md-ellipsis">
     
   
-    baseline management
+    Baseline management
   
 
     
@@ -766,7 +766,7 @@
   <span class="md-ellipsis">
     
   
-    pytest
+    Pytest integration
   
 
     
@@ -794,7 +794,7 @@
   <span class="md-ellipsis">
     
   
-    cicd
+    CI/CD integration
   
 
     
@@ -822,7 +822,7 @@
   <span class="md-ellipsis">
     
   
-    LangChain Integration Guide
+    LangChain integration
   
 
     
@@ -1005,7 +1005,7 @@
   <span class="md-ellipsis">
     
   
-    Monitor RAG Quality Demo
+    Monitor RAG quality
   
 
     
@@ -1033,7 +1033,7 @@
   <span class="md-ellipsis">
     
   
-    Detect RAG Regressions Over Time
+    Detect retrieval regressions
   
 
     
@@ -1569,6 +1569,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1615,6 +1619,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/v0.2.0-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0 verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1837,12 +1897,17 @@
 <h2 id="release-process">Release Process<a class="headerlink" href="#release-process" title="Permanent link">&para;</a></h2>
 <p>(For maintainers)</p>
 <ol>
-<li>Update <code>CHANGELOG.md</code></li>
-<li>Bump version in <code>pyproject.toml</code></li>
-<li>Create git tag: <code>git tag v0.2.0</code></li>
-<li>Push tag: <code>git push origin v0.2.0</code></li>
-<li>GitHub Actions will build and create release</li>
+<li>Update <code>CHANGELOG.md</code>, set the version in <code>pyproject.toml</code>, and regenerate any changed demo GIFs.</li>
+<li>Commit the source changes and updated <code>assets/*.gif</code> files. The checkout README uses public GIF links from the configured repository’s <code>main</code> branch. Push changed assets there so previews show the latest published recordings.</li>
+<li>Push the release commit and matching <code>v&lt;version&gt;</code> tag to the public image repository configured in <code>[tool.hatch.metadata.hooks.custom]</code>. It currently points to <code>Abdullahbinmushtaq/LongProbe</code>; change <code>image-base-url</code> if another repository will host release images.</li>
+<li>Build with <code>uv build</code>. The metadata hook pins public or local GIF links to public URLs under the matching version tag in the wheel and source-distribution descriptions. It does not edit <code>README.md</code> or upload images.</li>
+<li>Run <code>uv run python examples/verify_pypi_readme.py</code> to check both distribution descriptions and confirm that package builds preserve the checkout README.</li>
+<li>Run <code>uv run python examples/verify_pypi_readme.py --check-public</code> before uploading to PyPI. This downloads the tagged public images and checks that they match your local release assets. The tag workflow runs this check before creating its GitHub release. A version change or PyPI upload alone does not publish GitHub assets. The existing tag workflow builds the package and creates a GitHub release; it does not upload to PyPI.</li>
 </ol>
+<p>For example, package version <code>0.2.0</code> produces image URLs such as:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>https://raw.githubusercontent.com/Abdullahbinmushtaq/LongProbe/v0.2.0/assets/01-complete-workflow.gif
+</code></pre></div>
+<p>Each release uses its own tagged assets, so later GIF changes on <code>main</code> do not change older PyPI descriptions. After changing the package version, build new distributions; uploading an older wheel will retain its older description.</p>
 <h2 id="getting-help">Getting Help<a class="headerlink" href="#getting-help" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>GitHub Issues</strong>: <a href="https://github.com/ENDEVSOLS/LongProbe/issues">Report bugs or request features</a></li>

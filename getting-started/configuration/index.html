@@ -638,7 +638,7 @@
   <span class="md-ellipsis">
     
   
-    Golden Questions
+    Golden questions
   
 
     
@@ -694,7 +694,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI reference
   
 
     
@@ -722,7 +722,7 @@
   <span class="md-ellipsis">
     
   
-    python api
+    Python interface
   
 
     
@@ -750,7 +750,7 @@
   <span class="md-ellipsis">
     
   
-    baseline management
+    Baseline management
   
 
     
@@ -879,7 +879,7 @@
   <span class="md-ellipsis">
     
   
-    pytest
+    Pytest integration
   
 
     
@@ -907,7 +907,7 @@
   <span class="md-ellipsis">
     
   
-    cicd
+    CI/CD integration
   
 
     
@@ -935,7 +935,7 @@
   <span class="md-ellipsis">
     
   
-    LangChain Integration Guide
+    LangChain integration
   
 
     
@@ -1118,7 +1118,7 @@
   <span class="md-ellipsis">
     
   
-    Monitor RAG Quality Demo
+    Monitor RAG quality
   
 
     
@@ -1146,7 +1146,7 @@
   <span class="md-ellipsis">
     
   
-    Detect RAG Regressions Over Time
+    Detect retrieval regressions
   
 
     
@@ -1358,6 +1358,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1404,6 +1408,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0 verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1507,9 +1567,13 @@
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="nt">scoring</span><span class="p">:</span>
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="nt">recall_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.8</span>
 <a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="nt">fail_on_regression</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="nt">baseline</span><span class="p">:</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span><span class="nt">db_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.longprobe/baselines.db</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span><span class="nt">auto_compare</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">  </span><span class="c1"># Optional; replace with an ID in your full golden set:</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span><span class="c1"># question_thresholds:</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span><span class="c1">#   refund-policy: 1.0</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="nt">baseline</span><span class="p">:</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">  </span><span class="nt">db_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.longprobe/baselines.db</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">  </span><span class="nt">auto_compare</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">  </span><span class="nt">quality_gate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all_questions</span>
 </code></pre></div>
 <p>Remove the Authorization header when your local endpoint does not require authentication. HTTP settings live under <code>retriever.http</code>. Chroma/Pinecone/Qdrant connection fields live directly under <code>retriever</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">retriever</span><span class="p">:</span>
@@ -1517,7 +1581,7 @@
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">collection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">documents</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">persist_directory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./chroma_db</span>
 </code></pre></div>
-<p>Pinecone uses <code>index_name</code>, <code>api_key</code>, and <code>namespace</code>. Qdrant uses <code>collection</code>, <code>host</code>, <code>port</code>, and optional <code>api_key</code>. Their normal text-question flow is not connected to query embeddings in v0.1.3; use a properly configured application HTTP endpoint or custom Python adapter until that integration is implemented. Framework retrievers require the Python API.</p>
+<p>Pinecone uses <code>index_name</code>, <code>api_key</code>, and <code>namespace</code>. Qdrant uses <code>collection</code>, <code>host</code>, <code>port</code>, and optional <code>api_key</code>. Their normal text-question flow is not connected to query embeddings in this release; use a properly configured application HTTP endpoint or custom Python adapter until that integration is implemented. Framework retrievers require the Python API.</p>
 <h2 id="strict-loading-and-accepted-values">Strict loading and accepted values<a class="headerlink" href="#strict-loading-and-accepted-values" title="Permanent link">&para;</a></h2>
 <p>CLI commands that accept a configuration path require that selected file to exist and be valid. Invalid files never silently become default settings. <code>init</code>, <code>edit</code>, and help need no retriever configuration. Baseline list/delete use their existing <code>--db-path</code> option rather than reading <code>longprobe.yaml</code>.</p>
 <p>Python callers supplying an adapter may omit the conventional <code>longprobe.yaml</code>; documented defaults are then used. <code>./longprobe.yaml</code> has the same behavior. Missing custom/absolute selected paths raise <code>FileNotFoundError</code>. Any existing invalid selected file fails.</p>
@@ -1528,7 +1592,7 @@
 <li>Floats must be finite. Recall threshold must be between 0 and 1.</li>
 <li>Ports must be 1–65535, dimensions nonnegative, and timeouts/batch sizes/generation counts/token limits positive.</li>
 <li>Booleans accept YAML booleans or case-insensitive strings <code>true/false</code>, <code>1/0</code>, <code>yes/no</code>, <code>on/off</code>.</li>
-<li>Provider-specific <code>extra</code> mappings are preserved; this patch does not redesign unknown-key handling.</li>
+<li>Provider-specific <code>extra</code> mappings are preserved; this release does not redesign unknown-key handling.</li>
 </ul>
 <p>Validation errors identify fields without printing their values. Correct misspelled or incorrectly nested known settings; extra fields are not automatically used by every CLI adapter.</p>
 <h2 id="environment-variables-and-active-providers">Environment variables and active providers<a class="headerlink" href="#environment-variables-and-active-providers" title="Permanent link">&para;</a></h2>
@@ -1544,8 +1608,10 @@
 </code></pre></div>
 <p>Cloud generation may use <code>generator.api_key</code> or the provider environment variable, such as <code>OPENAI_API_KEY</code>, <code>ANTHROPIC_API_KEY</code>, or <code>GEMINI_API_KEY</code>. Changing a generator model affects generated questions, not checks against existing goldens. Auto-capture validates both generator and retriever settings before generation. Local Chroma, unauthenticated Qdrant, and Ollama do not require unrelated cloud credentials.</p>
 <h2 id="scoring-and-baselines">Scoring and baselines<a class="headerlink" href="#scoring-and-baselines" title="Permanent link">&para;</a></h2>
-<p><code>recall_threshold</code> controls per-question pass/fail. <code>fail_on_regression: true</code> makes <code>check</code> exit unsuccessfully for a failed question or detected question-level baseline recall decrease. Setting it to false does not suppress configuration or empty-suite failures.</p>
-<p><code>baseline.db_path</code> selects SQLite storage. <code>auto_compare</code> compares with the literal label <code>latest</code>, if it exists. CI must restore this database explicitly when historical comparison is needed. No baseline schema migration is introduced.</p>
+<p><code>recall_threshold</code> controls the global per-question threshold. Invocation overrides supersede it, while explicit <code>question_thresholds</code> take precedence for their IDs. Values must be finite numbers in <code>[0, 1]</code>; unknown IDs fail against the full loaded suite, even when selection later filters questions.</p>
+<p><code>baseline.quality_gate</code> defaults to <code>all_questions</code> for both CLI and Python promotion. <code>aggregate</code> is an explicit alternative that permits individual failures if the mean meets the global threshold. Regular evaluation still reports every failed question.</p>
+<p><code>fail_on_regression: true</code> makes <code>check</code> fail for question failures or lost required evidence, including equal-recall evidence swaps. Setting it to false only relaxes completed quality failures; configuration, empty suites, incompatible comparisons, and execution failures remain nonzero. It never bypasses baseline promotion policy.</p>
+<p><code>baseline.db_path</code> selects SQLite storage. <code>auto_compare</code> uses literal <code>latest</code> when present. Explicit <code>--baseline</code> labels are required; <code>--no-compare</code> skips comparison. CI restores its database explicitly when configured. New report JSON metadata does not require an SQL table migration, but legacy references must be re-established before strict comparison. See <a href="../../guide/baseline-management/">baseline management</a>.</p>
 <h2 id="embedding-and-matching-limitations">Embedding and matching limitations<a class="headerlink" href="#embedding-and-matching-limitations" title="Permanent link">&para;</a></h2>
 <p>The standalone <code>QueryEmbedder</code> utility supports provider/model/dimensions/batch-size settings, but normal <code>check</code> and <code>LongProbe.run()</code> do not invoke it. Local test mode produces zero vectors, not useful semantic embeddings. Changing only <code>embedder.model</code> does not change normal retrieval.</p>
 <p><code>match_mode: semantic</code> uses word-frequency cosine similarity. Its threshold belongs to each golden question and does not use <code>QueryEmbedder</code>.</p>

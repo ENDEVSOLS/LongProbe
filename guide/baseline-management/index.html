@@ -29,7 +29,7 @@
     
     
       
-        <title>baseline management - </title>
+        <title>Baseline management - </title>
       
     
     
@@ -123,7 +123,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              baseline management
+              Baseline management
             
           </span>
         </div>
@@ -525,7 +525,7 @@
   <span class="md-ellipsis">
     
   
-    Golden Questions
+    Golden questions
   
 
     
@@ -581,7 +581,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI reference
   
 
     
@@ -609,7 +609,7 @@
   <span class="md-ellipsis">
     
   
-    python api
+    Python interface
   
 
     
@@ -639,6 +639,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Baseline management
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -646,7 +664,7 @@
   <span class="md-ellipsis">
     
   
-    baseline management
+    Baseline management
   
 
     
@@ -655,6 +673,91 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#save-a-trusted-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Save a trusted reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#policy-and-threshold-overrides" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Policy and threshold overrides
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#select-the-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Select the reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#understand-differences-and-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understand differences and compatibility
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upgrade-existing-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrade existing references
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#python-promotion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python promotion
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -776,7 +879,7 @@
   <span class="md-ellipsis">
     
   
-    pytest
+    Pytest integration
   
 
     
@@ -804,7 +907,7 @@
   <span class="md-ellipsis">
     
   
-    cicd
+    CI/CD integration
   
 
     
@@ -832,7 +935,7 @@
   <span class="md-ellipsis">
     
   
-    LangChain Integration Guide
+    LangChain integration
   
 
     
@@ -1015,7 +1118,7 @@
   <span class="md-ellipsis">
     
   
-    Monitor RAG Quality Demo
+    Monitor RAG quality
   
 
     
@@ -1043,7 +1146,7 @@
   <span class="md-ellipsis">
     
   
-    Detect RAG Regressions Over Time
+    Detect retrieval regressions
   
 
     
@@ -1255,6 +1358,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1301,6 +1408,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0 verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1384,9 +1547,59 @@
   
 
 
-<h1 id="baseline-management">baseline management<a class="headerlink" href="#baseline-management" title="Permanent link">&para;</a></h1>
-<p>Documentation coming soon.</p>
-<p>See the <a href="../../getting-started/quick-start/">quick start</a> for now.</p>
+<h1 id="baseline-management">Baseline management<a class="headerlink" href="#baseline-management" title="Permanent link">&para;</a></h1>
+<p>A baseline is an explicitly saved retrieval report used as the reference for later checks. It lives in the SQLite database selected by <code>baseline.db_path</code>, normally <code>.longprobe/baselines.db</code>.</p>
+<h2 id="save-a-trusted-reference">Save a trusted reference<a class="headerlink" href="#save-a-trusted-reference" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>longprobe<span class="w"> </span>check<span class="w"> </span>--no-compare
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>longprobe<span class="w"> </span>baseline<span class="w"> </span>save<span class="w"> </span>--label<span class="w"> </span>latest
+</code></pre></div>
+<p><code>baseline save</code> performs a fresh evaluation of approved questions. By default every evaluated question must meet its effective recall threshold. A strong average cannot hide an individual failure. Empty selections and drafts cannot be promoted. A rejected promotion leaves the existing labeled reference intact.</p>
+<p>The first command is optional inspection; its result is not silently reused by the second. Neither command edits <code>goldens.yaml</code>. Review any question or required-evidence changes against the source documents before approving them.</p>
+<p>A passing check never replaces a baseline automatically. Saving an existing label explicitly replaces that label's report. Saving <code>release-a</code> does not update <code>latest</code>: <code>latest</code> is a literal name, not a newest-report lookup.</p>
+<h2 id="policy-and-threshold-overrides">Policy and threshold overrides<a class="headerlink" href="#policy-and-threshold-overrides" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">scoring</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">recall_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.8</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">question_thresholds</span><span class="p">:</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="nt">cancellation-policy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nt">baseline</span><span class="p">:</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">quality_gate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all_questions</span>
+</code></pre></div>
+<p>An invocation-level <code>--threshold</code> overrides the configured global threshold. Explicit per-question thresholds take precedence over that global override. Override IDs are validated against the complete loaded suite, so a typo fails while a valid override for an excluded question is allowed.</p>
+<p>For an intentional average-based baseline policy:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">baseline</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">quality_gate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aggregate</span>
+</code></pre></div>
+<p>This explicit alternative permits individual failures when overall recall meets the effective global threshold. The report records that choice and retains individual failure details. It only changes baseline eligibility; regular checks still assess every selected question and regressions.</p>
+<p><code>fail_on_regression: false</code> does not disable baseline promotion gates, configuration validation, empty-selection rejection, or comparison compatibility checks.</p>
+<h2 id="select-the-reference">Select the reference<a class="headerlink" href="#select-the-reference" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>longprobe<span class="w"> </span>check<span class="w"> </span>--baseline<span class="w"> </span>release-a
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>longprobe<span class="w"> </span>diff<span class="w"> </span>--baseline<span class="w"> </span>release-a
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>longprobe<span class="w"> </span>diff<span class="w"> </span>release-a<span class="w"> </span>release-b
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>longprobe<span class="w"> </span>check<span class="w"> </span>--no-compare
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>longprobe<span class="w"> </span>baseline<span class="w"> </span>list<span class="w"> </span>--db-path<span class="w"> </span>.longprobe/baselines.db
+</code></pre></div>
+<p>An explicit missing label fails before retrieval. The default automatic comparison looks for optional <code>latest</code>; if it does not exist, quality can still be assessed, but the report says no historical comparison occurred. <code>--no-compare</code> skips the configured comparison; it cannot be combined with an explicit <code>--baseline</code>.</p>
+<p>The report includes requested/resolved label, reference timestamp, and comparison status. Stored <code>diff A B</code> treats A as the reference and B as the target, without running retrieval.</p>
+<h2 id="understand-differences-and-compatibility">Understand differences and compatibility<a class="headerlink" href="#understand-differences-and-compatibility" title="Permanent link">&para;</a></h2>
+<p>Version 0.2.0 reports carry effective matching, retrieval-limit, threshold, question, and evidence contracts. A strict comparison requires the same evaluated question coverage, suite name/version, and contracts. Reordering questions or required evidence does not make otherwise identical reports incompatible.</p>
+<p>Comparisons surface added/removed question IDs, changed contract fields, and lost/gained required evidence. Losing previously found required evidence is a regression even if another requirement is found and total recall stays the same.</p>
+<p>Changed coverage or contracts produce an incompatible outcome instead of a clean regression verdict. Raw scores remain available, but a like-for-like overall delta is unavailable. Review intentional changes, then explicitly establish a new reference if appropriate.</p>
+<h2 id="upgrade-existing-references">Upgrade existing references<a class="headerlink" href="#upgrade-existing-references" title="Permanent link">&para;</a></h2>
+<p>Unversioned v0.1.x rows remain readable/listable; adoption does not rewrite the database. Missing historical settings cannot be inferred safely, so strict comparisons against those rows are marked unverified and exit unsuccessfully.</p>
+<ol>
+<li>Close baseline writers and back up your database.</li>
+<li>Review the current approved questions, evidence, and settings.</li>
+<li>Inspect a fresh evaluation with <code>longprobe check --no-compare</code>.</li>
+<li>Explicitly save a new reference with <code>longprobe baseline save --label latest</code> when eligible.</li>
+<li>Retain the old backup or historical labels as needed.</li>
+</ol>
+<p>A metadata-free old reference does not prevent independent baseline saving. No SQL table migration is required; new metadata is stored in report JSON. An older executable replacing a label may discard metadata it does not understand, so preserve backups before downgrading.</p>
+<h2 id="python-promotion">Python promotion<a class="headerlink" href="#python-promotion" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">report</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">probe</span><span class="o">.</span><span class="n">save_baseline</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"release-a"</span><span class="p">)</span>
+</code></pre></div>
+<p>The Python facade applies the same policy. It saves a retained evaluation snapshot: modifying the returned report or configuration afterward does not weaken that candidate. Run again to adopt new settings. Failed reruns invalidate prior candidates. A passing candidate can be explicitly promoted even when its comparison with an older incompatible reference is unavailable.</p>
+<p><code>BaselineStore.save()</code> is low-level storage, not a quality certification operation. Use the facade or CLI to promote trusted baselines.</p>
 
 
 

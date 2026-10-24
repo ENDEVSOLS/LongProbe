@@ -29,7 +29,7 @@
     
     
       
-        <title>python api - </title>
+        <title>Python interface - </title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#python-api" class="md-skip">
+        <a href="#python-interface" class="md-skip">
           Skip to content
         </a>
       
@@ -123,7 +123,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              python api
+              Python interface
             
           </span>
         </div>
@@ -525,7 +525,7 @@
   <span class="md-ellipsis">
     
   
-    Golden Questions
+    Golden questions
   
 
     
@@ -581,7 +581,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI reference
   
 
     
@@ -611,6 +611,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Python interface
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -618,7 +636,7 @@
   <span class="md-ellipsis">
     
   
-    python api
+    Python interface
   
 
     
@@ -627,6 +645,69 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#evaluation-and-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluation and references
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#save-a-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Save a baseline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-and-in-memory-suites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration and in-memory suites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reports-and-comparisons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reports and comparisons
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -647,7 +728,7 @@
   <span class="md-ellipsis">
     
   
-    baseline management
+    Baseline management
   
 
     
@@ -776,7 +857,7 @@
   <span class="md-ellipsis">
     
   
-    pytest
+    Pytest integration
   
 
     
@@ -804,7 +885,7 @@
   <span class="md-ellipsis">
     
   
-    cicd
+    CI/CD integration
   
 
     
@@ -832,7 +913,7 @@
   <span class="md-ellipsis">
     
   
-    LangChain Integration Guide
+    LangChain integration
   
 
     
@@ -1015,7 +1096,7 @@
   <span class="md-ellipsis">
     
   
-    Monitor RAG Quality Demo
+    Monitor RAG quality
   
 
     
@@ -1043,7 +1124,7 @@
   <span class="md-ellipsis">
     
   
-    Detect RAG Regressions Over Time
+    Detect retrieval regressions
   
 
     
@@ -1255,6 +1336,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1301,6 +1386,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0 verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1384,9 +1525,42 @@
   
 
 
-<h1 id="python-api">python api<a class="headerlink" href="#python-api" title="Permanent link">&para;</a></h1>
-<p>Documentation coming soon.</p>
-<p>See the <a href="../../getting-started/quick-start/">quick start</a> for now.</p>
+<h1 id="python-interface">Python interface<a class="headerlink" href="#python-interface" title="Permanent link">&para;</a></h1>
+<p>Use your existing retriever through an adapter. LongProbe tests retrieval evidence; it does not index documents or evaluate the generated answer.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">longprobe</span><span class="w"> </span><span class="kn">import</span> <span class="n">LongProbe</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">longprobe.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">LangChainRetrieverAdapter</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">adapter</span> <span class="o">=</span> <span class="n">LangChainRetrieverAdapter</span><span class="p">(</span><span class="n">your_application_retriever</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">probe</span> <span class="o">=</span> <span class="n">LongProbe</span><span class="p">(</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">adapter</span><span class="o">=</span><span class="n">adapter</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">goldens_path</span><span class="o">=</span><span class="s2">"goldens.yaml"</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">config_path</span><span class="o">=</span><span class="s2">"longprobe.yaml"</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">)</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">report</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="k">assert</span> <span class="n">report</span><span class="o">.</span><span class="n">quality</span><span class="p">[</span><span class="s2">"passed"</span><span class="p">],</span> <span class="n">report</span><span class="o">.</span><span class="n">quality</span><span class="p">[</span><span class="s2">"reasons"</span><span class="p">]</span>
+</code></pre></div>
+<p>Replace <code>your_application_retriever</code> with the retriever already constructed by your application. HTTP and other supported adapters can be created through <code>create_adapter_from_config(config)</code>; optional backend SDKs remain lazy.</p>
+<h2 id="evaluation-and-references">Evaluation and references<a class="headerlink" href="#evaluation-and-references" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">report</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">top_k_override</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">"critical"</span><span class="p">])</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">report</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">baseline_label</span><span class="o">=</span><span class="s2">"release-a"</span><span class="p">)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">differences</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">baseline_label</span><span class="o">=</span><span class="s2">"release-a"</span><span class="p">)</span>
+</code></pre></div>
+<p><code>run()</code> returns <code>ProbeReport</code>, including per-question results/contracts, aggregate scores, selected baseline identity, structured comparison, and the quality decision. Quality failure is returned as data; invalid input and failed execution raise exceptions. Explicit missing labels fail. The default automatic reference is optional <code>latest</code>.</p>
+<p>To deliberately evaluate without the default comparison, set <code>probe.config.baseline.auto_compare = False</code> before running. An explicit <code>baseline_label</code> still requests that reference.</p>
+<p>CLI and Python share evaluation and policy resolution. A global <code>recall_threshold</code> constructor override supersedes the configured global value; explicit <code>scoring.question_thresholds</code> still take precedence for their question IDs. Unknown override IDs fail before retrieval.</p>
+<h2 id="save-a-baseline">Save a baseline<a class="headerlink" href="#save-a-baseline" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">probe</span><span class="o">.</span><span class="n">save_baseline</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"latest"</span><span class="p">)</span>
+</code></pre></div>
+<p>Every evaluated question must pass under the default policy. Draft-containing reports cannot be promoted. The optional aggregate policy must be selected explicitly in configuration and is captured with the evaluation.</p>
+<p>The facade retains a defensive snapshot after a completed run. Editing the returned report or changing settings afterward cannot weaken its promotion policy. A failed rerun clears the old candidate. Use another <code>run()</code> to evaluate changed settings, and catch <code>BaselineQualityError</code> from <code>longprobe.core.policy</code> if you need to handle a rejected promotion.</p>
+<h2 id="configuration-and-in-memory-suites">Configuration and in-memory suites<a class="headerlink" href="#configuration-and-in-memory-suites" title="Permanent link">&para;</a></h2>
+<p>You may supply <code>golden_set=GoldenSet(...)</code> instead of a golden YAML path. The facade applies approved-only selection by default; use <code>include_drafts=True</code> for analysis. Tag filtering requires all selected tags. Empty selections fail.</p>
+<p>When you supply an adapter and the conventional <code>longprobe.yaml</code> is absent, documented Python defaults are supported. Explicit missing custom paths and existing invalid files fail. Unused built-in retriever credentials are not required for your supplied adapter.</p>
+<h2 id="reports-and-comparisons">Reports and comparisons<a class="headerlink" href="#reports-and-comparisons" title="Permanent link">&para;</a></h2>
+<p>New reports use schema version 2. Old unversioned reports remain readable but cannot establish strict compatibility when historical settings are missing. Changed requirements, retrieval limits, thresholds, suite identity, or selected question coverage are surfaced rather than silently compared as the same test.</p>
+<p><code>probe.diff()</code> returns the same comparison fields used by CLI output, including <code>compatible</code>, <code>compatibility_reasons</code>, coverage/contract/evidence changes, regressions, improvements, and a nullable <code>overall_delta</code>. Check compatibility before interpreting the delta.</p>
+<p>See <a href="../baseline-management/">baseline management</a>, <a href="../../integrations/pytest/">pytest integration</a>, and <a href="../../releases/v0.2.0/">release migration notes</a>.</p>
 
 
 

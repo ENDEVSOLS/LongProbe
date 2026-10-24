@@ -29,7 +29,7 @@
     
     
       
-        <title>Monitor RAG Quality Demo - </title>
+        <title>Monitor RAG quality - </title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#monitor-rag-quality-demo" class="md-skip">
+        <a href="#monitor-rag-quality" class="md-skip">
           Skip to content
         </a>
       
@@ -123,7 +123,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Monitor RAG Quality Demo
+              Monitor RAG quality
             
           </span>
         </div>
@@ -525,7 +525,7 @@
   <span class="md-ellipsis">
     
   
-    Golden Questions
+    Golden questions
   
 
     
@@ -581,7 +581,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI reference
   
 
     
@@ -609,7 +609,7 @@
   <span class="md-ellipsis">
     
   
-    python api
+    Python interface
   
 
     
@@ -637,7 +637,7 @@
   <span class="md-ellipsis">
     
   
-    baseline management
+    Baseline management
   
 
     
@@ -766,7 +766,7 @@
   <span class="md-ellipsis">
     
   
-    pytest
+    Pytest integration
   
 
     
@@ -794,7 +794,7 @@
   <span class="md-ellipsis">
     
   
-    cicd
+    CI/CD integration
   
 
     
@@ -822,7 +822,7 @@
   <span class="md-ellipsis">
     
   
-    LangChain Integration Guide
+    LangChain integration
   
 
     
@@ -1014,7 +1014,7 @@
   <span class="md-ellipsis">
     
   
-    Monitor RAG Quality Demo
+    Monitor RAG quality
   
 
     
@@ -1032,7 +1032,7 @@
   <span class="md-ellipsis">
     
   
-    Monitor RAG Quality Demo
+    Monitor RAG quality
   
 
     
@@ -1058,10 +1058,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#run-locally" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Overview
+        Run locally
       
     </span>
   </a>
@@ -1069,60 +1069,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#running-the-demo" class="md-nav__link">
+  <a href="#inspect-the-verdict" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Running the Demo
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#interactive-tui-output" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Interactive TUI Output
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Interactive TUI Output">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sample-output-display" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sample Output Display:
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-it-works-under-the-hood" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        How It Works Under the Hood
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#quality-threshold-enforcement" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Quality Threshold Enforcement
+        Inspect the verdict
       
     </span>
   </a>
@@ -1152,7 +1102,7 @@
   <span class="md-ellipsis">
     
   
-    Detect RAG Regressions Over Time
+    Detect retrieval regressions
   
 
     
@@ -1364,6 +1314,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1410,6 +1364,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0 verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1493,86 +1503,26 @@
   
 
 
-<h1 id="monitor-rag-quality-demo">Monitor RAG Quality Demo<a class="headerlink" href="#monitor-rag-quality-demo" title="Permanent link">&para;</a></h1>
-<p>The <strong>Monitor RAG Quality</strong> demonstration illustrates how to continuously measure RAG retrieval performance against saved Golden Questions using LongProbe.</p>
-<hr />
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>In production RAG systems, monitoring retrieval quality is critical to ensure that changes to documents, embeddings, or vector databases do not silently degrade recall. </p>
-<p>This demo connects LongProbe to a vector store (ChromaDB), evaluates a set of approved golden questions, and renders an interactive Rich TUI table displaying recall scores, pass/fail status, and retrieved chunk counts.</p>
-<hr />
-<h2 id="running-the-demo">Running the Demo<a class="headerlink" href="#running-the-demo" title="Permanent link">&para;</a></h2>
-<p>To run the RAG quality monitoring demo locally:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>demo_run/monitor_rag_quality.py
+<h1 id="monitor-rag-quality">Monitor RAG quality<a class="headerlink" href="#monitor-rag-quality" title="Permanent link">&para;</a></h1>
+<p><img alt="Monitor RAG Quality" src="../../assets/02-python-api.gif" /></p>
+<p>The v0.2.0 dashboard shows one evaluation with per-question recall, required evidence found, pass/fail results, and the shared quality verdict. It also shows that no historical comparison occurred when a baseline is absent. Progress panels and result tables are displayed without source code.</p>
+<p>Evidence is displayed as <strong>found / required</strong>, alongside recall percentage and PASS/FAIL. For example, <strong>0 / 1</strong> means zero of one required items was retrieved, giving <strong>0% recall</strong>. Similarity scores are not correctness percentages and are not displayed by this synthetic demonstration.</p>
+<h2 id="run-locally">Run locally<a class="headerlink" href="#run-locally" title="Permanent link">&para;</a></h2>
+<p>From the repository root:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>make<span class="w"> </span>setup-demos
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>demos/.recording_venv/bin/python<span class="w"> </span>demo_run/monitor_rag_quality.py
 </code></pre></div>
-<hr />
-<h2 id="interactive-tui-output">Interactive TUI Output<a class="headerlink" href="#interactive-tui-output" title="Permanent link">&para;</a></h2>
-<p>When executed, LongProbe performs three live setup and evaluation phases:</p>
-<ol>
-<li><strong>Setup</strong>: Connects to the vector store and seeds/loads sample documents.</li>
-<li><strong>Loading</strong>: Loads approved golden questions from <code>goldens.yaml</code>.</li>
-<li><strong>Testing</strong>: Queries the vector store for each question and calculates recall.</li>
-</ol>
-<h3 id="sample-output-display">Sample Output Display:<a class="headerlink" href="#sample-output-display" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>🔬 RAG Quality Check with LongProbe
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>╭──────────────────────────────────────── RAG Quality Check ─────────────────────────────────────────╮
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   Setup                                      ✓                    Connected to vector store        │
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   Loading                                    ✓                    Loaded 3 golden questions        │
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│   Testing                                    ✓                    All 3 tests complete             │
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│                                                                                                    │
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│ ✓ Tests complete!                                                                                  │
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>╭────────────────────────────────────────── 📊 Test Results ──────────────────────────────────────────╮
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│  Question                                                                      Recall        Status  │
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│  What are the enterprise payment terms?                                         50.0%        ✗ FAIL  │
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│  What is the refund policy?                                                    100.0%        ✓ PASS  │
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>│  How is data encrypted?                                                        100.0%        ✓ PASS  │
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>╭───────────────────────────────────────────── 📈 Summary ───────────────────────────────────────────╮
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│ Overall Recall: 83.3%                                                                              │
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>│ Pass Rate: 66.7%                                                                                   │
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>│                                                                                                    │
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>│ ✓ Passed: 2/3                                                                                      │
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>│ ✗ Failed: 1/3                                                                                      │
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>⚠️  1 test(s) failed - review missing chunks
+<p>The script uses three reviewed sample cases, an 85% threshold, and a deterministic in-memory adapter. Refund evidence is deliberately omitted: two questions pass and one fails. Overall recall and pass rate are 66.7%, and the quality summary identifies the missing evidence. This is an expected demonstration failure; the script verifies it and exits successfully. It runs without an external service or optional vector SDK. Temporary files are removed after each run. Add <code>--no-delay</code> for immediate output.</p>
+<h2 id="inspect-the-verdict">Inspect the verdict<a class="headerlink" href="#inspect-the-verdict" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">report</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Overall recall: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">overall_recall</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Pass rate: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">pass_rate</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">baseline_identity</span><span class="p">)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="k">assert</span> <span class="n">report</span><span class="o">.</span><span class="n">quality</span><span class="p">[</span><span class="s2">"passed"</span><span class="p">],</span> <span class="n">report</span><span class="o">.</span><span class="n">quality</span><span class="p">[</span><span class="s2">"reasons"</span><span class="p">]</span>
 </code></pre></div>
-<hr />
-<h2 id="how-it-works-under-the-hood">How It Works Under the Hood<a class="headerlink" href="#how-it-works-under-the-hood" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">longprobe</span><span class="w"> </span><span class="kn">import</span> <span class="n">LongProbe</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">longprobe.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_adapter</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># 1. Connect to vector database adapter</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">adapter</span> <span class="o">=</span> <span class="n">create_adapter</span><span class="p">(</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="s2">"chroma"</span><span class="p">,</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">collection_name</span><span class="o">=</span><span class="s2">"demo_collection"</span><span class="p">,</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">persist_directory</span><span class="o">=</span><span class="s2">"./.demo_chroma_db"</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">)</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># 2. Initialize LongProbe with Golden Questions</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="n">probe</span> <span class="o">=</span> <span class="n">LongProbe</span><span class="p">(</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">adapter</span><span class="o">=</span><span class="n">adapter</span><span class="p">,</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="n">goldens_path</span><span class="o">=</span><span class="s2">"goldens.yaml"</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="p">)</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="c1"># 3. Execute quality check</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="n">report</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="c1"># 4. Inspect results</span>
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Overall Recall: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">overall_recall</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Question: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">question_id</span><span class="si">}</span><span class="s2"> -&gt; Recall: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">recall_score</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-</code></pre></div>
-<hr />
-<h2 id="quality-threshold-enforcement">Quality Threshold Enforcement<a class="headerlink" href="#quality-threshold-enforcement" title="Permanent link">&para;</a></h2>
-<p>You can enforce hard quality gates in Python or CLI:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>uv<span class="w"> </span>run<span class="w"> </span>longprobe<span class="w"> </span>check<span class="w"> </span>--goldens<span class="w"> </span>goldens.yaml<span class="w"> </span>--threshold<span class="w"> </span><span class="m">0</span>.85
-</code></pre></div>
-<p>If overall recall falls below <code>85%</code>, LongProbe outputs a quality warning diagnostic panel and exits with status code <code>1</code>, preventing deployment of broken RAG pipelines.</p>
+<p>A strong average can hide a failed question. Use the shared quality verdict to enforce each selected question's effective threshold and any available comparison. Passing does not automatically approve questions or save a baseline.</p>
+<p>The fixture demonstrates evaluation behavior rather than live production monitoring. To evaluate your own application, supply its retriever and reviewed goldens. See the <a href="../../guide/python-api/">Python guide</a> and <a href="../../integrations/pytest/">pytest integration</a>.</p>
+<p>Regenerate the GIF with <code>make demos</code> after installing the recording tools listed in <code>demos/README.md</code>.</p>
 
 
 

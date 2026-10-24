@@ -330,6 +330,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#v020-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.2.0 status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -697,7 +708,7 @@
   <span class="md-ellipsis">
     
   
-    Golden Questions
+    Golden questions
   
 
     
@@ -753,7 +764,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI reference
   
 
     
@@ -781,7 +792,7 @@
   <span class="md-ellipsis">
     
   
-    python api
+    Python interface
   
 
     
@@ -809,7 +820,7 @@
   <span class="md-ellipsis">
     
   
-    baseline management
+    Baseline management
   
 
     
@@ -938,7 +949,7 @@
   <span class="md-ellipsis">
     
   
-    pytest
+    Pytest integration
   
 
     
@@ -966,7 +977,7 @@
   <span class="md-ellipsis">
     
   
-    cicd
+    CI/CD integration
   
 
     
@@ -994,7 +1005,7 @@
   <span class="md-ellipsis">
     
   
-    LangChain Integration Guide
+    LangChain integration
   
 
     
@@ -1177,7 +1188,7 @@
   <span class="md-ellipsis">
     
   
-    Monitor RAG Quality Demo
+    Monitor RAG quality
   
 
     
@@ -1205,7 +1216,7 @@
   <span class="md-ellipsis">
     
   
-    Detect RAG Regressions Over Time
+    Detect retrieval regressions
   
 
     
@@ -1417,6 +1428,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1463,6 +1478,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="releases/v0.2.0-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0 verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1561,6 +1632,9 @@
 </p>
 
 <hr />
+<h2 id="v020-status">v0.2.0 status<a class="headerlink" href="#v020-status" title="Permanent link">&para;</a></h2>
+<p>This documentation describes the locally implemented <strong>v0.2.0 candidate</strong>. Publication and hosted GitHub Actions acceptance remain pending. Install the checkout or a locally built wheel to use these changes before publication.</p>
+<p>The main purpose is consistent evaluation across CLI, Python, pytest, and CI: explicit baseline selection, per-question quality gates, comparable reports, and reliable automation output. See the <a href="releases/v0.2.0/">release and migration guide</a> and <a href="releases/v0.2.0-verification/">verification record</a>.</p>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <blockquote>
 <p>"Did my last commit break retrieval?" — now you know in seconds.</p>
@@ -1579,6 +1653,7 @@
 <li>🔌 <strong>Pluggable adapters</strong> for any vector store</li>
 </ul>
 <h2 id="quick-example">Quick Example<a class="headerlink" href="#quick-example" title="Permanent link">&para;</a></h2>
+<p>The package-index command below installs the published version. For the unreleased candidate, follow <a href="getting-started/installation/#install-the-v020-candidate">checkout installation</a>. Configure a working retriever and review golden evidence before saving a baseline.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Install</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>longprobe
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
@@ -1611,7 +1686,7 @@
 <ul>
 <li>⚡ <strong>Sub-second checks</strong> on small golden sets</li>
 <li>📋 <strong>Golden Questions + Required Chunks</strong> defined in simple YAML</li>
-<li>🔍 <strong>Three match modes</strong>: exact ID, text substring, semantic similarity</li>
+<li>🔍 <strong>Three match modes</strong>: exact ID, text substring, and lexical cosine similarity (<code>semantic</code> mode)</li>
 <li>📊 <strong>Recall Score</strong> with per-question breakdown</li>
 <li>🔄 <strong>Regression diff</strong>: exactly which chunks were lost/gained</li>
 <li>💾 <strong>SQLite baseline store</strong>: compare against any previous run</li>

@@ -29,7 +29,7 @@
     
     
       
-        <title>Detect RAG Regressions Over Time - </title>
+        <title>Detect retrieval regressions - </title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#detect-rag-regressions-over-time" class="md-skip">
+        <a href="#detect-retrieval-regressions" class="md-skip">
           Skip to content
         </a>
       
@@ -123,7 +123,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Detect RAG Regressions Over Time
+              Detect retrieval regressions
             
           </span>
         </div>
@@ -525,7 +525,7 @@
   <span class="md-ellipsis">
     
   
-    Golden Questions
+    Golden questions
   
 
     
@@ -581,7 +581,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI reference
   
 
     
@@ -609,7 +609,7 @@
   <span class="md-ellipsis">
     
   
-    python api
+    Python interface
   
 
     
@@ -637,7 +637,7 @@
   <span class="md-ellipsis">
     
   
-    baseline management
+    Baseline management
   
 
     
@@ -766,7 +766,7 @@
   <span class="md-ellipsis">
     
   
-    pytest
+    Pytest integration
   
 
     
@@ -794,7 +794,7 @@
   <span class="md-ellipsis">
     
   
-    cicd
+    CI/CD integration
   
 
     
@@ -822,7 +822,7 @@
   <span class="md-ellipsis">
     
   
-    LangChain Integration Guide
+    LangChain integration
   
 
     
@@ -1005,7 +1005,7 @@
   <span class="md-ellipsis">
     
   
-    Monitor RAG Quality Demo
+    Monitor RAG quality
   
 
     
@@ -1042,7 +1042,7 @@
   <span class="md-ellipsis">
     
   
-    Detect RAG Regressions Over Time
+    Detect retrieval regressions
   
 
     
@@ -1060,7 +1060,7 @@
   <span class="md-ellipsis">
     
   
-    Detect RAG Regressions Over Time
+    Detect retrieval regressions
   
 
     
@@ -1086,10 +1086,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#run-locally" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Overview
+        Run locally
       
     </span>
   </a>
@@ -1097,10 +1097,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#running-the-demo" class="md-nav__link">
+  <a href="#python-workflow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Running the Demo
+        Python workflow
       
     </span>
   </a>
@@ -1108,43 +1108,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#two-step-baseline-comparison-workflow" class="md-nav__link">
+  <a href="#cli-equivalent" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Two-Step Baseline Comparison Workflow
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#interactive-tui-output" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Interactive TUI Output
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#code-example-saving-comparing-baselines" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Code Example: Saving &amp; Comparing Baselines
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#command-line-interface-cli-baseline-workflow" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Command Line Interface (CLI) Baseline Workflow
+        CLI equivalent
       
     </span>
   </a>
@@ -1358,6 +1325,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1404,6 +1375,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0 verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1487,97 +1514,38 @@
   
 
 
-<h1 id="detect-rag-regressions-over-time">Detect RAG Regressions Over Time<a class="headerlink" href="#detect-rag-regressions-over-time" title="Permanent link">&para;</a></h1>
-<p>The <strong>Detect Regressions</strong> demonstration shows how to establish a baseline snapshot of your RAG pipeline and automatically detect retrieval regressions whenever chunking, embeddings, or documents change.</p>
-<hr />
-<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>A <strong>retrieval regression</strong> occurs when a modification to your RAG pipeline (such as changing <code>chunk_size</code>, updating vector database indexes, or removing documents) causes the vector store to fail to retrieve ground-truth chunks that previously succeeded.</p>
-<p>LongProbe's baseline tracking allows you to save named baselines (e.g. <code>production-v1</code>), run tests after making changes, and generate detailed regression reports highlighting exact lost chunks.</p>
-<hr />
-<h2 id="running-the-demo">Running the Demo<a class="headerlink" href="#running-the-demo" title="Permanent link">&para;</a></h2>
-<p>To run the regression detection demo locally:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>demo_run/detect_regressions.py
+<h1 id="detect-retrieval-regressions">Detect retrieval regressions<a class="headerlink" href="#detect-retrieval-regressions" title="Permanent link">&para;</a></h1>
+<p><img alt="Detect Regressions" src="../../assets/03-baseline-tracking.gif" /></p>
+<p>The v0.2.0 dashboard scenario explicitly selects a baseline and displays compatibility, regression/improvement counts, lost evidence, and the shared quality verdict. A retrieval check does not establish overall deployment readiness.</p>
+<h2 id="run-locally">Run locally<a class="headerlink" href="#run-locally" title="Permanent link">&para;</a></h2>
+<p>From the repository root:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>make<span class="w"> </span>setup-demos
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>demos/.recording_venv/bin/python<span class="w"> </span>demo_run/detect_regressions.py
 </code></pre></div>
-<hr />
-<h2 id="two-step-baseline-comparison-workflow">Two-Step Baseline Comparison Workflow<a class="headerlink" href="#two-step-baseline-comparison-workflow" title="Permanent link">&para;</a></h2>
-<p>The regression detection workflow consists of two core steps:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sequenceDiagram
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    participant Dev as Developer
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    participant LP as LongProbe
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    participant Store as Baseline Store
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    Dev-&gt;&gt;LP: Step 1: Run &amp; Save Baseline
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    LP-&gt;&gt;Store: Save baseline ("production")
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    Dev-&gt;&gt;LP: Pipeline Update (Chunking/Embedding Change)
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    Dev-&gt;&gt;LP: Step 2: Run Check &amp; Compare
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    LP-&gt;&gt;Store: Compare current run vs "production"
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    LP--&gt;&gt;Dev: Alert: Display missing chunks &amp; recall delta (Δ)
+<p>The deterministic sample retriever starts with all three reviewed cases passing. The script saves an eligible reference, removes refund evidence, and evaluates again. It shows one regression, zero improvements, compatible contracts, and failed quality. Temporary files are removed afterward; no external database or embedding model is required.</p>
+<h2 id="python-workflow">Python workflow<a class="headerlink" href="#python-workflow" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># probe is configured with your adapter and reviewed golden suite.</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">report</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">probe</span><span class="o">.</span><span class="n">save_baseline</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"production-v1"</span><span class="p">)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="c1"># After an application retrieval change:</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">report2</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">baseline_label</span><span class="o">=</span><span class="s2">"production-v1"</span><span class="p">)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">diff</span> <span class="o">=</span> <span class="n">report2</span><span class="o">.</span><span class="n">comparison</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Compatible: </span><span class="si">{</span><span class="n">diff</span><span class="p">[</span><span class="s1">'compatible'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Regressions: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">diff</span><span class="p">[</span><span class="s1">'regressions'</span><span class="p">])</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Improvements: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">diff</span><span class="p">[</span><span class="s1">'improvements'</span><span class="p">])</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="k">assert</span> <span class="n">report2</span><span class="o">.</span><span class="n">quality</span><span class="p">[</span><span class="s2">"passed"</span><span class="p">],</span> <span class="n">report2</span><span class="o">.</span><span class="n">quality</span><span class="p">[</span><span class="s2">"reasons"</span><span class="p">]</span>
 </code></pre></div>
-<hr />
-<h2 id="interactive-tui-output">Interactive TUI Output<a class="headerlink" href="#interactive-tui-output" title="Permanent link">&para;</a></h2>
-<p>When executed, LongProbe displays the baseline creation and comparison progress:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>📊 Baseline Tracking - Detect RAG Regressions
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>╭──────────────────────────────────────────────────────────────────────────────────────────────────╮
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│ ✓ Setup complete                                                                                 │
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│                                                                                                  │
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   STEP 1                       ✓                  Baseline established - Recall: 83.3%           │
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│   STEP 2                       ✓                  Comparison complete - Recall: 83.3%            │
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>╭───────────────────────────────────── 📈 BASELINE COMPARISON ─────────────────────────────────────╮
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>│ ✓ No regressions detected                                                                        │
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>│                                                                                                  │
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>│ ➡️ Unchanged: 3 questions                                                                        │
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>✅ Safe to deploy - no regressions detected!
+<p>The assertion fails if a selected question fails, evidence regresses, or a comparison is incompatible. Zero regressions alone is insufficient to establish passing quality. Missing explicit references fail before retrieval.</p>
+<h2 id="cli-equivalent">CLI equivalent<a class="headerlink" href="#cli-equivalent" title="Permanent link">&para;</a></h2>
+<p>With a working application retriever and reviewed golden questions:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>longprobe<span class="w"> </span>baseline<span class="w"> </span>save<span class="w"> </span>--label<span class="w"> </span>production-v1
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>longprobe<span class="w"> </span>baseline<span class="w"> </span>list
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>longprobe<span class="w"> </span>check<span class="w"> </span>--baseline<span class="w"> </span>production-v1
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>longprobe<span class="w"> </span>diff<span class="w"> </span>--baseline<span class="w"> </span>production-v1
 </code></pre></div>
-<hr />
-<h2 id="code-example-saving-comparing-baselines">Code Example: Saving &amp; Comparing Baselines<a class="headerlink" href="#code-example-saving-comparing-baselines" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">longprobe</span><span class="w"> </span><span class="kn">import</span> <span class="n">LongProbe</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">longprobe.core.baseline</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaselineStore</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># 1. Initialize LongProbe</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">probe</span> <span class="o">=</span> <span class="n">LongProbe</span><span class="p">(</span><span class="n">adapter</span><span class="o">=</span><span class="n">adapter</span><span class="p">,</span> <span class="n">goldens_path</span><span class="o">=</span><span class="s2">"goldens.yaml"</span><span class="p">)</span>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># 2. Run initial check &amp; save production baseline</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">initial_report</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">probe</span><span class="o">.</span><span class="n">save_baseline</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"production-v1"</span><span class="p">)</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="c1"># --- Developer updates RAG pipeline or re-indexes documents ---</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
-<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="c1"># 3. Run check on updated pipeline</span>
-<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="n">new_report</span> <span class="o">=</span> <span class="n">probe</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
-<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="c1"># 4. Compare current run against baseline</span>
-<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">baseline_store</span> <span class="o">=</span> <span class="n">BaselineStore</span><span class="p">(</span><span class="n">db_path</span><span class="o">=</span><span class="s2">".longprobe/baselines.db"</span><span class="p">)</span>
-<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="n">baseline_report</span> <span class="o">=</span> <span class="n">baseline_store</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"production-v1"</span><span class="p">)</span>
-<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>
-<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="n">diff</span> <span class="o">=</span> <span class="n">baseline_store</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">new_report</span><span class="p">,</span> <span class="n">baseline_report</span><span class="p">)</span>
-<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>
-<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="c1"># 5. Check for regressions</span>
-<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="k">if</span> <span class="n">diff</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"regressions"</span><span class="p">):</span>
-<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"⚠️ REGRESSIONS DETECTED!"</span><span class="p">)</span>
-<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>    <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="n">diff</span><span class="p">[</span><span class="s2">"regressions"</span><span class="p">]:</span>
-<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Question: </span><span class="si">{</span><span class="n">reg</span><span class="p">[</span><span class="s1">'question_id'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Recall Drop: </span><span class="si">{</span><span class="n">reg</span><span class="p">[</span><span class="s1">'baseline_recall'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">reg</span><span class="p">[</span><span class="s1">'current_recall'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1%</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Lost Chunks: </span><span class="si">{</span><span class="n">reg</span><span class="p">[</span><span class="s1">'lost_chunks'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"✅ No regressions detected - safe to deploy!"</span><span class="p">)</span>
-</code></pre></div>
-<hr />
-<h2 id="command-line-interface-cli-baseline-workflow">Command Line Interface (CLI) Baseline Workflow<a class="headerlink" href="#command-line-interface-cli-baseline-workflow" title="Permanent link">&para;</a></h2>
-<p>You can manage baselines directly from your terminal:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Save baseline snapshot</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>uv<span class="w"> </span>run<span class="w"> </span>longprobe<span class="w"> </span>baseline<span class="w"> </span>save<span class="w"> </span>--label<span class="w"> </span>production-v1
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># List all saved baselines</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>uv<span class="w"> </span>run<span class="w"> </span>longprobe<span class="w"> </span>baseline<span class="w"> </span>list
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Compare current pipeline against saved baseline</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>uv<span class="w"> </span>run<span class="w"> </span>longprobe<span class="w"> </span>baseline<span class="w"> </span>diff<span class="w"> </span>production-v1
-</code></pre></div>
+<p>The last two commands are alternatives for a live comparison; each performs its own evaluation. A check never replaces the saved reference automatically. Changed coverage or evaluation contracts require review before intentionally establishing a new reference.</p>
+<p>See <a href="../../guide/baseline-management/">baseline management</a> and the <a href="../../guide/cli-reference/">CLI reference</a>. Regenerate the GIF with <code>make demos</code> using the prerequisites in <code>demos/README.md</code>.</p>
 
 
 

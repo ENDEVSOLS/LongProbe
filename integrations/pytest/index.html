@@ -29,7 +29,7 @@
     
     
       
-        <title>pytest - </title>
+        <title>Pytest integration - </title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#pytest" class="md-skip">
+        <a href="#pytest-integration" class="md-skip">
           Skip to content
         </a>
       
@@ -123,7 +123,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              pytest
+              Pytest integration
             
           </span>
         </div>
@@ -525,7 +525,7 @@
   <span class="md-ellipsis">
     
   
-    Golden Questions
+    Golden questions
   
 
     
@@ -581,7 +581,7 @@
   <span class="md-ellipsis">
     
   
-    CLI Reference
+    CLI reference
   
 
     
@@ -609,7 +609,7 @@
   <span class="md-ellipsis">
     
   
-    python api
+    Python interface
   
 
     
@@ -637,7 +637,7 @@
   <span class="md-ellipsis">
     
   
-    baseline management
+    Baseline management
   
 
     
@@ -768,6 +768,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pytest integration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -775,7 +793,7 @@
   <span class="md-ellipsis">
     
   
-    pytest
+    Pytest integration
   
 
     
@@ -784,6 +802,69 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#evaluate-once-and-inspect-the-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluate once and inspect the report
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enforce-quality-automatically" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enforce quality automatically
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-an-application-owned-retriever" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use an application-owned retriever
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fixtures-and-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixtures and options
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -804,7 +885,7 @@
   <span class="md-ellipsis">
     
   
-    cicd
+    CI/CD integration
   
 
     
@@ -832,7 +913,7 @@
   <span class="md-ellipsis">
     
   
-    LangChain Integration Guide
+    LangChain integration
   
 
     
@@ -1015,7 +1096,7 @@
   <span class="md-ellipsis">
     
   
-    Monitor RAG Quality Demo
+    Monitor RAG quality
   
 
     
@@ -1043,7 +1124,7 @@
   <span class="md-ellipsis">
     
   
-    Detect RAG Regressions Over Time
+    Detect retrieval regressions
   
 
     
@@ -1255,6 +1336,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -1301,6 +1386,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../releases/v0.2.0-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    v0.2.0 verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1384,9 +1525,74 @@
   
 
 
-<h1 id="pytest">pytest<a class="headerlink" href="#pytest" title="Permanent link">&para;</a></h1>
-<p>Documentation coming soon.</p>
-<p>See the <a href="../../getting-started/quick-start/">quick start</a> for now.</p>
+<h1 id="pytest-integration">Pytest integration<a class="headerlink" href="#pytest-integration" title="Permanent link">&para;</a></h1>
+<p>The installed LongProbe package registers its pytest plugin automatically. Install pytest separately in your test environment. Tests can request a shared evaluation report or enable automatic quality enforcement.</p>
+<h2 id="evaluate-once-and-inspect-the-report">Evaluate once and inspect the report<a class="headerlink" href="#evaluate-once-and-inspect-the-report" title="Permanent link">&para;</a></h2>
+<p>Configure your retriever in <code>longprobe.yaml</code> and review the approved questions in <code>goldens.yaml</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_retrieval</span><span class="p">(</span><span class="n">longprobe_report</span><span class="p">):</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="k">assert</span> <span class="n">longprobe_report</span><span class="o">.</span><span class="n">quality</span><span class="p">[</span><span class="s2">"passed"</span><span class="p">],</span> <span class="n">longprobe_report</span><span class="o">.</span><span class="n">quality</span><span class="p">[</span><span class="s2">"reasons"</span><span class="p">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pytest<span class="w"> </span>--longprobe-config<span class="w"> </span>tests/longprobe.yaml<span class="w"> </span>--longprobe-goldens<span class="w"> </span>tests/goldens.yaml
+</code></pre></div>
+<p>The selected configuration path is forwarded to the probe. The session-scoped <code>longprobe_report</code> fixture evaluates once per pytest process, even when several tests request it. The terminal summary uses that same report. You do not need to assign private attributes on pytest's configuration.</p>
+<p>Without an assertion or enforcement option, the report fixture returns failed quality results for inspection; requesting a report alone does not automatically assert its quality. Invalid setup and failed execution remain test errors.</p>
+<h2 id="enforce-quality-automatically">Enforce quality automatically<a class="headerlink" href="#enforce-quality-automatically" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pytest<span class="w"> </span>--longprobe-fail-threshold<span class="w"> </span><span class="m">0</span>.85
+</code></pre></div>
+<p>This option activates the evaluation even when no user test requests <code>longprobe_report</code>. Every selected question must pass, and any detected regression or incompatible comparison fails the gate. Configured <code>scoring.question_thresholds</code> take precedence over the invocation's global threshold. A setting that makes CLI quality failures nonblocking does not disable explicit pytest enforcement.</p>
+<p>Version 0.2.0 changes the old option's aggregate-oriented description: a good average cannot hide an individually failing question. Invalid thresholds and invalid requested configuration fail rather than skip tests. Pytest retains its own exit-code conventions.</p>
+<p>Without requested LongProbe fixtures or the enforcement option, the plugin does not load configuration or call a retriever. If no tests are collected, normal pytest no-tests behavior applies.</p>
+<h2 id="use-an-application-owned-retriever">Use an application-owned retriever<a class="headerlink" href="#use-an-application-owned-retriever" title="Permanent link">&para;</a></h2>
+<p>Override the adapter fixture in <code>conftest.py</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">longprobe.adapters</span><span class="w"> </span><span class="kn">import</span> <span class="n">LangChainRetrieverAdapter</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">"session"</span><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">longprobe_adapter</span><span class="p">():</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="k">return</span> <span class="n">LangChainRetrieverAdapter</span><span class="p">(</span><span class="n">build_application_retriever</span><span class="p">())</span>
+</code></pre></div>
+<p><code>build_application_retriever()</code> represents your application's setup function. A custom adapter does not require credentials for an unused built-in backend. Evaluation/scoring/baseline settings still come from the selected configuration.</p>
+<h2 id="fixtures-and-options">Fixtures and options<a class="headerlink" href="#fixtures-and-options" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Fixture</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>longprobe_report</code></td>
+<td>One completed session evaluation</td>
+</tr>
+<tr>
+<td><code>longprobe_probe</code></td>
+<td>Configured Python facade; manual <code>run()</code> calls deliberately evaluate again</td>
+</tr>
+<tr>
+<td><code>longprobe_adapter</code></td>
+<td>Default configured adapter or your override</td>
+</tr>
+<tr>
+<td><code>longprobe_config_path</code></td>
+<td>Selected configuration path</td>
+</tr>
+<tr>
+<td><code>longprobe_goldens_path</code></td>
+<td>Selected golden-set path</td>
+</tr>
+<tr>
+<td><code>longprobe_fail_threshold</code></td>
+<td>Optional invocation threshold</td>
+</tr>
+<tr>
+<td><code>longprobe_include_drafts</code></td>
+<td>Whether analysis includes drafts</td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>--longprobe-include-drafts</code> to analyze drafts explicitly. Draft-containing results cannot be promoted to a trusted baseline. Review candidate questions and evidence before approval.</p>
+<p>See <a href="../../guide/baseline-management/">baseline management</a> and the <a href="../../getting-started/quick-start/">quick start</a>.</p>
 
 
 
