@@ -65,17 +65,6 @@ Every RAG developer faces the same silent killer: you refactor chunking strategy
 - 🧪 **pytest integration** for existing test suites
 - 🔌 **Pluggable adapters** for any vector store
 
-## Part of the Long Suite
-
-LongProbe is part of the [EnDevSols Long Suite](https://endevsols.com/open-source) of RAG tools:
-
-- **[LongParser](https://github.com/ENDEVSOLS/LongParser)** - Document ingestion and chunking
-- **[LongTrainer](https://github.com/ENDEVSOLS/Long-Trainer)** - RAG chatbot framework
-- **[LongTracer](https://github.com/ENDEVSOLS/LongTracer)** - Hallucination detection
-- **[LongProbe](https://github.com/ENDEVSOLS/LongProbe)** - Retrieval regression testing ← You are here
-
-Together they cover the full RAG pipeline from ingestion to production monitoring.
-
 ## Features
 
 - ⚡ **Sub-second checks** on small golden sets
@@ -442,6 +431,23 @@ Reviewed golden questions
 4. **Score** each question by checking if required chunks appear in Top-K results
 5. **Compare** against saved baselines to detect regressions
 6. **Report** a Recall Score, diff of lost chunks, and optionally fail CI/CD
+
+---
+
+## Part of the Long Suite
+
+LongProbe is part of the **Long Suite** — a collection of tools for building, testing, and monitoring production RAG systems.
+
+| Project | Description |
+|---|---|
+| **[LongParser](https://github.com/ENDEVSOLS/LongParser)** | Document ingestion and chunking |
+| **[LongTrainer](https://github.com/ENDEVSOLS/Long-Trainer)** | RAG chatbot framework |
+| **[LongGuard](https://github.com/ENDEVSOLS/LongGuard)** | In-flight circuit breaker and reasoning loop recovery for agents |
+| **[LongCache](https://github.com/ENDEVSOLS/LongCache)** | Semantic similarity cache for LLM and RAG pipelines |
+| **[LongTracer](https://github.com/ENDEVSOLS/LongTracer)** | Hallucination detection and tracing |
+| **[LongProbe](https://github.com/ENDEVSOLS/LongProbe)** | Retrieval regression testing *(you are here)* |
+
+---
 
 ## Contributing
 
