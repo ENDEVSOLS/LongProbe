@@ -1,0 +1,24 @@
+::error title=LongProbe Retrieval::[q01_refund_window] recall=0%25; missing: Annual subscriptions are eligible for a full refund within 30 days of initial purchase.
+::error title=LongProbe Retrieval::[q02_prorated_refund] recall=0%25; missing: Prorated refunds are available after 30 days upon written request to billing support
+::notice title=LongProbe Retrieval::[q03_payment_terms] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q04_early_discount] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q05_late_fee] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q06_encryption_rest] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q07_encryption_transit] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q08_key_rotation] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q09_soc2_audit] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q10_breach_notice] recall=100%25; missing: none
+::error title=LongProbe Retrieval::[q11_uptime_sla] recall=0%25; missing: Enterprise tier subscriptions include a guaranteed 99.95%25 monthly uptime service level agreement.
+::notice title=LongProbe Retrieval::[q12_sev1_response] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q13_sla_credit] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q14_maintenance_notice] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q15_rpo_target] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q16_authorized_signers] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q17_termination_notice] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q18_data_retention] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q19_subprocessor_notice] recall=100%25; missing: none
+::notice title=LongProbe Retrieval::[q20_governing_law] recall=100%25; missing: none
+::error title=Retrieval Regression::[q01_refund_window] Required evidence lost: Annual subscriptions are eligible for a full refund within 30 days of initial purchase.
+::error title=Retrieval Regression::[q02_prorated_refund] Required evidence lost: Prorated refunds are available after 30 days upon written request to billing support
+::error title=Retrieval Regression::[q11_uptime_sla] Required evidence lost: Enterprise tier subscriptions include a guaranteed 99.95%25 monthly uptime service level agreement.
+::notice title=LongProbe Reference::Baseline: launch-demo; comparison: compared; timestamp: 2026-11-10T10:43:07.547142+00:00

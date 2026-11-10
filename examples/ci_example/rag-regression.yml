@@ -1,14 +1,32 @@
-# Minimal single-job example. Configure your application retriever first.
-# The reusable workflow additionally supports baseline restoration and PR comments.
+# Single-job CI example using the local RAG Regression Starter Kit fixture.
+# Installs the pinned package, creates the trusted 'launch-demo' baseline from
+# the known-good fixture, and runs the regression check against that baseline.
 name: RAG Regression Check
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      fixture_mode:
+        description: "Fixture state to evaluate (corrected passes, degraded fails)"
+        required: true
+        default: "corrected"
+        type: choice
+        options:
+          - corrected
+          - degraded
+
 permissions:
   contents: read
+
 jobs:
   rag-probe:
     runs-on: ubuntu-latest
-    env:
-      LONGPROBE_RETRIEVER_API_KEY: ${{ secrets.RAG_RETRIEVER_API_KEY }}
+    defaults:
+      run:
+        working-directory: examples/rag-regression-starter
     steps:
       - uses: actions/checkout@v4
         with:
@@ -16,19 +34,41 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python -m pip install longprobe==0.2.0
-      - name: Evaluate once and emit annotations
+      - name: Install pinned LongProbe 0.2.0
+        run: python -m pip install longprobe==0.2.0
+      - name: Recreate trusted launch-demo baseline from known-good fixture
+        run: |
+          python fixture_server.py --mode good --port 8000 &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID 2>/dev/null || true" EXIT
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:8000/health && break
+            sleep 0.2
+          done
+          longprobe check
+          longprobe baseline save --label launch-demo
+      - name: Start target fixture and evaluate once against launch-demo baseline
         id: probe
-        run: python -m longprobe.ci run --config longprobe.yaml --goldens goldens.yaml
+        env:
+          TARGET_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.fixture_mode || 'corrected' }}
+        run: |
+          python fixture_server.py --mode "$TARGET_MODE" --port 8000 &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID 2>/dev/null || true" EXIT
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:8000/health && break
+            sleep 0.2
+          done
+          python -m longprobe.ci run --config longprobe.yaml --goldens goldens.yaml --baseline launch-demo
       - name: Retain report
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: longprobe-report
           path: |
-            longprobe-result.json
-            longprobe-diagnostics.txt
-            longprobe-comment.md
+            examples/rag-regression-starter/longprobe-result.json
+            examples/rag-regression-starter/longprobe-diagnostics.txt
+            examples/rag-regression-starter/longprobe-comment.md
           if-no-files-found: warn
       - name: Enforce recorded verdict
         if: always()

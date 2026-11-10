@@ -1,0 +1,24 @@
+# LongProbe Configuration for RAG Regression Starter Kit
+# -----------------------------------------------------
+
+retriever:
+  type: http
+  http:
+    url: "http://127.0.0.1:8000/retrieve"
+    method: "POST"
+    timeout: 10
+    response_mapping:
+      results_path: "data.chunks"
+      id_field: "chunk_id"
+      text_field: "content"
+      score_field: "similarity"
+
+scoring:
+  recall_threshold: 0.90
+  fail_on_regression: true
+
+baseline:
+  db_path: ".longprobe/baselines.db"
+  auto_compare: true
+  quality_gate: all_questions
+

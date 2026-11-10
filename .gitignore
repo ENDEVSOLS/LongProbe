@@ -148,8 +148,8 @@ cython_debug/
 /scripts/
 .longprobe/
 chroma_db/
-goldens.yaml
-longprobe.yaml
+/goldens.yaml
+/longprobe.yaml
 demo_run/.longprobe/
 demo_run/chroma_db/
 demo_run/.demo_chroma_db/

@@ -11,11 +11,12 @@
   <a href="https://pepy.tech/projects/longprobe"><img src="https://static.pepy.tech/personalized-badge/longprobe?period=total&amp;units=international_system&amp;left_color=black&amp;right_color=green&amp;left_text=downloads" alt="PyPI Downloads" /></a>
   <a href="https://pypi.org/project/longprobe/"><img src="https://img.shields.io/pypi/pyversions/longprobe.svg" alt="Python Versions" /></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
-  <a href="https://github.com/Abdullahbinmushtaq/LongProbe/actions/workflows/ci.yml"><img src="https://github.com/Abdullahbinmushtaq/LongProbe/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://github.com/ENDEVSOLS/LongProbe/actions/workflows/ci.yml"><img src="https://github.com/ENDEVSOLS/LongProbe/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="https://endevsols.github.io/LongProbe"><img src="https://img.shields.io/badge/docs-mkdocs-blue.svg" alt="Documentation" /></a>
 </p>
 
 <p align="center">
+  <a href="https://github.com/ENDEVSOLS/LongProbe/tree/main/examples/rag-regression-starter"><strong>Run the Starter Kit</strong></a> •
   <a href="#quick-start">Quick Start</a> •
   <a href="https://endevsols.github.io/LongProbe">Documentation</a> •
   <a href="#python-api">Python API</a> •
@@ -81,9 +82,11 @@ Every RAG developer faces the same silent killer: you refactor chunking strategy
 
 ## Quick Start
 
+> 🚀 **Want to try LongProbe in 30 seconds?** Run the [**RAG Regression Starter Kit**](https://github.com/ENDEVSOLS/LongProbe/tree/main/examples/rag-regression-starter) with 20 pre-built golden questions and an offline `Pass → Fail → Fix` demo (zero API keys required).
+
 ### Installation
 
-Requires **Python 3.11 or newer**. The package-index commands below install a published version. To use this v0.2.0 checkout, run `pip install -e .` from the directory containing `pyproject.toml`, or install its locally built wheel. See [installation](docs/getting-started/installation.md).
+Requires **Python 3.11 or newer**. The package-index commands below install a published version. To use this v0.2.0 checkout, run `pip install -e .` from the directory containing `pyproject.toml`, or install its locally built wheel. See [installation](https://endevsols.github.io/LongProbe/getting-started/installation/).
 
 ```bash
 # Install with UV (recommended)
@@ -112,11 +115,11 @@ This creates:
 
 The initial content is copied from fixed templates in CLI source. It does not read your documents or embeddings. Replace example questions with verified cases, or use `capture`/`generate --auto-capture` and review drafts with `edit`.
 
-Configuration errors and zero-question evaluations fail explicitly. Existing invalid golden files are preserved rather than replaced during generation. See the [working local HTTP quick start](docs/getting-started/quick-start.md) and [v0.2.0 migration notes](docs/releases/v0.2.0.md).
+Configuration errors and zero-question evaluations fail explicitly. Existing invalid golden files are preserved rather than replaced during generation. See the [working local HTTP quick start](https://github.com/ENDEVSOLS/LongProbe/blob/main/docs/getting-started/quick-start.md) and [v0.2.0 migration notes](https://github.com/ENDEVSOLS/LongProbe/blob/main/docs/releases/v0.2.0.md).
 
 ### Define Golden Questions
 
-Edit `goldens.yaml` with reviewed test cases. Omitted status defaults to `approved`; use `status: draft` for unverified candidates. Drafts are excluded by default. See the [golden-question review workflow](docs/guide/golden-questions.md).
+Edit `goldens.yaml` with reviewed test cases. Omitted status defaults to `approved`; use `status: draft` for unverified candidates. Drafts are excluded by default. See the [golden-question review workflow](https://github.com/ENDEVSOLS/LongProbe/blob/main/docs/guide/golden-questions.md).
 
 ```yaml
 name: "my-rag-golden-set"
@@ -451,15 +454,22 @@ LongProbe is part of the **Long Suite** — a collection of tools for building, 
 
 ## Contributing
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We welcome contributions! Please see [CONTRIBUTING.md](https://github.com/ENDEVSOLS/LongProbe/blob/main/CONTRIBUTING.md) for guidelines.
 
 ## Security
 
-For security issues, please see [SECURITY.md](SECURITY.md).
+For security issues, please see [SECURITY.md](https://github.com/ENDEVSOLS/LongProbe/blob/main/SECURITY.md).
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License — see [LICENSE](https://github.com/ENDEVSOLS/LongProbe/blob/main/LICENSE) for details.
+
+---
+
+### Need help with production RAG retrieval?
+
+[Book a free AI reliability check](https://endevsols.com/ai-reliability-check?utm_source=github&utm_medium=referral&utm_campaign=longprobe_reliability&utm_content=readme_footer)
+to discuss missing retrieval evidence, baseline setup, or CI integration with EnDevSols.
 
 ---
 
