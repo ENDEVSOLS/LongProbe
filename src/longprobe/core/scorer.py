@@ -61,6 +61,8 @@ class QuestionResult:
     passed: bool
     latency_ms: float
     contract: dict | None = None
+    returned_count: int | None = None
+    evaluated_count: int | None = None
 
 
 @dataclass
@@ -150,6 +152,8 @@ class RecallScorer:
         self,
         question: GoldenQuestion,
         retrieved_docs: list[dict],
+        *,
+        top_k: int | None = None,
     ) -> QuestionResult:
         """Score a single question against its retrieved documents.
 
@@ -158,12 +162,21 @@ class RecallScorer:
                 matching configuration.
             retrieved_docs: List of dicts returned by the retriever, each
                 with at least ``"id"`` and ``"text"`` keys.
+            top_k: Optional effective K limit. Defaults to ``question.top_k``.
 
         Returns:
             A :class:`QuestionResult` with recall and diagnostic details.
         """
+        effective_k = top_k if top_k is not None else getattr(question, "top_k", 5)
+        if type(effective_k) is not int or effective_k <= 0:
+            raise ValueError("top_k must be a positive integer.")
+
+        returned_count = len(retrieved_docs)
+        evaluated_docs = list(retrieved_docs)[:effective_k]
+        evaluated_count = len(evaluated_docs)
+
         required_chunks = list(question.required_chunks)
-        retrieved_ids = [doc.get("id", "") for doc in retrieved_docs]
+        retrieved_ids = [doc.get("id", "") for doc in evaluated_docs]
 
         # Dispatch to the appropriate matching strategy.
         match_mode = question.match_mode
@@ -171,10 +184,10 @@ class RecallScorer:
         if match_mode == "id":
             found = self._id_match(required_chunks, retrieved_ids)
         elif match_mode == "text":
-            found = self._text_match(required_chunks, retrieved_docs)
+            found = self._text_match(required_chunks, evaluated_docs)
         elif match_mode == "semantic":
             found = self._semantic_match(
-                required_chunks, retrieved_docs, question.semantic_threshold
+                required_chunks, evaluated_docs, question.semantic_threshold
             )
         else:
             raise ValueError(
@@ -199,6 +212,8 @@ class RecallScorer:
             found_chunks=found,
             passed=recall >= self.question_thresholds.get(question.id, self.recall_threshold),
             latency_ms=0.0,
+            returned_count=returned_count,
+            evaluated_count=evaluated_count,
         )
 
     def score_all(
@@ -236,7 +251,7 @@ class RecallScorer:
             retrieved_docs = retriever_fn(question.question, top_k)
             elapsed = time.perf_counter() - start
 
-            result = self.score(question, retrieved_docs)
+            result = self.score(question, retrieved_docs, top_k=top_k)
             result.contract = question_contract(
                 question, top_k, self.question_thresholds.get(question.id, self.recall_threshold)
             )
