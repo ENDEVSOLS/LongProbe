@@ -149,10 +149,18 @@ def test_feedback_is_derived_from_one_evaluation(project, tmp_path, monkeypatch,
 def test_comment_escapes_document_text(project):
     *_, report, _artifact, _destination = project
     report.results[0].missing_chunks = ["<script>alert(1)</script>\n| fake |"]
-    rendered = markdown_report(report)
-    assert "<script>" not in rendered
-    assert "&lt;script&gt;" in rendered
-    assert "\\| fake \\|" in rendered
+    # When unredacted, raw document evidence is escaped for markdown/HTML safety.
+    unredacted = markdown_report(report, redact=False)
+    assert "<script>" not in unredacted
+    assert "&lt;script&gt;" in unredacted
+    assert "\\| fake \\|" in unredacted
+
+    # By default, shared reports redact chunk text entirely.
+    redacted = markdown_report(report, redact=True)
+    assert "<script>" not in redacted
+    assert "&lt;script&gt;" not in redacted
+    assert "fake" not in redacted
+    assert "missing: 1 of 2 chunk(s)" in redacted
 
 
 @pytest.mark.parametrize(
