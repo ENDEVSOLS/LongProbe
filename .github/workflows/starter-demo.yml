@@ -1,0 +1,65 @@
+name: Starter Kit Regression Demo
+
+on:
+  push:
+    branches:
+      - main
+      - "docs/**"
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      fixture_mode:
+        description: "Fixture state to evaluate against launch-demo baseline"
+        required: true
+        default: "degraded"
+        type: choice
+        options:
+          - corrected
+          - degraded
+
+jobs:
+  starter-regression-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: examples/rag-regression-starter
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned LongProbe 0.2.0
+        run: python -m pip install longprobe==0.2.0
+
+      - name: Build trusted baseline from known-good fixture
+        run: |
+          python fixture_server.py --mode good --port 8000 &
+          SERVER_PID=$!
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:8000/health && break
+            sleep 0.2
+          done
+          longprobe check
+          longprobe baseline save --label launch-demo
+          kill $SERVER_PID
+          sleep 0.5
+
+      - name: Evaluate target fixture against launch-demo baseline
+        env:
+          TARGET_MODE: ${{ github.event_name == 'workflow_dispatch' && inputs.fixture_mode || 'corrected' }}
+        run: |
+          echo "Evaluating with fixture mode: $TARGET_MODE"
+          python fixture_server.py --mode "$TARGET_MODE" --port 8000 &
+          SERVER_PID=$!
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:8000/health && break
+            sleep 0.2
+          done
+          longprobe check --baseline launch-demo --output github
+          longprobe diff --baseline launch-demo
+          kill $SERVER_PID
+

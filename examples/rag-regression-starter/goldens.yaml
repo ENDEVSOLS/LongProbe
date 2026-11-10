@@ -1,0 +1,201 @@
+name: "saas-policy-golden-set"
+version: "1.0"
+
+questions:
+  # ---------------------------------------------------------------------------
+  # 1. Billing & Refund Policy (text match)
+  # ---------------------------------------------------------------------------
+  - id: "q01_refund_window"
+    question: "What is the standard refund window for annual subscriptions?"
+    match_mode: "text"
+    status: "approved"
+    required_chunks:
+      - "Annual subscriptions are eligible for a full refund within 30 days of initial purchase."
+    top_k: 5
+    tags: ["billing", "refund", "critical"]
+
+  - id: "q02_prorated_refund"
+    question: "Are prorated refunds offered after the initial 30-day period?"
+    match_mode: "text"
+    status: "approved"
+    required_chunks:
+      - "Prorated refunds are available after 30 days upon written request to billing support"
+    top_k: 5
+    tags: ["billing", "refund"]
+
+  - id: "q03_payment_terms"
+    question: "What are the standard payment terms for enterprise invoices?"
+    match_mode: "text"
+    status: "approved"
+    required_chunks:
+      - "Standard enterprise invoice payment terms are net 30 days from date of issuance."
+    top_k: 5
+    tags: ["billing", "enterprise"]
+
+  - id: "q04_early_discount"
+    question: "Is there a discount for paying enterprise invoices early?"
+    match_mode: "text"
+    status: "approved"
+    required_chunks:
+      - "Enterprise clients receive a 2% early payment discount for settling invoices within 10 days."
+    top_k: 5
+    tags: ["billing", "finance"]
+
+  - id: "q05_late_fee"
+    question: "What late fee applies to overdue invoices?"
+    match_mode: "text"
+    status: "approved"
+    required_chunks:
+      - "A 1.5% monthly late fee applies to any past due balance exceeding 30 calendar days."
+    top_k: 5
+    tags: ["billing", "compliance"]
+
+  # ---------------------------------------------------------------------------
+  # 2. Security & Cryptographic Architecture (id match)
+  # ---------------------------------------------------------------------------
+  - id: "q06_encryption_rest"
+    question: "How is customer data encrypted at rest?"
+    match_mode: "id"
+    status: "approved"
+    required_chunks:
+      - "sec-chunk-01"
+    top_k: 5
+    tags: ["security", "encryption", "critical"]
+
+  - id: "q07_encryption_transit"
+    question: "What protocol secures data in transit?"
+    match_mode: "id"
+    status: "approved"
+    required_chunks:
+      - "sec-chunk-02"
+    top_k: 5
+    tags: ["security", "encryption"]
+
+  - id: "q08_key_rotation"
+    question: "How often are encryption keys rotated?"
+    match_mode: "id"
+    status: "approved"
+    required_chunks:
+      - "sec-chunk-03"
+    top_k: 5
+    tags: ["security", "compliance"]
+
+  - id: "q09_soc2_audit"
+    question: "How frequently does the platform undergo SOC 2 Type II audits?"
+    match_mode: "id"
+    status: "approved"
+    required_chunks:
+      - "sec-chunk-04"
+    top_k: 5
+    tags: ["security", "audit"]
+
+  - id: "q10_breach_notice"
+    question: "Within what timeframe are customers notified of a confirmed breach?"
+    match_mode: "id"
+    status: "approved"
+    required_chunks:
+      - "sec-chunk-05"
+    top_k: 5
+    tags: ["security", "incident-response", "critical"]
+
+  # ---------------------------------------------------------------------------
+  # 3. Enterprise SLA & Availability (text match)
+  # ---------------------------------------------------------------------------
+  - id: "q11_uptime_sla"
+    question: "What is the guaranteed monthly uptime percentage for enterprise tiers?"
+    match_mode: "text"
+    status: "approved"
+    required_chunks:
+      - "Enterprise tier subscriptions include a guaranteed 99.95% monthly uptime service level agreement."
+    top_k: 5
+    tags: ["sla", "availability", "critical"]
+
+  - id: "q12_sev1_response"
+    question: "What is the initial response time for a Severity 1 outage?"
+    match_mode: "text"
+    status: "approved"
+    required_chunks:
+      - "Severity 1 critical incidents receive an initial engineering response within 15 minutes 24/7."
+    top_k: 5
+    tags: ["sla", "support"]
+
+  - id: "q13_sla_credit"
+    question: "What service credit is issued if monthly uptime falls below 99.9%?"
+    match_mode: "text"
+    status: "approved"
+    required_chunks:
+      - "Customers receive a 10% monthly service credit if monthly uptime drops below 99.9%."
+    top_k: 5
+    tags: ["sla", "billing"]
+
+  - id: "q14_maintenance_notice"
+    question: "How much advance notice is given for scheduled maintenance?"
+    match_mode: "text"
+    status: "approved"
+    required_chunks:
+      - "Scheduled system maintenance requires a minimum of 5 business days advance notification."
+    top_k: 5
+    tags: ["sla", "operations"]
+
+  - id: "q15_rpo_target"
+    question: "What is the Recovery Point Objective (RPO) for production databases?"
+    match_mode: "text"
+    status: "approved"
+    required_chunks:
+      - "The disaster recovery RPO for all primary production databases is guaranteed under 15 minutes."
+    top_k: 5
+    tags: ["sla", "disaster-recovery"]
+
+  # ---------------------------------------------------------------------------
+  # 4. Account Governance & Legal Terms (semantic match, threshold 0.80)
+  # ---------------------------------------------------------------------------
+  - id: "q16_authorized_signers"
+    question: "Which company officers are authorized to sign enterprise agreements?"
+    match_mode: "semantic"
+    semantic_threshold: 0.80
+    status: "approved"
+    required_chunks:
+      - "Only authorized executive officers including the CEO, CFO, and General Counsel may execute agreements on behalf of the company."
+    top_k: 5
+    tags: ["governance", "legal"]
+
+  - id: "q17_termination_notice"
+    question: "How many days of written notice are required to terminate a contract?"
+    match_mode: "semantic"
+    semantic_threshold: 0.80
+    status: "approved"
+    required_chunks:
+      - "Either party may terminate the master services agreement by providing 30 days prior written notice."
+    top_k: 5
+    tags: ["governance", "legal"]
+
+  - id: "q18_data_retention"
+    question: "How long are customer backups retained after account termination?"
+    match_mode: "semantic"
+    semantic_threshold: 0.80
+    status: "approved"
+    required_chunks:
+      - "Customer data backups are retained for 60 days following account termination before permanent deletion."
+    top_k: 5
+    tags: ["governance", "privacy"]
+
+  - id: "q19_subprocessor_notice"
+    question: "How far in advance are customers notified before adding a new subprocessor?"
+    match_mode: "semantic"
+    semantic_threshold: 0.80
+    status: "approved"
+    required_chunks:
+      - "Customers receive at least 30 calendar days advance notice prior to onboarding new third-party subprocessors."
+    top_k: 5
+    tags: ["governance", "compliance"]
+
+  - id: "q20_governing_law"
+    question: "Which jurisdiction's laws govern the master service agreement?"
+    match_mode: "semantic"
+    semantic_threshold: 0.80
+    status: "approved"
+    required_chunks:
+      - "The master agreement and any disputes arising under it are governed by the laws of Delaware."
+    top_k: 5
+    tags: ["governance", "legal"]
+

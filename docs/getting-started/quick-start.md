@@ -2,6 +2,8 @@
 
 LongProbe tests whether your retriever still returns expected evidence for a fixed set of questions. It does not automatically inspect every live user query.
 
+> 💡 **Looking for a ready-to-run example?** See the [**RAG Regression Starter Kit**](https://github.com/ENDEVSOLS/LongProbe/tree/main/examples/rag-regression-starter) for a 20-question, 3-stage `pass → fail → fix` local demo that runs without API keys.
+
 ## 1. Install and initialize
 
 ```bash
