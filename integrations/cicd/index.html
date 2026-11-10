@@ -888,6 +888,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Reports and verdicts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#privacy-and-redaction-on-shared-surfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Privacy and redaction on shared surfaces
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1608,6 +1625,13 @@
 <h2 id="reports-and-verdicts">Reports and verdicts<a class="headerlink" href="#reports-and-verdicts" title="Permanent link">&para;</a></h2>
 <p>The reusable workflow retains <code>longprobe-result.json</code>, <code>longprobe-diagnostics.txt</code>, and the derived <code>longprobe-comment.md</code>. It does not upload a new trusted baseline automatically.</p>
 <p>The final verdict comes from the saved report and process outcome together. <code>fail-on-regression: false</code> only relaxes completed quality failures. It cannot hide invalid configuration, missing/incompatible references, invalid JSON, or a crashed command. A report's quality status remains failed even if the process is allowed to exit successfully.</p>
+<h3 id="privacy-and-redaction-on-shared-surfaces">Privacy and redaction on shared surfaces<a class="headerlink" href="#privacy-and-redaction-on-shared-surfaces" title="Permanent link">&para;</a></h3>
+<p>By default, LongProbe protects private data on all shared CI surfaces:
+- <strong>Annotations and PR Comments</strong>: Output in <code>longprobe-comment.md</code> and GitHub Actions annotations report safe counts (<code>missing: N of M chunk(s)</code>, <code>N evidence chunk(s) lost</code>), question IDs, and recall scores without exposing raw chunk evidence, document excerpts, or question text.
+- <strong>Shared Artifact (<code>longprobe-result.json</code>)</strong>: Default uploaded JSON results redact question text and chunk payloads, keeping verdicts, metrics, contract fingerprints, and safe counts intact.
+- <strong>Private Retention in SQLite</strong>: Full evidence, question contracts, and chunk IDs are retained locally in the private SQLite database (<code>.longprobe/baselines.db</code>) by maintainers.
+- <strong>Diagnostics and Logs</strong>: Retrieval error messages sanitize transport details and strip raw response payloads (such as HTML or database error bodies).
+- <strong>Opt-in Full Evidence</strong>: When running in private infrastructure where unredacted evidence is desired, pass <code>--include-private-evidence</code> to <code>longprobe.ci run</code>.</p>
 <p>Fork PRs receive annotations/artifacts without attempted write comments. A denied same-repository comment is reported separately; it does not change the evaluation result.</p>
 <h2 id="run-the-same-workflow-locally">Run the same workflow locally<a class="headerlink" href="#run-the-same-workflow-locally" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python<span class="w"> </span>-m<span class="w"> </span>longprobe.ci<span class="w"> </span>run<span class="w"> </span>--config<span class="w"> </span>longprobe.yaml<span class="w"> </span>--goldens<span class="w"> </span>goldens.yaml

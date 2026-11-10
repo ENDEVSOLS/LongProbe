@@ -1538,7 +1538,7 @@
 <tbody>
 <tr>
 <td>Evaluation</td>
-<td>CLI and Python coordinate selection, scoring, policy, and reference comparison through one module</td>
+<td>CLI and Python coordinate selection, scoring, policy, and reference comparison through one module; <code>top_k</code> is strictly enforced during scoring (<code>returned_count</code> and <code>evaluated_count</code> recorded)</td>
 </tr>
 <tr>
 <td>Baseline quality</td>
@@ -1550,11 +1550,15 @@
 </tr>
 <tr>
 <td>Compatibility</td>
-<td>Recorded matching/retrieval/threshold contracts determine strict comparability; incompatible suites have no like-for-like aggregate delta</td>
+<td>Recorded matching/retrieval/threshold contracts (<code>longprobe-lexical-v2</code>) determine strict comparability; incompatible suites or pre-v2 references have no like-for-like aggregate delta</td>
 </tr>
 <tr>
 <td>Baseline identity</td>
 <td>Requested/resolved labels, reference timestamp, and comparison status are recorded and displayed</td>
+</tr>
+<tr>
+<td>HTTP validation</td>
+<td>Valid empty retrieval arrays are evaluated as quality misses; missing paths, non-list results, or malformed items fail as unrelaxable execution errors (<code>invalid_response</code>, <code>http_error</code>, <code>timeout</code>, <code>transport_error</code>)</td>
 </tr>
 <tr>
 <td>Pytest</td>
@@ -1565,8 +1569,8 @@
 <td>Parsed JSON invocations emit one stdout object; command failures have documented categories</td>
 </tr>
 <tr>
-<td>CI</td>
-<td>One evaluation supplies annotations/comments; configured trusted artifacts are validated/restored, version input is honored, and quality relaxation cannot hide setup errors</td>
+<td>CI &amp; Privacy</td>
+<td>Shared CI outputs (PR comments, annotations, default <code>longprobe-result.json</code>) redact sensitive question text and chunk evidence by default, keeping verdicts and safe counts intact</td>
 </tr>
 </tbody>
 </table>
@@ -1598,7 +1602,7 @@
 <p>No SQL table migration is required. New report JSON fields are stored in existing rows only when explicitly saving/replacing a label. Old executables can discard metadata they do not understand if used to replace labels; preserve backups before downgrading.</p>
 <h2 id="unchanged-scope-and-limitations">Unchanged scope and limitations<a class="headerlink" href="#unchanged-scope-and-limitations" title="Permanent link">&para;</a></h2>
 <p>Requires Python 3.11 or newer; the validated interpreter matrix remains 3.11 and 3.12. This release retains strict configuration, empty-evaluation rejection, stale-state invalidation, optional-SDK lazy imports, and safe golden-file writes.</p>
-<p>Normal evaluation does not wire embedding conversion into vector-only Pinecone/Qdrant flows. Semantic matching remains word-frequency cosine similarity. Adapter error swallowing that predates this work is not redesigned; propagated retrieval failures are classified operationally. Explain does not calculate rank/score deltas, and watch still responds only to golden-file changes.</p>
+<p>Normal evaluation does not wire embedding conversion into vector-only Pinecone/Qdrant flows. Semantic matching remains word-frequency cosine similarity. HTTP adapter responses are strictly validated and transport/response errors are classified operationally without exposing raw response bodies. Explain does not calculate rank/score deltas, and watch still responds only to golden-file changes.</p>
 <p>Golden suites test selected reviewed examples, not all possible questions or every live user query. Generated/captured evidence still needs human review. Baseline promotion and golden approval remain explicit; there is no new manager sign-off application.</p>
 <p>The older changelog's named <code>@longprobe_check</code> and historical rank/distance explanation claims do not describe supported v0.2.0 interfaces. Use the documented report fixture and missing-evidence explanation behavior.</p>
 <p>See <a href="../../guide/cli-reference/">CLI reference</a>, <a href="../../guide/baseline-management/">baseline management</a>, <a href="../../guide/python-api/">Python interface</a>, <a href="../../integrations/pytest/">pytest</a>, and <a href="../../integrations/cicd/">CI/CD</a>.</p>

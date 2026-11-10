@@ -421,13 +421,41 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#requirements" class="md-nav__link">
+  <a href="#requirements-and-verified-support-matrix" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Requirements
+        Requirements and Verified Support Matrix
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Requirements and Verified Support Matrix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verified-platform-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verified Platform Matrix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adapter-verification-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adapter Verification Matrix
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1642,11 +1670,100 @@
 
 
 <h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
-<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Python 3.11 or higher</li>
-<li>pip or uv package manager</li>
-</ul>
+<h2 id="requirements-and-verified-support-matrix">Requirements and Verified Support Matrix<a class="headerlink" href="#requirements-and-verified-support-matrix" title="Permanent link">&para;</a></h2>
+<p>LongProbe runs on Python 3.11 and 3.12 across standard operating systems. Support tiers below reflect environments verified in continuous integration:</p>
+<h3 id="verified-platform-matrix">Verified Platform Matrix<a class="headerlink" href="#verified-platform-matrix" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Environment Component</th>
+<th>Verified Tier</th>
+<th>Status &amp; Verification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Python 3.11</strong></td>
+<td>Tier 1 (CI Verified)</td>
+<td>Fully tested and supported across all unit and contract tests</td>
+</tr>
+<tr>
+<td><strong>Python 3.12</strong></td>
+<td>Tier 1 (CI Verified)</td>
+<td>Primary target runtime for testing and release packaging</td>
+</tr>
+<tr>
+<td><strong>Python 3.13</strong></td>
+<td>Community</td>
+<td>Not yet gated in mandatory CI; experimental</td>
+</tr>
+<tr>
+<td><strong>Ubuntu Linux (x86_64)</strong></td>
+<td>Tier 1 (CI Verified)</td>
+<td>Verified on Ubuntu 22.04 LTS and 24.04 LTS GitHub runners</td>
+</tr>
+<tr>
+<td><strong>macOS (Darwin x86_64 / arm64)</strong></td>
+<td>Tier 2 (Compatible)</td>
+<td>Compatible via standard POSIX runtime; unverified in automated CI gates</td>
+</tr>
+<tr>
+<td><strong>Windows (x86_64)</strong></td>
+<td>Tier 2 (Compatible)</td>
+<td>Path separators normalized; unverified in automated CI gates</td>
+</tr>
+</tbody>
+</table>
+<h3 id="adapter-verification-matrix">Adapter Verification Matrix<a class="headerlink" href="#adapter-verification-matrix" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Adapter / Backend</th>
+<th>Package Extra</th>
+<th>Offline CI Status</th>
+<th>Requirements / Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HTTP (Generic REST API)</strong></td>
+<td><em>(built-in)</em></td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Verified</td>
+<td>No extras needed; built into base package</td>
+</tr>
+<tr>
+<td><strong>ChromaDB</strong></td>
+<td><code>longprobe[chroma]</code></td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Verified</td>
+<td>Verified with deterministic offline embedding fixtures</td>
+</tr>
+<tr>
+<td><strong>LangChain</strong></td>
+<td><code>longprobe[langchain]</code></td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Verified</td>
+<td>Contract and adapter tests verified</td>
+</tr>
+<tr>
+<td><strong>LlamaIndex</strong></td>
+<td><code>longprobe[llamaindex]</code></td>
+<td><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Verified</td>
+<td>Contract and adapter tests verified</td>
+</tr>
+<tr>
+<td><strong>Pinecone</strong></td>
+<td><code>longprobe[pinecone]</code></td>
+<td><img alt="⚠" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/26a0.svg" title=":warning:" /> Unverified in offline CI</td>
+<td>Requires live cloud API key and network connectivity</td>
+</tr>
+<tr>
+<td><strong>Qdrant</strong></td>
+<td><code>longprobe[qdrant]</code></td>
+<td><img alt="⚠" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/26a0.svg" title=":warning:" /> Unverified in offline CI</td>
+<td>Requires live container or cluster endpoint</td>
+</tr>
+</tbody>
+</table>
+<p><em>Note: Live cloud services and unverified environments require customer integration testing in staging prior to production gating.</em></p>
 <h2 id="install-the-v020-candidate">Install the v0.2.0 candidate<a class="headerlink" href="#install-the-v020-candidate" title="Permanent link">&para;</a></h2>
 <p>Version 0.2.0 is implemented locally but has not been published by this work. The package-index commands below install an available published version; they do not guarantee these new features.</p>
 <p>From the repository root containing <code>pyproject.toml</code>, choose one installation method:</p>
