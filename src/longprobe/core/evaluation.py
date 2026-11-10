@@ -25,6 +25,10 @@ class BaselineNotFoundError(ValueError):
 class EvaluationExecutionError(RuntimeError):
     """Retrieval failed operationally, rather than producing a quality miss."""
 
+    def __init__(self, message: str, category: str = "execution_error") -> None:
+        super().__init__(message)
+        self.category = category
+
 
 def select_questions(
     golden_set: GoldenSet,
@@ -97,10 +101,16 @@ def evaluate(
             return retrieve(query, top_k)
         except ImportError:
             raise
-        except Exception:
-            raise EvaluationExecutionError(
-                "Retrieval failed; check the configured endpoint and service diagnostics."
-            ) from None
+        except EvaluationExecutionError:
+            raise
+        except Exception as exc:
+            category = getattr(exc, "category", "execution_error")
+            msg = (
+                str(exc)
+                if hasattr(exc, "category")
+                else "Retrieval failed; check the configured endpoint and service diagnostics."
+            )
+            raise EvaluationExecutionError(msg, category=category) from None
 
     report = scorer.score_all(suite, retrieve_checked, top_k_override)
     report.policy = {
