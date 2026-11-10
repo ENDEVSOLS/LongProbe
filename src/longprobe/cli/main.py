@@ -44,7 +44,12 @@ from longprobe.config import ConfigurationError, GeneratorConfig, ProbeConfig
 from longprobe.core.baseline import BaselineStore
 from longprobe.core.diff import DiffReporter
 from longprobe.core.docparser import DocumentParser
-from longprobe.core.evaluation import BaselineNotFoundError, evaluate, select_questions
+from longprobe.core.evaluation import (
+    BaselineNotFoundError,
+    EvaluationExecutionError,
+    evaluate,
+    select_questions,
+)
 from longprobe.core.explain import explain_failure
 from longprobe.core.generator import QuestionGenerator
 from longprobe.core.golden import GoldenQuestion, GoldenSet, generate_question_id
@@ -254,6 +259,12 @@ def _command_errors(fn):
                     2,
                     "missing_dependency",
                     "Required optional dependency is missing; install the selected adapter extra.",
+                )
+            elif isinstance(exc, EvaluationExecutionError):
+                code, kind, message = (
+                    3,
+                    getattr(exc, "category", "execution_error"),
+                    str(exc),
                 )
             else:
                 code, kind, message = (

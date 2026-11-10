@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 from typing import Any
 
 import requests
@@ -34,6 +35,14 @@ from ..config import HttpRetrieverConfig
 from .base import AbstractRetrieverAdapter
 
 logger = logging.getLogger(__name__)
+
+
+class HttpAdapterError(RuntimeError):
+    """Failure during HTTP retrieval transport or response validation."""
+
+    def __init__(self, message: str, category: str = "execution_error") -> None:
+        super().__init__(message)
+        self.category = category
 
 
 class HttpAdapter(AbstractRetrieverAdapter):
@@ -88,26 +97,30 @@ class HttpAdapter(AbstractRetrieverAdapter):
                 timeout=cfg.timeout,
             )
         except requests.Timeout as exc:
-            raise requests.Timeout(
-                f"HTTP adapter request timed out after {cfg.timeout}s "
-                f"for URL '{cfg.url}'."
+            raise HttpAdapterError(
+                f"HTTP adapter request timed out after {cfg.timeout}s.",
+                category="timeout",
+            ) from exc
+        except requests.RequestException as exc:
+            raise HttpAdapterError(
+                "HTTP adapter transport failure; check connectivity and endpoint.",
+                category="transport_error",
             ) from exc
 
         # 3. Check status.
         if response.status_code >= 300:
-            snippet = response.text[:500] if response.text else "(empty body)"
-            raise RuntimeError(
-                f"HTTP adapter received status {response.status_code} from "
-                f"'{cfg.url}': {snippet}"
+            raise HttpAdapterError(
+                f"HTTP adapter received status {response.status_code}.",
+                category="http_error",
             )
 
         # 4. Parse response.
         try:
             data = response.json()
         except (json.JSONDecodeError, ValueError) as exc:
-            raise RuntimeError(
-                f"HTTP adapter received non-JSON response from '{cfg.url}': "
-                f"{response.text[:200]}"
+            raise HttpAdapterError(
+                "HTTP adapter received non-JSON payload.",
+                category="invalid_response",
             ) from exc
 
         # 5. Resolve results path.
@@ -115,27 +128,67 @@ class HttpAdapter(AbstractRetrieverAdapter):
         items = self._resolve_path(data, mapping.results_path)
 
         if not isinstance(items, list):
-            logger.warning(
-                "HTTP adapter: path '%s' did not resolve to a list "
-                "(got %s). Returning empty results.",
-                mapping.results_path,
-                type(items).__name__,
+            raise HttpAdapterError(
+                f"Configured results_path '{mapping.results_path}' did not resolve to a list (got {type(items).__name__}).",
+                category="invalid_response",
             )
-            return []
 
         # 6. Map each item to LongProbe format.
         results: list[dict[str, Any]] = []
         for item in items:
             if not isinstance(item, dict):
-                logger.warning(
-                    "HTTP adapter: skipping non-dict item in results array."
+                raise HttpAdapterError(
+                    f"Result item in response list is not an object (got {type(item).__name__}).",
+                    category="invalid_response",
                 )
-                continue
+
+            has_id = mapping.id_field in item
+            has_text = mapping.text_field in item
+            if not has_id and not has_text:
+                raise HttpAdapterError(
+                    f"Result item is missing required mapped fields '{mapping.id_field}' and '{mapping.text_field}'.",
+                    category="invalid_response",
+                )
+
+            item_id = ""
+            if has_id:
+                raw_id = item[mapping.id_field]
+                if isinstance(raw_id, bool) or not isinstance(raw_id, (str, int)):
+                    raise HttpAdapterError(
+                        f"Result field '{mapping.id_field}' must be a string or integer.",
+                        category="invalid_response",
+                    )
+                item_id = str(raw_id).strip()
+
+            item_text = ""
+            if has_text:
+                raw_text = item[mapping.text_field]
+                if not isinstance(raw_text, str):
+                    raise HttpAdapterError(
+                        f"Result field '{mapping.text_field}' must be a string.",
+                        category="invalid_response",
+                    )
+                item_text = raw_text
+
+            score = 0.0
+            if mapping.score_field in item and item[mapping.score_field] is not None:
+                raw_score = item[mapping.score_field]
+                if (
+                    isinstance(raw_score, bool)
+                    or not isinstance(raw_score, (int, float))
+                    or not math.isfinite(raw_score)
+                ):
+                    raise HttpAdapterError(
+                        f"Result field '{mapping.score_field}' must be a finite number.",
+                        category="invalid_response",
+                    )
+                score = float(raw_score)
+
             results.append(
                 {
-                    "id": str(item.get(mapping.id_field, "")),
-                    "text": str(item.get(mapping.text_field, "")),
-                    "score": float(item.get(mapping.score_field, 0.0)),
+                    "id": item_id,
+                    "text": item_text,
+                    "score": score,
                     "metadata": {
                         k: v
                         for k, v in item.items()
@@ -214,21 +267,21 @@ class HttpAdapter(AbstractRetrieverAdapter):
     def _resolve_path(data: Any, path: str) -> Any:
         """Traverse *data* using a dot-notation *path*.
 
-        ``\"data.chunks\"`` resolves to ``data[\"data\"][\"chunks\"]``.
-        If any segment is missing, an empty list is returned.
-
-        Args:
-            data: The parsed JSON response.
-            path: Dot-separated key path.
-
-        Returns:
-            The value at the path, or an empty list if not found.
+        Raises HttpAdapterError if data is not an object or any path segment is missing.
         """
+        if not isinstance(data, dict):
+            raise HttpAdapterError(
+                "HTTP response payload must be a JSON object.",
+                category="invalid_response",
+            )
         current = data
         parts = path.split(".") if path else []
         for part in parts:
             if isinstance(current, dict) and part in current:
                 current = current[part]
             else:
-                return []
+                raise HttpAdapterError(
+                    f"Configured results_path segment '{part}' was not found in response.",
+                    category="invalid_response",
+                )
         return current

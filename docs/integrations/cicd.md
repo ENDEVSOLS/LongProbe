@@ -89,6 +89,15 @@ The reusable workflow retains `longprobe-result.json`, `longprobe-diagnostics.tx
 
 The final verdict comes from the saved report and process outcome together. `fail-on-regression: false` only relaxes completed quality failures. It cannot hide invalid configuration, missing/incompatible references, invalid JSON, or a crashed command. A report's quality status remains failed even if the process is allowed to exit successfully.
 
+### Privacy and redaction on shared surfaces
+
+By default, LongProbe protects private data on all shared CI surfaces:
+- **Annotations and PR Comments**: Output in `longprobe-comment.md` and GitHub Actions annotations report safe counts (`missing: N of M chunk(s)`, `N evidence chunk(s) lost`), question IDs, and recall scores without exposing raw chunk evidence, document excerpts, or question text.
+- **Shared Artifact (`longprobe-result.json`)**: Default uploaded JSON results redact question text and chunk payloads, keeping verdicts, metrics, contract fingerprints, and safe counts intact.
+- **Private Retention in SQLite**: Full evidence, question contracts, and chunk IDs are retained locally in the private SQLite database (`.longprobe/baselines.db`) by maintainers.
+- **Diagnostics and Logs**: Retrieval error messages sanitize transport details and strip raw response payloads (such as HTML or database error bodies).
+- **Opt-in Full Evidence**: When running in private infrastructure where unredacted evidence is desired, pass `--include-private-evidence` to `longprobe.ci run`.
+
 Fork PRs receive annotations/artifacts without attempted write comments. A denied same-repository comment is reported separately; it does not change the evaluation result.
 
 ## Run the same workflow locally

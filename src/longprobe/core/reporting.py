@@ -17,7 +17,7 @@ from .golden import GoldenQuestion
 from .scorer import ProbeReport, QuestionResult
 
 SCHEMA_VERSION = 2
-MATCHER_VERSION = "longprobe-lexical-v1"
+MATCHER_VERSION = "longprobe-lexical-v2"
 
 
 class ReportError(ValueError):
@@ -84,6 +84,16 @@ def report_from_dict(data: dict) -> ProbeReport:
             seen.add(qid)
             if not isinstance(raw["question"], str) or type(raw["passed"]) is not bool:
                 raise ReportError("Report question text or passing status is invalid.")
+            returned_count = raw.get("returned_count")
+            if returned_count is not None and (
+                type(returned_count) is not int or returned_count < 0
+            ):
+                raise ReportError("Report returned_count must be a non-negative integer.")
+            evaluated_count = raw.get("evaluated_count")
+            if evaluated_count is not None and (
+                type(evaluated_count) is not int or evaluated_count < 0
+            ):
+                raise ReportError("Report evaluated_count must be a non-negative integer.")
             result = QuestionResult(
                 question_id=qid,
                 question=raw["question"],
@@ -97,6 +107,8 @@ def report_from_dict(data: dict) -> ProbeReport:
                 passed=raw["passed"],
                 latency_ms=_number(raw["latency_ms"], "latency_ms", ratio=False),
                 contract=raw.get("contract"),
+                returned_count=returned_count,
+                evaluated_count=evaluated_count,
             )
             if version == SCHEMA_VERSION:
                 _validate_contract(result)
@@ -233,6 +245,13 @@ def _validate_contract(result: QuestionResult) -> None:
         or contract.get("status") not in {"draft", "approved"}
     ):
         raise ReportError("Report retrieval limit or question status is invalid.")
+    if result.evaluated_count is not None:
+        if result.evaluated_count > contract["top_k"]:
+            raise ReportError("Evaluated count exceeds contract top_k.")
+        if len(result.retrieved_chunk_ids) != result.evaluated_count:
+            raise ReportError("Retrieved chunk IDs count does not match evaluated count.")
+        if result.returned_count is not None and result.evaluated_count > result.returned_count:
+            raise ReportError("Evaluated count exceeds returned count.")
     threshold = _number(contract["recall_threshold"], "contract.recall_threshold")
     if contract["match_mode"] == "semantic":
         _number(contract["semantic_threshold"], "contract.semantic_threshold")

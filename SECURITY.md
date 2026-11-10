@@ -6,7 +6,8 @@ We release patches for security vulnerabilities in the following versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.1.x   | :white_check_mark: |
+| 0.2.x   | :white_check_mark: |
+| < 0.2.0 | :x:                |
 
 ## Reporting a Vulnerability
 
@@ -114,13 +115,14 @@ When using the document parser with untrusted files:
 - Run parsing in isolated environments for untrusted documents
 - Validate file types before parsing
 
-### 5. Baseline Database
+### 5. Baseline Database and CI Retention
 
-The SQLite baseline database stores test results:
-- Contains retrieval results and chunk content
-- May include sensitive information from your documents
-- Protect with appropriate file permissions
-- Consider encryption for highly sensitive data
+The SQLite baseline database stores test results and evaluation contracts:
+- Contains full retrieval results, query contracts, and chunk content for reproducibility and strict diff comparisons
+- May include sensitive proprietary information from your indexed documents
+- Protect with appropriate local file permissions (`chmod 600 .longprobe/baselines.db`)
+- Maintain in trusted storage; do not upload SQLite baselines to unauthenticated public CI artifact stores
+- Shared CI outputs (`longprobe-comment.md`, annotations, and default `longprobe-result.json`) redact question text and chunk evidence by default
 
 ## Disclosure Policy
 
@@ -135,7 +137,7 @@ We will coordinate the disclosure with you and credit you in the release notes (
 
 ## Security Updates
 
-Security updates will be released as patch versions (e.g., 0.1.1) and announced via:
+Security updates will be released as patch versions (e.g., 0.2.1) and announced via:
 
 - GitHub Security Advisories
 - Release notes in CHANGELOG.md
@@ -145,8 +147,8 @@ Subscribe to [GitHub releases](https://github.com/ENDEVSOLS/LongProbe/releases) 
 
 ## Comments on This Policy
 
-If you have suggestions on how this process could be improved, please submit a pull request or email opensource@endevsols.com.
+If you have suggestions on how this process could be improved, please submit a pull request or email security@endevsols.com.
 
 ---
 
-**Last Updated**: May 5, 2026
+**Last Updated**: November 2026

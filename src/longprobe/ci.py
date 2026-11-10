@@ -19,7 +19,7 @@ import tempfile
 from contextlib import closing
 from pathlib import Path
 
-from .cli.output import escape_annotation, github_annotations
+from .cli.output import escape_annotation, github_annotations, redact_report
 from .config import ConfigurationError, ProbeConfig
 from .core.diff import DiffReporter
 from .core.evaluation import evaluate
@@ -124,7 +124,7 @@ def _markdown(value) -> str:
     return re.sub(r"([\\`*_{}\[\]()#+.!|>~-])", r"\\\1", text)
 
 
-def markdown_report(report) -> str:
+def markdown_report(report, *, redact: bool = True) -> str:
     """Human feedback uses the recorded verdict rather than guessed defaults."""
     identity = report.baseline_identity
     comparison = report.comparison or {}
@@ -156,16 +156,27 @@ def markdown_report(report) -> str:
             + ", ".join(_markdown(f) for f in change["fields"])
         )
     for regression in comparison.get("regressions", []):
-        lines.append(
-            f"- Regression {_markdown(regression['question_id'])}: lost "
-            + ", ".join(_markdown(c) for c in regression["newly_lost_chunks"])
-        )
+        lost = regression.get("newly_lost_chunks", [])
+        if redact:
+            lines.append(
+                f"- Regression {_markdown(regression['question_id'])}: {len(lost)} evidence chunk(s) lost"
+            )
+        else:
+            lines.append(
+                f"- Regression {_markdown(regression['question_id'])}: lost "
+                + ", ".join(_markdown(c) for c in lost)
+            )
     for result in report.results:
         if result.missing_chunks:
-            lines.append(
-                f"- {_markdown(result.question_id)} missing: "
-                + ", ".join(_markdown(c) for c in result.missing_chunks)
-            )
+            if redact:
+                lines.append(
+                    f"- {_markdown(result.question_id)} missing: {len(result.missing_chunks)} of {len(result.required_chunks)} chunk(s)"
+                )
+            else:
+                lines.append(
+                    f"- {_markdown(result.question_id)} missing: "
+                    + ", ".join(_markdown(c) for c in result.missing_chunks)
+                )
     text = "\n".join(lines) + "\n"
     return text[:59000] + (
         "\n\nReport truncated; inspect the JSON artifact.\n" if len(text) > 59000 else ""
@@ -179,6 +190,7 @@ def run_evaluation(
     label: str | None = None,
     blocking: bool = True,
     directory: Path = Path("."),
+    redact: bool = True,
 ) -> int:
     directory.mkdir(parents=True, exist_ok=True)
     report_path = directory / "longprobe-result.json"
@@ -214,8 +226,16 @@ def run_evaluation(
     except (ValueError, OSError):
         report = None
     if has_result:
-        print(github_annotations(report))
-        (directory / "longprobe-comment.md").write_text(markdown_report(report), encoding="utf-8")
+        print(github_annotations(report, redact=redact))
+        (directory / "longprobe-comment.md").write_text(
+            markdown_report(report, redact=redact), encoding="utf-8"
+        )
+        if redact:
+            redacted_payload = redact_report(report)
+            report_path.write_text(
+                json.dumps(redacted_payload, indent=2, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
     else:
         print(
             "::error title=LongProbe Execution::Evaluation did not produce a valid report; inspect diagnostics."
@@ -245,6 +265,7 @@ def main() -> int:
     run.add_argument("--baseline")
     run.add_argument("--nonblocking", action="store_true")
     run.add_argument("--directory", type=Path, default=Path("."))
+    run.add_argument("--include-private-evidence", action="store_true", default=False)
     args = parser.parse_args()
     try:
         if args.command == "validate-inputs":
@@ -260,6 +281,7 @@ def main() -> int:
                 label=args.baseline,
                 blocking=not args.nonblocking,
                 directory=args.directory,
+                redact=not args.include_private_evidence,
             )
             # The workflow performs its final gate after uploads/comments.
             return 0 if os.environ.get("GITHUB_OUTPUT") else code

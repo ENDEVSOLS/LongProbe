@@ -190,6 +190,10 @@ class DiffReporter:
                 result.unchanged.append(qid)
         if result.changed_questions:
             reasons.append("Question requirements or evaluation settings changed.")
+            if any("matcher_version" in c.get("fields", []) for c in result.changed_questions):
+                reasons.append(
+                    "Baseline matcher version is unverified or outdated; rebuild baseline under current top-K evaluation rules."
+                )
         result.compatible = not reasons
         result.overall_delta = (
             current.overall_recall - baseline.overall_recall if result.compatible else None

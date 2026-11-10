@@ -19,9 +19,11 @@ class ChromaAdapter(AbstractRetrieverAdapter):
         self,
         collection_name: str = "default",
         persist_directory: str = "",
+        embedding_function: Any = None,
     ) -> None:
         self.collection_name = collection_name
         self.persist_directory = persist_directory
+        self.embedding_function = embedding_function
         self._client: Any = None
 
     def _get_client(self) -> Any:
@@ -61,7 +63,10 @@ class ChromaAdapter(AbstractRetrieverAdapter):
         """
         client = self._get_client()
         try:
-            collection = client.get_collection(self.collection_name)
+            kwargs: dict[str, Any] = {}
+            if self.embedding_function is not None:
+                kwargs["embedding_function"] = self.embedding_function
+            collection = client.get_collection(self.collection_name, **kwargs)
         except Exception as exc:
             logger.warning("Chroma collection '%s' error: %s", self.collection_name, exc)
             return []

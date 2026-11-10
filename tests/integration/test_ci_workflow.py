@@ -79,5 +79,5 @@ def test_restored_baseline_and_single_run_feedback(
     assert state["calls"] == 1
     report = json.loads((results / "longprobe-result.json").read_text())
     assert report["status"] == "failed"
-    assert report["comparison"]["regressions"][0]["newly_lost_chunks"] == ["policy-1"]
+    assert report["comparison"]["regressions"][0]["lost_count"] == 1
     assert "FAIL" in (results / "longprobe-comment.md").read_text()
