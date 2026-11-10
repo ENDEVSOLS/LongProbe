@@ -1,9 +1,32 @@
 # Installation
 
-## Requirements
+## Requirements and Verified Support Matrix
 
-- Python 3.11 or higher
-- pip or uv package manager
+LongProbe runs on Python 3.11 and 3.12 across standard operating systems. Support tiers below reflect environments verified in continuous integration:
+
+### Verified Platform Matrix
+
+| Environment Component | Verified Tier | Status & Verification |
+|-----------------------|---------------|-----------------------|
+| **Python 3.11** | Tier 1 (CI Verified) | Fully tested and supported across all unit and contract tests |
+| **Python 3.12** | Tier 1 (CI Verified) | Primary target runtime for testing and release packaging |
+| **Python 3.13** | Community | Not yet gated in mandatory CI; experimental |
+| **Ubuntu Linux (x86_64)** | Tier 1 (CI Verified) | Verified on Ubuntu 22.04 LTS and 24.04 LTS GitHub runners |
+| **macOS (Darwin x86_64 / arm64)** | Tier 2 (Compatible) | Compatible via standard POSIX runtime; unverified in automated CI gates |
+| **Windows (x86_64)** | Tier 2 (Compatible) | Path separators normalized; unverified in automated CI gates |
+
+### Adapter Verification Matrix
+
+| Adapter / Backend | Package Extra | Offline CI Status | Requirements / Notes |
+|-------------------|---------------|-------------------|----------------------|
+| **HTTP (Generic REST API)** | *(built-in)* | :white_check_mark: Verified | No extras needed; built into base package |
+| **ChromaDB** | `longprobe[chroma]` | :white_check_mark: Verified | Verified with deterministic offline embedding fixtures |
+| **LangChain** | `longprobe[langchain]` | :white_check_mark: Verified | Contract and adapter tests verified |
+| **LlamaIndex** | `longprobe[llamaindex]` | :white_check_mark: Verified | Contract and adapter tests verified |
+| **Pinecone** | `longprobe[pinecone]` | :warning: Unverified in offline CI | Requires live cloud API key and network connectivity |
+| **Qdrant** | `longprobe[qdrant]` | :warning: Unverified in offline CI | Requires live container or cluster endpoint |
+
+*Note: Live cloud services and unverified environments require customer integration testing in staging prior to production gating.*
 
 ## Install the v0.2.0 candidate
 

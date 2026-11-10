@@ -11,6 +11,11 @@ Requires the ``chromadb`` package and ``--run-integration`` flag::
 
 from __future__ import annotations
 
+import contextlib
+import math
+import re
+import zlib
+
 import pytest
 
 # Lazy import with skip fallback — ensures the file can be collected even
@@ -25,9 +30,46 @@ except ImportError:
 pytestmark = pytest.mark.integration
 
 
+class DeterministicLocalEmbeddingFunction:
+    """Deterministic, offline embedding fixture that requires zero downloads or network access."""
+
+    def __init__(self, dimension: int = 384) -> None:
+        self.dimension = dimension
+
+    def is_legacy(self) -> bool:
+        return False
+
+    def name(self) -> str:
+        return "deterministic_local_ef"
+
+    def __call__(self, input: list[str]) -> list[list[float]]:
+        embeddings = []
+        for text in input:
+            words = re.findall(r"\w+", text.lower())
+            vec = [0.0] * self.dimension
+            for word in words:
+                idx = zlib.crc32(word.encode("utf-8")) % self.dimension
+                vec[idx] += 1.0
+            norm = math.sqrt(sum(x * x for x in vec)) or 1.0
+            embeddings.append([x / norm for x in vec])
+        return embeddings
+
+    def embed_query(self, input: list[str]) -> list[list[float]]:
+        return self(input)
+
+    def embed_documents(self, input: list[str]) -> list[list[float]]:
+        return self(input)
+
+
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def embedding_fn() -> DeterministicLocalEmbeddingFunction:
+    return DeterministicLocalEmbeddingFunction(dimension=384)
+
 
 @pytest.fixture(scope="module")
 def persist_directory(tmp_path_factory):
@@ -45,18 +87,17 @@ def chroma_client(persist_directory):
 
 
 @pytest.fixture(scope="module")
-def collection(chroma_client):
+def collection(chroma_client, embedding_fn):
     """Create (or get) the test collection with sample documents."""
     collection_name = "longprobe-test"
 
     # Delete if it already exists to ensure a clean state.
-    try:
+    with contextlib.suppress(Exception):
         chroma_client.delete_collection(collection_name)
-    except Exception:
-        pass
 
     col = chroma_client.get_or_create_collection(
         name=collection_name,
+        embedding_function=embedding_fn,
         metadata={"hnsw:space": "l2"},
     )
 
@@ -81,7 +122,7 @@ def collection(chroma_client):
 
 
 @pytest.fixture(scope="module")
-def adapter(persist_directory, collection):
+def adapter(persist_directory, collection, embedding_fn):
     """Create a ChromaAdapter pointing at the test collection."""
     # Import inside fixture to ensure chromadb is available.
     from longprobe.adapters.chroma import ChromaAdapter
@@ -89,6 +130,7 @@ def adapter(persist_directory, collection):
     return ChromaAdapter(
         collection_name="longprobe-test",
         persist_directory=persist_directory,
+        embedding_function=embedding_fn,
     )
 
 

@@ -70,12 +70,15 @@ Every RAG developer faces the same silent killer: you refactor chunking strategy
 
 - ⚡ **Sub-second checks** on small golden sets
 - 📋 **Golden Questions + Required Chunks** defined in simple YAML
+- 🎯 **Strict Top-K enforcement**: evaluates only the top-K ranked results and records `returned_count` and `evaluated_count`
 - 🔍 **Three match modes**: exact ID, text substring, and lexical cosine similarity (`semantic` mode)
 - 📊 **Recall Score** with per-question breakdown
 - 🔄 **Regression diff**: exactly which chunks were lost/gained
 - 💾 **SQLite baseline store**: explicitly save references and compare compatible runs
+- 🔒 **Privacy-first CI reporting**: shared PR comments, annotations, and default JSON artifacts redact raw document evidence by default
+- 🛡️ **Strict HTTP validation**: separates genuine empty retrieval results from malformed payloads or transport errors
 - 🧪 **pytest plugin**: integrate into existing test suites
-- 🔌 **Pluggable adapters**: LangChain, LlamaIndex, Chroma, Pinecone, Qdrant
+- 🔌 **Pluggable adapters**: HTTP API, Chroma, LangChain, LlamaIndex, Pinecone, Qdrant
 - 🖥️ **Beautiful CLI** with Rich tables, JSON, and GitHub Actions output
 - 👀 **Watch mode**: auto re-run when the golden file changes
 - 🏗️ **CI/CD ready**: fails pipeline on regression
@@ -86,7 +89,7 @@ Every RAG developer faces the same silent killer: you refactor chunking strategy
 
 ### Installation
 
-Requires **Python 3.11 or newer**. The package-index commands below install a published version. To use this v0.2.0 checkout, run `pip install -e .` from the directory containing `pyproject.toml`, or install its locally built wheel. See [installation](https://endevsols.github.io/LongProbe/getting-started/installation/).
+Requires **Python 3.11 or newer**. The package-index commands below install a published version. To use this v0.2.0 checkout, run `pip install -e .` from the directory containing `pyproject.toml`, or install its locally built wheel. See [installation and verified support matrix](https://github.com/ENDEVSOLS/LongProbe/blob/main/docs/getting-started/installation.md).
 
 ```bash
 # Install with UV (recommended)
